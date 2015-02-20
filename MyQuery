@@ -1,0 +1,82 @@
+Pig
+-----------------------------------------------------------------------------------------
+Protocol = LOAD '/user/cloudera/Data/PTCL.txt' using PigStorage(';')
+as (ptclid:chararray, ptclname:chararray, phase:chararray,  status:chararray,
+    pgmid:chararray, applnum:chararray, indicator:chararray, 
+    prodid:chararray, prodname:chararray, bustype:chararray, 
+    gender:chararray, leg:chararray, theraparea:chararray, 
+    verified:chararray, pgmname:chararray, customer:chararray); 
+/*    
+    ROW_ID;PTCL_NAME;PTCL_PHASE;PTCL_STAT_CD;PGM_APPLN_ID;APPL_NUM;INDICATOR_CD;PRODUCT_ID;NAME;X_BUSINESS_TYPE;
+    X_GENDER;X_LEG_INDICATION;X_THERA_AREA;X_LEG_THERA_AREA;X_VERIFIED_FLG;NAME_1;NAME_2
+*/
+myprotocol = FILTER Protocol by phase == 'Phase 2';
+
+sorted = ORDER myprotocol by status DESC;
+
+top5 = LIMIT sorted 5;
+
+dump top5;
+**********************************************************
+myprotocol = FILTER Protocol by phase == 'Phase 2';
+
+myprotocols = FOREACH myprotocol GENERATE phase,status;
+
+grouped = GROUP myprotocols by (phase,status) ;
+
+summed = FOREACH grouped GENERATE group, COUNT($1) as count;
+
+sorted = ORDER summed by $0 ASC;
+
+dump sorted;
+**********************************************************
+
+
+
+
+Hive
+------------------------------------------------------------------------------------------
+CREATE EXTERNAL TABLE IF NOT EXISTS protocol
+(ptclid STRING, ptclname STRING, phase STRING,  status STRING,
+    pgmid STRING, applnum STRING, indicator STRING, 
+    prodid STRING, prodname STRING, bustype STRING, 
+    gender STRING, leg STRING, theraparea STRING, 
+    verified STRING, pgmname STRING, customer STRING)
+COMMENT 'Our Clinical Protocol Data!'
+ROW FORMAT DELIMITED 
+	FIELDS TERMINATED BY ';'
+	LINES TERMINATED BY '\n';
+
+LOAD DATA INPATH '/user/cloudera/Data/PTCL.txt' OVERWRITE INTO TABLE protocol;
+
+SELECT phase, count(status) from protocol group by phase;
+**********************************************************
+SELECT phase, status, unix_timestamp() from protocol ;
+
+
+
+PTCL.ROW_ID, PTCL.PTCL_NAME, PTCL.PTCL_NUM,SITE.SITE_NUM,SITE.STATUS_CD,
+SUBJ.ROW_ID,SUBJ.SUBJ_NUM,SUBJ.BIRTH_DT, to_char(SUBJ.BIRTH_DT,'YYYYMMDD'),  
+  SUBJ.PTCL_SITE_ID,SUBJ.CREATED,to_char(SUBJ.CREATED,'YYYYMMDD'), 
+SJ_STAT.STATUS_CD,SJ_STAT.PAR_SUBJ_ID,to_char(SJ_STAT.STATUS_DATE,'YYYYMMDD'),
+  to_char(SJ_STAT.CREATED,'YYYYMMDD'),SJ_STAT.DB_LAST_UPD_SRC
+**********************************************************
+
+CREATE EXTERNAL TABLE IF NOT EXISTS sitesubjects(
+  protcolid STRING, protocolname STRING, protocolnum STRING, sitenum STRING, sitestatus STRING,
+  subjectid STRING, subjectnum STRING, birthdate STRING,birthdt STRING, 
+  protocolsiteid STRING, subjcreateddate STRING, subjcreated STRING,
+  subjstatus STRING, statussubjid STRING, statusdate STRING,statuscreated STRING, statusby STRING)
+  COMMENT 'Our Clinical Site Subject Data!'
+ROW FORMAT DELIMITED 
+	FIELDS TERMINATED BY ';'
+	LINES TERMINATED BY '\n';
+ 
+LOAD DATA INPATH '/user/cloudera/Data/Hive/SITESUBJ.txt' OVERWRITE INTO TABLE sitesubjects;
+
+SELECT protocolname, count(subjstatus) from sitesubjects group by protocolname;
+
+
+
+
+**********************************************************
