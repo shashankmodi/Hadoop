@@ -47,7 +47,7 @@ public class App
     }
 }
 
-package com.umermansoor;
+package com.myhadoop.clinical;
 
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.LongWritable;
@@ -60,7 +60,7 @@ import java.io.IOException;
 /**
  * This is the main Mapper class. 
  * 
- * @author umermansoor
+ * @author Udhay Subramanian
  */
 public class ClinicalStudyMapper extends 
         Mapper<LongWritable, Text, Text, DoubleWritable> 
@@ -100,7 +100,7 @@ public class ClinicalStudyMapper extends
     }
 }
 
-package com.umermansoor;
+package com.myhadoop.clinical;
 
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.mapreduce.Reducer;
@@ -109,7 +109,7 @@ import org.apache.hadoop.io.Text;
 
 
 
-public class EarthquakeReducer extends 
+public class ClinicalStudyReducer extends 
         Reducer<Text, DoubleWritable, Text, DoubleWritable> 
 {
 
