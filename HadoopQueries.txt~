@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS BookData
  FIELDS TERMINATED BY '\;'
  STORED AS TEXTFILE;
  
-LOAD DATA INPATH '/user/cloudera/Data/BX-BooksC.txt'
+LOAD DATA INPATH '/user/cloudera/Data/BX-BooksC.csv'
  OVERWRITE INTO TABLE BookData;
 
 CREATE TABLE IF NOT EXISTS BookRating 
@@ -106,7 +106,7 @@ CREATE TABLE IF NOT EXISTS BookRating
   FIELDS TERMINATED BY '\;'
   STORED AS TEXTFILE;
   
- LOAD DATA INPATH '/user/cloudera/data/BX-BooksRatingC.txt'
+ LOAD DATA INPATH '/user/cloudera/Data/BX-BookRatingC.csv'
  OVERWRITE INTO TABLE BookRating;
 
  CREATE TABLE IF NOT EXISTS UserData 
@@ -117,7 +117,7 @@ CREATE TABLE IF NOT EXISTS BookRating
   FIELDS TERMINATED BY '\;'
   STORED AS TEXTFILE;
   
- LOAD DATA INPATH '/user/cloudera/data/BX-UsersCC.txt'
+ LOAD DATA INPATH '/user/cloudera/Data/BX-UsersC.csv'
  OVERWRITE INTO TABLE UserData;
 
  

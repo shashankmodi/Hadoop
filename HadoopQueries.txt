@@ -106,7 +106,7 @@ CREATE TABLE IF NOT EXISTS BookRating
   FIELDS TERMINATED BY '\;'
   STORED AS TEXTFILE;
   
- LOAD DATA INPATH '/user/cloudera/Data/BX-BooksRatingC.csv'
+ LOAD DATA INPATH '/user/cloudera/Data/BX-BookRatingC.csv'
  OVERWRITE INTO TABLE BookRating;
 
  CREATE TABLE IF NOT EXISTS UserData 
