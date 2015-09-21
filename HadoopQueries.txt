@@ -109,6 +109,13 @@ CREATE TABLE IF NOT EXISTS BookRating
  LOAD DATA INPATH '/user/cloudera/Data/BX-BookRatingC.csv'
  OVERWRITE INTO TABLE BookRating;
 
+CREATE TABLE book_ratingi (USER_ID INT, ISBN STRING, Rating INT) ROW FORMAT DELIMITED FIELDS TERMINATED BY ",";
+INSERT OVERWRITE TABLE book_ratingi
+select regexp_replace(UserId,"\"",""), regexp_replace(ISBN,">",""), regexp_replace(regexp_replace(Rating,"\"",""),">","") from BookRating;
+
+
+
+
  CREATE TABLE IF NOT EXISTS UserData 
   (UserId STRING, 
   Location STRING, 
@@ -119,10 +126,6 @@ CREATE TABLE IF NOT EXISTS BookRating
   
  LOAD DATA INPATH '/user/cloudera/Data/BX-UsersC.csv'
  OVERWRITE INTO TABLE UserData;
-
- 
- SELECT YearOfPublication, COUNT(BookTitle) 
- FROM BookData GROUP BY YearOfPublication;
  
 INSERT OVERWRITE TABLE BookData
 SELECT BookData.*
@@ -134,6 +137,18 @@ There are 4619 book entries with 0 as year
 SELECT Publisher, BookAuthor, YearOfPublication, COUNT(BookTitle) 
  FROM BookData 
  GROUP BY Publisher, BookAuthor, YearOfPublication;
+
+QUESTION 1:- Find out the frequency of books published each year.
+SELECT YearOfPublication, count(DISTINCT BookTitle) as Count_of_Pubs 
+from BookData group by YearOfPublication sort by Count_of_Pubs DESC;
+
+QUESTION 2:- Find out in which year maximum number of books were published
+ SELECT YearOfPublication, COUNT(BookTitle) as Count_of_Pubs 
+ FROM BookData GROUP BY YearOfPublication sort by Count_of_Pubs DESC limit 1;
+
+
+
+                    
 
 --------------------------------------------Book Data--------Hive End
 
