@@ -20,7 +20,7 @@ alias dp="~/.dropbox-dist/dropboxd"
 	remote = origin
 	merge = refs/heads/master
 cd /home/cloudera/git-repos/Hadoop 
-git add -A && git commit -a -m "a meesage to commit all changes" && git push origin master
+git add -A && git commit -a -m "a meesage to commit all changes" && git push origin master && cd
 
 
 sed 's/\&amp;/\&/g' BX-Books.csv | sed -e '1d' |sed 's/;/$$$/g' | sed 's/"$$$"/";"/g'|sed 's/\"//g' > BX-BooksC.csv

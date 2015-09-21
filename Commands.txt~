@@ -23,9 +23,6 @@ cd /home/cloudera/git-repos/Hadoop
 git add -A && git commit -a -m "a meesage to commit all changes" && git push origin master
 
 
-
-sed 's/\&amp;/\&/g' BX-Books.csv | sed -e '1d' |sed 's/;/$$$/g' | sed 's/”$$$”/”;”/g' > BX-BooksCorrected.csv
-
 sed 's/\&amp;/\&/g' BX-Books.csv | sed -e '1d' |sed 's/;/$$$/g' | sed 's/"$$$"/";"/g'|sed 's/\"//g' > BX-BooksC.csv
 
 sed 's/\&amp;/\&/g' BX-Users.csv | sed -e '1d' |sed 's/\"//g' > BX-UsersC.csv

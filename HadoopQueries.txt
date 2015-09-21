@@ -127,6 +127,9 @@ CREATE TABLE IF NOT EXISTS BookRating
 INSERT OVERWRITE TABLE BookData
 SELECT BookData.*
 FROM BookData WHERE YearOfPublication > 0;
+/*
+There are 4619 book entries with 0 as year
+*/
 
 SELECT Publisher, BookAuthor, YearOfPublication, COUNT(BookTitle) 
  FROM BookData 
