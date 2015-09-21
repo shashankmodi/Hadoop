@@ -8,8 +8,20 @@ cd ~ && wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf -
 ~/.dropbox-dist/dropboxd
 alias dp="~/.dropbox-dist/dropboxd"
 
-cd /home/cloudera/git-repos/Hadoop
-git commit -a 
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "origin"]
+	fetch = +refs/heads/*:refs/remotes/origin/*
+	url = https://udhayanu:sukanu12@github.com/udhayanu/Hadoop.git
+[branch "master"]
+	remote = origin
+	merge = refs/heads/master
+cd /home/cloudera/git-repos/Hadoop 
+git add -A && git commit -a -m "a meesage to commit all changes" && git push origin master
+
 
 
 sed 's/\&amp;/\&/g' BX-Books.csv | sed -e '1d' |sed 's/;/$$$/g' | sed 's/”$$$”/”;”/g' > BX-BooksCorrected.csv

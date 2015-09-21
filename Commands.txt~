@@ -7,6 +7,11 @@ All the commands used for Hadoop
 cd ~ && wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf -
 ~/.dropbox-dist/dropboxd
 alias dp="~/.dropbox-dist/dropboxd"
+
+cd /home/cloudera/git-repos/Hadoop
+git commit -a 
+
+
 sed 's/\&amp;/\&/g' BX-Books.csv | sed -e '1d' |sed 's/;/$$$/g' | sed 's/”$$$”/”;”/g' > BX-BooksCorrected.csv
 
 sed 's/\&amp;/\&/g' BX-Books.csv | sed -e '1d' |sed 's/;/$$$/g' | sed 's/"$$$"/";"/g'|sed 's/\"//g' > BX-BooksC.csv
