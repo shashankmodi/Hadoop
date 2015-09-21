@@ -1,8 +1,0 @@
-Hadoop test share on the web
-
-
-All the commands used for Hadoop
-
-
-cd ~ && wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf -
-~/.dropbox-dist/dropboxd
