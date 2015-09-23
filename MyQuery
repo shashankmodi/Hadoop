@@ -80,3 +80,172 @@ SELECT protocolname, count(subjstatus) from sitesubjects group by protocolname;
 
 
 **********************************************************
+
+Adding Hive Queries used with different Data sets
+
+
+--------------------------------------------Book Data--------Hive/Pig Start--------------------------------------------
+
+Download file -> http://www2.informatik.uni-freiburg.de/~cziegler/BX/BX-CSV-Dump.zip
+
+Run the following unix commands to clean the data.
+sed 's/\&amp;/\&/g' BX-Books.csv | sed -e '1d' |sed 's/;/$$$/g' | sed 's/"$$$"/";"/g'|sed 's/\"//g' > BX-BooksC.csv
+sed 's/\&amp;/\&/g' BX-Users.csv | sed -e '1d' |sed 's/\"//g' > BX-UsersC.csv
+sed 's/\&amp;/\&/g' BX-Book-Ratings.csv | sed -e '1d' |sed 's/;/$$$/g' | sed 's/"$$$"/";"/g'|sed 's/\"//g' > BX-BookRatingC.csv
+
+Create a folder "Data" in hdfs and Move all the 3 cleaned csv files to hdfs /user/cloudera/Data and run chmod 777 for all the files
+If you want the files from the local filesystem then change the LOAD statement to include INPATH LOCAL
+
+• HDFS User Permissions - login into hortonworks 2.3.1 root/hadoop
+	• su -- hdfs -c "hadoop fs -chmod -R 755 /user"
+	• su -- hdfs -c "hadoop fs -chmod 755 /user/hive"
+
+
+CREATE DATABASE IF NOT EXISTS bookcrossing;
+
+USE bookcrossing;
+
+SET hive.cli.print.header=true;
+
+Books data ---------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS BookData 
+ (ISBN STRING, 
+ BookTitle STRING, 
+ BookAuthor STRING, 
+ YearOfPublication INT, 
+ Publisher STRING)
+ ROW FORMAT DELIMITED 
+ FIELDS TERMINATED BY '\59'
+ STORED AS TEXTFILE;
+
+LOAD DATA INPATH '/user/hive/Data/BX-BooksC.csv'
+ OVERWRITE INTO TABLE BookData;
+
+Books Rating data ---------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS BookRating 
+  (UserId STRING, 
+  ISBN STRING, 
+  Rating INT)
+  ROW FORMAT DELIMITED 
+  FIELDS TERMINATED BY '\59'
+  STORED AS TEXTFILE;
+  
+ LOAD DATA INPATH '/user/hive/Data/BX-BookRatingC.csv'
+ OVERWRITE INTO TABLE BookRating;
+
+CREATE TABLE book_ratingi (USER_ID INT, ISBN STRING, Rating INT) ROW FORMAT DELIMITED FIELDS TERMINATED BY ",";
+INSERT OVERWRITE TABLE book_ratingi
+select regexp_replace(UserId,"\"",""), regexp_replace(ISBN,">",""), regexp_replace(regexp_replace(Rating,"\"",""),">","") from BookRating;
+
+select count(*) from bookrating
+select count(*) from book_ratingi
+// Both should yield same count of 1149780
+ 
+INSERT OVERWRITE TABLE BookData
+SELECT BookData.*
+FROM BookData WHERE YearOfPublication > 0;
+/* There are 4619 book entries with 0 as year */
+
+QUESTION : Find out the frequency of books published each year.
+Answer:  Should result in 114 unique records and 115 if YearOfPublication =0 is included
+	SELECT YearOfPublication, count(DISTINCT BookTitle) as Count_of_Pubs 
+	from BookData group by YearOfPublication sort by Count_of_Pubs DESC;
+
+QUESTION : Find out in which year maximum number of books were published
+Answer : 17,628 - This job runs 2 jobs in hadoop (first to count of all and then limits to 1)
+	SELECT YearOfPublication, COUNT(BookTitle) as Count_of_Pubs 
+		FROM BookData GROUP BY YearOfPublication sort by Count_of_Pubs DESC limit 1;
+
+
+Question : JOINING BOTH THE TABLES - BOOKS AND BOOK_RATING_INT
+	CREATE TABLE book_join (ISBN STRING, YearOfPublication INT, BookTitle STRING, Rating INT) 
+		ROW FORMAT DELIMITED FIELDS TERMINATED BY ",";
+	
+	INSERT OVERWRITE TABLE book_join
+		select a.ISBN, regexp_replace(regexp_replace(a.YearOfPublication,"\"",""),">",""), a.BookTitle, b.Rating
+			from BookData a join book_ratingi b on a.ISBN = b.ISBN;
+
+QUESTION : Find out how many book were published based on ranking in the year 2002.
+	Create Table Rating_2002 (Rating INT, Count_of_Books INT) 
+		ROW FORMAT DELIMITED FIELDS TERMINATED BY ",";
+	
+	INSERT OVERWRITE TABLE Rating_2002
+		Select Rating, count(BookTitle) from book_join 
+			where YearOfPublication = 2002 group by Rating order by Rating asc;
+
+Books User data ---------------------------------------------------------------------------
+ CREATE TABLE IF NOT EXISTS UserData 
+  (UserId STRING, 
+  Location STRING, 
+  Age INT)
+  ROW FORMAT DELIMITED 
+  FIELDS TERMINATED BY '\59'
+  STORED AS TEXTFILE;
+  
+ LOAD DATA INPATH '/user/hive/Data/BX-UsersC.csv'  
+ OVERWRITE INTO TABLE UserData;
+
+CREATE TABLE IF NOT EXISTS users 
+(user_id INT, location STRING, age INT) 
+COMMENT 'Book Crossing users cleaned' 
+ROW FORMAT DELIMITED FIELDS TERMINATED BY '\073' STORED AS TEXTFILE;
+LOAD DATA LOCAL INPATH 'BX-Users-prepro.txt' OVERWRITE INTO TABLE users; 
+use bookcrossing;alter table users rename to bookcrossing.users;
+
+Or 
+
+CREATE TABLE bookcrossing.usersAS SELECT * FROM users ;
+DROP TABLE users ;
+
+Creating View……
+CREATE TABLE tmp_users AS SELECT user_id, location, age FROM users WHERE age>18 and age <34;
+INSERT INTO TABLE tmp_users SELECT user_id, location, age FROM users WHERE age>33 and age <51;
+CREATE VIEW tmp_users_view AS SELECT user_id, location, age FROM users WHERE age>18 and age <34;
+
+Order by , GROUP By, CLUSTER by ,SORT by, DISTRIBUTE by
+describe formatted UserData;
+SELECT user_id, location, age FROM UserData WHERE age>18 and age <34 limit 10; 
+SELECT count(*) FROM UserData WHERE age>18 and age <34 ; 
+SELECT age, count(*) FROM UserData GROUP BY age; 
+SELECT age, count(*) as c FROM UserData GROUP BY age ORDER BY c DESC;
+EXPLAIN SELECT userid, location, age FROM UserData WHERE age>18 and age <34 limit 10;
+Select * from tmp_users ORDER by age limit 10; -- 15s
+Select * from tmp_users CLUSTER by age limit 10; -- 25-60s / 2 reducers
+Select * from tmp_users ORDER by age limit 10; -- 25-60s / 2 reducers
+Select * from tmp_users DISTRIBUTE by age limit 10; -- 50s DOES NOT SORT
+
+HIVE Storage formats
+ORC file
+CREATE TABLE IF NOT EXISTS users_orc (user_id INT, location STRING, age INT) COMMENT 'Book Crossing users table ORC format' STORED AS ORC;
+INSERT INTO TABLE users_orc SELECT * FROM users;
+
+HIVE Functions
+select isbn, parse_url(image_s, 'FILE') from BookData limit 10; 
+
+
+Books = LOAD  '/user/hive/Data/BX-BooksC.csv' 
+	USING PigStorage(';')  AS (
+		isbn:chararray, 
+		title:chararray, 
+		author:chararray, 
+		year:int, 
+		publisher:chararray, 
+		image_s:chararray, 
+		image_m:chararray, 
+		image_l:chararray);
+Ratings = LOAD  '/user/hive/Data/BX-BookRatingC.csv'
+	USING PigStorage(';')  AS (
+		userid:int, 
+		isbn:chararray, 
+		ratings:int);
+GoodRatings = FILTER Ratings BY ratings > 3;
+J = JOIN Books BY isbn, GoodRatings by isbn;
+JA = GROUP J BY author;
+JB = FOREACH JA GENERATE COUNT(J), group;
+OA = LIMIT JB 100;
+DUMP OA; 
+
+
+
+--------------------------------------------Book Data--------Hive/Pig End--------------------------------------------
+
