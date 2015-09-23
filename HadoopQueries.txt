@@ -1,5 +1,5 @@
 Pig
------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------
 Protocol = LOAD '/user/cloudera/Data/PTCL.txt' using PigStorage(';')
 as (ptclid:chararray, ptclname:chararray, phase:chararray,  status:chararray,
     pgmid:chararray, applnum:chararray, indicator:chararray, 
@@ -85,6 +85,16 @@ ANALYZE TABLE sitesubjects PARTITION(subjstatus) COMPUTE STATISTICS noscan;
 DESCRIBE EXTENDED sitesubjects;
 
 --------------------------------------------Book Data--------Hive Start
+Download file -> http://www2.informatik.uni-freiburg.de/~cziegler/BX/BX-CSV-Dump.zip
+
+Run the following unix commands to clean the data.
+sed 's/\&amp;/\&/g' BX-Books.csv | sed -e '1d' |sed 's/;/$$$/g' | sed 's/"$$$"/";"/g'|sed 's/\"//g' > BX-BooksC.csv
+sed 's/\&amp;/\&/g' BX-Users.csv | sed -e '1d' |sed 's/\"//g' > BX-UsersC.csv
+sed 's/\&amp;/\&/g' BX-Book-Ratings.csv | sed -e '1d' |sed 's/;/$$$/g' | sed 's/"$$$"/";"/g'|sed 's/\"//g' > BX-BookRatingC.csv
+
+Create a folder "Data" in hdfs and Move all the 3 cleaned csv files to hdfs /user/cloudera/Data and run chmod 777 for all the files
+If you want the files from the local filesystem then change the LOAD statement to include INPATH LOCAL
+
 CREATE TABLE IF NOT EXISTS BookData 
  (ISBN STRING, 
  BookTitle STRING, 
@@ -109,12 +119,13 @@ CREATE TABLE IF NOT EXISTS BookRating
  LOAD DATA INPATH '/user/cloudera/Data/BX-BookRatingC.csv'
  OVERWRITE INTO TABLE BookRating;
 
-CREATE TABLE book_ratingi (USER_ID INT, ISBN STRING, Rating INT) ROW FORMAT DELIMITED FIELDS TERMINATED BY ",";
-INSERT OVERWRITE TABLE book_ratingi
+CREATE TABLE bookratingi (USERID INT, ISBN STRING, Rating INT) ROW FORMAT DELIMITED FIELDS TERMINATED BY ",";
+INSERT OVERWRITE TABLE bookratingi
 select regexp_replace(UserId,"\"",""), regexp_replace(ISBN,">",""), regexp_replace(regexp_replace(Rating,"\"",""),">","") from BookRating;
 
-
-
+select count(*) from bookrating
+select count(*) from bookratingi
+// Both should yield same count of 1149780
 
  CREATE TABLE IF NOT EXISTS UserData 
   (UserId STRING, 
@@ -130,27 +141,51 @@ select regexp_replace(UserId,"\"",""), regexp_replace(ISBN,">",""), regexp_repla
 INSERT OVERWRITE TABLE BookData
 SELECT BookData.*
 FROM BookData WHERE YearOfPublication > 0;
-/*
-There are 4619 book entries with 0 as year
-*/
+/* There are 4619 book entries with 0 as year */
+
+QUESTION : Find out the frequency of books published each year.
+Answer:  Should result in 114 unique records and 115 if YearOfPublication =0 is included
+	SELECT YearOfPublication, count(DISTINCT BookTitle) as Count_of_Pubs 
+	from BookData group by YearOfPublication sort by Count_of_Pubs DESC;
+
+QUESTION : Find out in which year maximum number of books were published
+Answer : 17,628 - This job runs 2 jobs in hadoop (first to count of all and then limits to 1)
+	SELECT YearOfPublication, COUNT(BookTitle) as Count_of_Pubs 
+	FROM BookData GROUP BY YearOfPublication sort by Count_of_Pubs DESC limit 1;
+
+
+Question : JOINING BOTH THE TABLES - BOOKS AND BOOK_RATING_INT
+	CREATE TABLE book_join (ISBN STRING, YearOfPublication INT, BookTitle STRING, Rating INT) ROW FORMAT DELIMITED FIELDS TERMINATED BY ",";
+	INSERT OVERWRITE TABLE book_join
+	select a.ISBN, regexp_replace(regexp_replace(a.YearOfPublication,"\"",""),">",""), a.BookTitle, b.Rating
+	from BookData a join bookratingi b on a.ISBN = b.ISBN;
+
+
+QUESTION : Find out how many book were published based on ranking in the year 2002.
+	Create Table Rating_2002 (Rating INT, Count_of_Books INT) ROW FORMAT DELIMITED FIELDS TERMINATED BY ",";
+	INSERT OVERWRITE TABLE Rating_2002
+	Select Rating, count(BookTitle) from book_join where YearOfPublication = 2002 group by Rating order by Rating asc;
+
 
 SELECT Publisher, BookAuthor, YearOfPublication, COUNT(BookTitle) 
  FROM BookData 
- GROUP BY Publisher, BookAuthor, YearOfPublication;
-
-QUESTION 1:- Find out the frequency of books published each year.
-SELECT YearOfPublication, count(DISTINCT BookTitle) as Count_of_Pubs 
-from BookData group by YearOfPublication sort by Count_of_Pubs DESC;
-
-QUESTION 2:- Find out in which year maximum number of books were published
- SELECT YearOfPublication, COUNT(BookTitle) as Count_of_Pubs 
- FROM BookData GROUP BY YearOfPublication sort by Count_of_Pubs DESC limit 1;
-
-
-
-                    
+ GROUP BY Publisher, BookAuthor, YearOfPublication;                   
 
 --------------------------------------------Book Data--------Hive End
+
+
+CREATE DATABASE HR WITH DBPROPERTIES ('creator' = 'Udhay Subramanian', 'date' = '2015-09-21');
+
+CREATE TABLE IF NOT EXISTS HR.employees (
+name STRING COMMENT 'Employee name',
+salary FLOAT COMMENT 'Employee salary',
+subordinates ARRAY<STRING> COMMENT 'Names of subordinates', deductions MAP<STRING, FLOAT>
+COMMENT 'Keys are deductions names, values are percentages', address STRUCT<street:STRING, city:STRING, state:STRING, zip:INT>
+COMMENT 'Home address') COMMENT 'Employee table contains salary,subordinates,deductions and address of the employees'
+TBLPROPERTIES ('creator'='Udhay', 'created_at'='2015-09-21 10:00:00')
+
+
+
 
 SELECT COUNT(*)
 FROM

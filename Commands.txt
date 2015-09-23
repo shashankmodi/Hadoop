@@ -3,7 +3,7 @@ https://forums.virtualbox.org/viewtopic.php?t=15868
 
 http://cloudacademy.com/blog/hadoop-series-hive-flume-hdfs-and-retail-analysis/
 
-
+ 
 
 All the commands used for Hadoop
 
