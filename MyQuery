@@ -83,15 +83,16 @@ SELECT protocolname, count(subjstatus) from sitesubjects group by protocolname;
 
 Adding Hive Queries used with different Data sets
 
+https://github.com/hortonworks/hadoop-tutorials/tree/master/Sandbox
 
 --------------------------------------------Book Data--------Hive/Pig Start--------------------------------------------
 
 Download file -> http://www2.informatik.uni-freiburg.de/~cziegler/BX/BX-CSV-Dump.zip
 
 Run the following unix commands to clean the data.
-sed 's/\&amp;/\&/g' BX-Books.csv | sed -e '1d' |sed 's/;/$$$/g' | sed 's/"$$$"/";"/g'|sed 's/\"//g' > BX-BooksC.csv
-sed 's/\&amp;/\&/g' BX-Users.csv | sed -e '1d' |sed 's/\"//g' > BX-UsersC.csv
-sed 's/\&amp;/\&/g' BX-Book-Ratings.csv | sed -e '1d' |sed 's/;/$$$/g' | sed 's/"$$$"/";"/g'|sed 's/\"//g' > BX-BookRatingC.csv
+• sed 's/\&amp;/\&/g' BX-Books.csv | sed -e '1d' |sed 's/;/$$$/g' | sed 's/"$$$"/";"/g'|sed 's/\"//g' > BX-BooksC.csv
+• sed 's/\&amp;/\&/g' BX-Users.csv | sed -e '1d' |sed 's/\"//g' > BX-UsersC.csv
+• sed 's/\&amp;/\&/g' BX-Book-Ratings.csv | sed -e '1d' |sed 's/;/$$$/g' | sed 's/"$$$"/";"/g'|sed 's/\"//g' > BX-BookRatingC.csv
 
 Create a folder "Data" in hdfs and Move all the 3 cleaned csv files to hdfs /user/cloudera/Data and run chmod 777 for all the files
 If you want the files from the local filesystem then change the LOAD statement to include INPATH LOCAL
@@ -99,7 +100,8 @@ If you want the files from the local filesystem then change the LOAD statement t
 • HDFS User Permissions - login into hortonworks 2.3.1 root/hadoop
 	• su -- hdfs -c "hadoop fs -chmod -R 755 /user"
 	• su -- hdfs -c "hadoop fs -chmod 755 /user/hive"
-
+	• hive \ -hiveconf DATA_DIR=…/hcb-v2/chapter6/data/ \ -f create-book-crossing.hql 
+	• hive -e 'select * from bookcrossing.users limit 10'  -----from unix shell 
 
 CREATE DATABASE IF NOT EXISTS bookcrossing;
 
@@ -120,6 +122,14 @@ CREATE TABLE IF NOT EXISTS BookData
 
 LOAD DATA INPATH '/user/hive/Data/BX-BooksC.csv'
  OVERWRITE INTO TABLE BookData;
+
+CREATE EXTERNAL TABLE IF NOT EXISTS books 
+(isbn INT, title STRING, author STRING, year INT, publisher STRING, image_s STRING, image_m STRING,  image_l STRING) COMMENT 'Book crossing books list cleaned' 
+ROW FORMAT DELIMITED FIELDS TERMINATED BY '\073' 
+STORED AS TEXTFILE
+LOAD DATA INPATH '/user/hive/Data/BX-Books-Prepro.txt'
+ OVERWRITE INTO TABLE Books;
+
 
 Books Rating data ---------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS BookRating 
@@ -165,6 +175,11 @@ Question : JOINING BOTH THE TABLES - BOOKS AND BOOK_RATING_INT
 		select a.ISBN, regexp_replace(regexp_replace(a.YearOfPublication,"\"",""),">",""), a.BookTitle, b.Rating
 			from BookData a join book_ratingi b on a.ISBN = b.ISBN;
 
+Stinger Initiative Hive 0.13, no use of JOIN
+select a.ISBN, regexp_replace(regexp_replace(a.YearOfPublication,"\"",""),">",""), a.BookTitle, b.Rating
+	from BookData a ,book_ratingi b on a.ISBN = b.ISBN;
+
+
 QUESTION : Find out how many book were published based on ranking in the year 2002.
 	Create Table Rating_2002 (Rating INT, Count_of_Books INT) 
 		ROW FORMAT DELIMITED FIELDS TERMINATED BY ",";
@@ -172,6 +187,9 @@ QUESTION : Find out how many book were published based on ranking in the year 20
 	INSERT OVERWRITE TABLE Rating_2002
 		Select Rating, count(BookTitle) from book_join 
 			where YearOfPublication = 2002 group by Rating order by Rating asc;
+			
+Select distinct rating from bookrating;
+
 
 Books User data ---------------------------------------------------------------------------
  CREATE TABLE IF NOT EXISTS UserData 
@@ -190,11 +208,13 @@ CREATE TABLE IF NOT EXISTS users
 COMMENT 'Book Crossing users cleaned' 
 ROW FORMAT DELIMITED FIELDS TERMINATED BY '\073' STORED AS TEXTFILE;
 LOAD DATA LOCAL INPATH 'BX-Users-prepro.txt' OVERWRITE INTO TABLE users; 
-use bookcrossing;alter table users rename to bookcrossing.users;
+use bookcrossing;
+alter table users rename to bookcrossing.users;
 
 Or 
 
-CREATE TABLE bookcrossing.usersAS SELECT * FROM users ;
+CREATE TABLE bookcrossing.users
+AS SELECT * FROM users ;
 DROP TABLE users ;
 
 Creating View……
@@ -202,8 +222,10 @@ CREATE TABLE tmp_users AS SELECT user_id, location, age FROM users WHERE age>18 
 INSERT INTO TABLE tmp_users SELECT user_id, location, age FROM users WHERE age>33 and age <51;
 CREATE VIEW tmp_users_view AS SELECT user_id, location, age FROM users WHERE age>18 and age <34;
 
-Order by , GROUP By, CLUSTER by ,SORT by, DISTRIBUTE by
+
+Order by , GROUP By, CLUSTER by ,SORT by, DISTRIBUTE by, UNION ALL, IN, NOT IN, EXISTS , NOT EXISTS, DISTINCT
 describe formatted UserData;
+select DISTINCT rating from bookrating;  -- 11 records
 SELECT user_id, location, age FROM UserData WHERE age>18 and age <34 limit 10; 
 SELECT count(*) FROM UserData WHERE age>18 and age <34 ; 
 SELECT age, count(*) FROM UserData GROUP BY age; 
@@ -214,13 +236,46 @@ Select * from tmp_users CLUSTER by age limit 10; -- 25-60s / 2 reducers
 Select * from tmp_users ORDER by age limit 10; -- 25-60s / 2 reducers
 Select * from tmp_users DISTRIBUTE by age limit 10; -- 50s DOES NOT SORT
 
-HIVE Storage formats
+Select count(*) from (
+	SELECT user_id, location, age FROM users WHERE age>18 and age <34
+		UNION ALL
+	SELECT user_id, location, age FROM users WHERE age>33 and age <51
+) unionresult
+
+Select * from userdata where userid in ( select userid from bookrating ) LIMIT 10;
+Select * from userdata where userid not in ( select userid from bookrating ) LIMIT 10; --userid = 1 is one of them
+
+
+
+HIVE Storage formats                                                                       : 
 ORC file
 CREATE TABLE IF NOT EXISTS users_orc (user_id INT, location STRING, age INT) COMMENT 'Book Crossing users table ORC format' STORED AS ORC;
 INSERT INTO TABLE users_orc SELECT * FROM users;
 
-HIVE Functions
-select isbn, parse_url(image_s, 'FILE') from BookData limit 10; 
+HIVE Functions                                                                                   : 
+SHOW FUNCTIONS;
+describe function extended parse_url;
+select isbn, parse_url(image_s, 'FILE') from Book limit 10; 
+Select * , RANK() OVER (order by rating desc) as rank from bookrating limit 10;
+Select * , RANK() OVER (partition by userid) as rank from bookrating limit 10;
+Select * , RANK() OVER (partition by userid order by rating desc) as rank from bookrating limit 10;
+Select * from (Select * , RANK() OVER (partition by userid order by rating desc) as rank from bookrating) as ranked_rating where ranked_rating.rank=1 limit 10;   - Gives the top rated books by all users in the rating table
+Select * from (Select * , RANK() OVER (partition by userid order by rating desc) as rank from bookrating) as ranked_rating where ranked_rating.rank=1 and rating =10 limit 10; 
+Select isbn, count(*) from (Select * , RANK() OVER (partition by userid order by rating desc) as rank from bookrating) as ranked_rating where ranked_rating.rank=1 and rating =10 group by isbn order by isbn limit 10; 
+
+
+Select isbn,rating,count(*) as cnt from bookrating where rating =10 group by isbn,rating order by cnt desc limit 1;
+Answer = 0385504209 with 158 rating "10" rating
+
+Question :Books that got maximum 0 rating, maximum 1 rating, maximum 1 rating, and so on
+Create table ratingcnt  as Select isbn,rating,count(*) as cnt from bookrating group by isbn,rating;
+Select * from (
+Select *, rank() over (partition by ratin order bt cnt desc) as rank from ratingcnt 
+) rankedcnt where rankedcnt.rank=1 and rating is not null limit 20;
+Answer = Output of 11 records for each distinct rating 0 to 10 and books that got that rating !
+
+Custom UDF Functions                                                                                   : 
+http://dev.bizo.com/2009/06/custom-udfs-and-hive.html
 
 
 Books = LOAD  '/user/hive/Data/BX-BooksC.csv' 
@@ -248,4 +303,3 @@ DUMP OA;
 
 
 --------------------------------------------Book Data--------Hive/Pig End--------------------------------------------
-
