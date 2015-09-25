@@ -1,89 +1,18 @@
-Pig
------------------------------------------------------------------------------------------
-Protocol = LOAD '/user/cloudera/Data/PTCL.txt' using PigStorage(';')
-as (ptclid:chararray, ptclname:chararray, phase:chararray,  status:chararray,
-    pgmid:chararray, applnum:chararray, indicator:chararray, 
-    prodid:chararray, prodname:chararray, bustype:chararray, 
-    gender:chararray, leg:chararray, theraparea:chararray, 
-    verified:chararray, pgmname:chararray, customer:chararray); 
-/*    
-    ROW_ID;PTCL_NAME;PTCL_PHASE;PTCL_STAT_CD;PGM_APPLN_ID;APPL_NUM;INDICATOR_CD;PRODUCT_ID;NAME;X_BUSINESS_TYPE;
-    X_GENDER;X_LEG_INDICATION;X_THERA_AREA;X_LEG_THERA_AREA;X_VERIFIED_FLG;NAME_1;NAME_2
-*/
-myprotocol = FILTER Protocol by phase == 'Phase 2';
-
-sorted = ORDER myprotocol by status DESC;
-
-top5 = LIMIT sorted 5;
-
-dump top5;
-**********************************************************
-myprotocol = FILTER Protocol by phase == 'Phase 2';
-
-myprotocols = FOREACH myprotocol GENERATE phase,status;
-
-grouped = GROUP myprotocols by (phase,status) ;
-
-summed = FOREACH grouped GENERATE group, COUNT($1) as count;
-
-sorted = ORDER summed by $0 ASC;
-
-dump sorted;
-**********************************************************
-
-
-
-
-Hive
-------------------------------------------------------------------------------------------
-CREATE EXTERNAL TABLE IF NOT EXISTS protocol
-(ptclid STRING, ptclname STRING, phase STRING,  status STRING,
-    pgmid STRING, applnum STRING, indicator STRING, 
-    prodid STRING, prodname STRING, bustype STRING, 
-    gender STRING, leg STRING, theraparea STRING, 
-    verified STRING, pgmname STRING, customer STRING)
-COMMENT 'Our Clinical Protocol Data!'
-ROW FORMAT DELIMITED 
-	FIELDS TERMINATED BY ';'
-	LINES TERMINATED BY '\n';
-
-LOAD DATA INPATH '/user/cloudera/Data/PTCL.txt' OVERWRITE INTO TABLE protocol;
-
-SELECT phase, count(status) from protocol group by phase;
-**********************************************************
-SELECT phase, status, unix_timestamp() from protocol ;
-
-
-
-PTCL.ROW_ID, PTCL.PTCL_NAME, PTCL.PTCL_NUM,SITE.SITE_NUM,SITE.STATUS_CD,
-SUBJ.ROW_ID,SUBJ.SUBJ_NUM,SUBJ.BIRTH_DT, to_char(SUBJ.BIRTH_DT,'YYYYMMDD'),  
-  SUBJ.PTCL_SITE_ID,SUBJ.CREATED,to_char(SUBJ.CREATED,'YYYYMMDD'), 
-SJ_STAT.STATUS_CD,SJ_STAT.PAR_SUBJ_ID,to_char(SJ_STAT.STATUS_DATE,'YYYYMMDD'),
-  to_char(SJ_STAT.CREATED,'YYYYMMDD'),SJ_STAT.DB_LAST_UPD_SRC
-**********************************************************
-
-CREATE EXTERNAL TABLE IF NOT EXISTS sitesubjects(
-  protcolid STRING, protocolname STRING, protocolnum STRING, sitenum STRING, sitestatus STRING,
-  subjectid STRING, subjectnum STRING, birthdate STRING,birthdt STRING, 
-  protocolsiteid STRING, subjcreateddate STRING, subjcreated STRING,
-  subjstatus STRING, statussubjid STRING, statusdate STRING,statuscreated STRING, statusby STRING)
-  COMMENT 'Our Clinical Site Subject Data!'
-ROW FORMAT DELIMITED 
-	FIELDS TERMINATED BY ';'
-	LINES TERMINATED BY '\n';
- 
-LOAD DATA INPATH '/user/cloudera/Data/Hive/SITESUBJ.txt' OVERWRITE INTO TABLE sitesubjects;
-
-SELECT protocolname, count(subjstatus) from sitesubjects group by protocolname;
-
-
-
-
-**********************************************************
-
 Adding Hive Queries used with different Data sets
 
 https://github.com/hortonworks/hadoop-tutorials/tree/master/Sandbox
+http://cdn.oreillystatic.com/oreilly/booksamplers/packt/9781783285471_Sample.pdf
+https://github.com/hortonworks/hive-testbench/tree/hive14/settings  -- Hive settings used in a typical hortonwork hadoop
+https://github.com/apache/hive/tree/master/data/files
+https://github.com/ananddhanabal/hive/blob/master/HIVE%20Tutorial   -- good text on hive with examples
+https://github.com/Alekyab/Hive
+https://github.com/Alekyab/oozie
+https://github.com/yhemanth/hive-samples
+https://github.com/Re1tReddy/Hive-Pig-Hbase
+
+ Lots of links to explore for hadoop AWESOME
+https://github.com/rameshsurapathi/awesome-hadoop#sql-on-hadoop
+https://github.com/rameshsurapathi/Tech_Notes
 
 --------------------------------------------Book Data--------Hive/Pig Start--------------------------------------------
 
@@ -102,12 +31,25 @@ If you want the files from the local filesystem then change the LOAD statement t
 	• su -- hdfs -c "hadoop fs -chmod 755 /user/hive"
 	• hive \ -hiveconf DATA_DIR=…/hcb-v2/chapter6/data/ \ -f create-book-crossing.hql 
 	• hive -e 'select * from bookcrossing.users limit 10'  -----from unix shell 
+	• Wget http://hortonassets.s3.amazonaws.com/tutorial/hive/Twitterdata.txt
+	• Hadoop fs -put Twitterdata.txt /user/hive/Data
+	• Hadoop fs -ls /user/hive/Data
+	• Make sure the owner of the file is admin, upload the files from ambari file browser or change owner for the files.
+
+#http://mapredit.blogspot.com/2013/05/get-all-extended-hive-tables-with.html
+Get all extended Hive tables with location in HDFS
+for file in $(hive -e "show table extended like \`*\`" | grep location: | awk 'BEGIN { FS = ":" };{printf("hdfs:%s:%s\n",$3,$4)}'); do hdfs dfs -du -h $file; done;
+
+ hive log to console
+ -hiveconf hive.root.logger=DEBUG,console
 
 CREATE DATABASE IF NOT EXISTS bookcrossing;
 
 USE bookcrossing;
 
 SET hive.cli.print.header=true;
+
+Note : All the HDFS files from /user/hive/Data are moved to hive metastore warehouse directory /apps/hive/warehouse after table is create with data in HDP 2.3.1
 
 Books data ---------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS BookData 
@@ -208,6 +150,7 @@ CREATE TABLE IF NOT EXISTS users
 COMMENT 'Book Crossing users cleaned' 
 ROW FORMAT DELIMITED FIELDS TERMINATED BY '\073' STORED AS TEXTFILE;
 LOAD DATA LOCAL INPATH 'BX-Users-prepro.txt' OVERWRITE INTO TABLE users; 
+
 use bookcrossing;
 alter table users rename to bookcrossing.users;
 
@@ -218,9 +161,9 @@ AS SELECT * FROM users ;
 DROP TABLE users ;
 
 Creating View……
-CREATE TABLE tmp_users AS SELECT user_id, location, age FROM users WHERE age>18 and age <34;
-INSERT INTO TABLE tmp_users SELECT user_id, location, age FROM users WHERE age>33 and age <51;
-CREATE VIEW tmp_users_view AS SELECT user_id, location, age FROM users WHERE age>18 and age <34;
+	CREATE TABLE tmp_users AS SELECT user_id, location, age FROM users WHERE age>18 and age <34;
+	INSERT INTO TABLE tmp_users SELECT user_id, location, age FROM users WHERE age>33 and age <51;
+	CREATE VIEW tmp_users_view AS SELECT user_id, location, age FROM users WHERE age>18 and age <34;
 
 
 Order by , GROUP By, CLUSTER by ,SORT by, DISTRIBUTE by, UNION ALL, IN, NOT IN, EXISTS , NOT EXISTS, DISTINCT
@@ -234,7 +177,7 @@ EXPLAIN SELECT userid, location, age FROM UserData WHERE age>18 and age <34 limi
 Select * from tmp_users ORDER by age limit 10; -- 15s
 Select * from tmp_users CLUSTER by age limit 10; -- 25-60s / 2 reducers
 Select * from tmp_users ORDER by age limit 10; -- 25-60s / 2 reducers
-Select * from tmp_users DISTRIBUTE by age limit 10; -- 50s DOES NOT SORT
+Select * from tmp_users DISTRIBUTE by age limit 10; -- 50s DOES NOT SORT, distributes different age group data to reducers
 
 Select count(*) from (
 	SELECT user_id, location, age FROM users WHERE age>18 and age <34
@@ -244,25 +187,36 @@ Select count(*) from (
 
 Select * from userdata where userid in ( select userid from bookrating ) LIMIT 10;
 Select * from userdata where userid not in ( select userid from bookrating ) LIMIT 10; --userid = 1 is one of them
-
-
+Also check this link on above topics -> http://www.datascience-labs.com/hive/hiveql-joins/
 
 HIVE Storage formats                                                                       : 
-ORC file
-CREATE TABLE IF NOT EXISTS users_orc (user_id INT, location STRING, age INT) COMMENT 'Book Crossing users table ORC format' STORED AS ORC;
-INSERT INTO TABLE users_orc SELECT * FROM users;
+	ORC file - Optimized row columnar - Execute plan uses vectorization to retrive data ( get 1000 at a time usually 1 record) 
+		CREATE TABLE IF NOT EXISTS users_orc (user_id INT, location STRING, age INT) COMMENT 'Book Crossing users table ORC format' STORED AS ORC;
+		INSERT INTO TABLE users_orc SELECT * FROM users;
+	
+	RC file
+		CREATE TABLE TwitterExampleRCtable(
+        tweetId INT, username BIGINT,
+        txt STRING, CreatedAt STRING,
+        profileLocation STRING COMMENT 'Location of user',
+        favc INT,retweet STRING,retcount INT,followerscount INT)
+    COMMENT 'This is the Twitter streaming data'
+    ROW FORMAT DELIMITED
+    FIELDS TERMINATED BY '\t'
+    STORED AS RCFILE;
+
 
 HIVE Functions                                                                                   : 
-SHOW FUNCTIONS;
-describe function extended parse_url;
-select isbn, parse_url(image_s, 'FILE') from Book limit 10; 
-Select * , RANK() OVER (order by rating desc) as rank from bookrating limit 10;
-Select * , RANK() OVER (partition by userid) as rank from bookrating limit 10;
-Select * , RANK() OVER (partition by userid order by rating desc) as rank from bookrating limit 10;
-Select * from (Select * , RANK() OVER (partition by userid order by rating desc) as rank from bookrating) as ranked_rating where ranked_rating.rank=1 limit 10;   - Gives the top rated books by all users in the rating table
-Select * from (Select * , RANK() OVER (partition by userid order by rating desc) as rank from bookrating) as ranked_rating where ranked_rating.rank=1 and rating =10 limit 10; 
-Select isbn, count(*) from (Select * , RANK() OVER (partition by userid order by rating desc) as rank from bookrating) as ranked_rating where ranked_rating.rank=1 and rating =10 group by isbn order by isbn limit 10; 
-
+	SHOW FUNCTIONS;
+	describe function extended parse_url;
+	select isbn, parse_url(image_s, 'FILE') from Book limit 10; 
+	Select * , RANK() OVER (order by rating desc) as rank from bookrating limit 10;
+	Select * , RANK() OVER (partition by userid) as rank from bookrating limit 10;
+	Select * , RANK() OVER (partition by userid order by rating desc) as rank from bookrating limit 10;
+	Select * from (Select * , RANK() OVER (partition by userid order by rating desc) as rank from bookrating) as ranked_rating where ranked_rating.rank=1 limit 10;   - Gives the top rated books by all users in the rating table
+	Select * from (Select * , RANK() OVER (partition by userid order by rating desc) as rank from bookrating) as ranked_rating where ranked_rating.rank=1 and rating =10 limit 10; 
+	Select isbn, count(*) from (Select * , RANK() OVER (partition by userid order by rating desc) as rank from bookrating) as ranked_rating where ranked_rating.rank=1 and rating =10 group by isbn order by isbn limit 10; 
+	
 
 Select isbn,rating,count(*) as cnt from bookrating where rating =10 group by isbn,rating order by cnt desc limit 1;
 Answer = 0385504209 with 158 rating "10" rating
@@ -274,9 +228,110 @@ Select *, rank() over (partition by ratin order bt cnt desc) as rank from rating
 ) rankedcnt where rankedcnt.rank=1 and rating is not null limit 20;
 Answer = Output of 11 records for each distinct rating 0 to 10 and books that got that rating !
 
-Custom UDF Functions                                                                                   : 
-http://dev.bizo.com/2009/06/custom-udfs-and-hive.html
 
+Column Aliases,CASE … WHEN … THEN Statements,Calc WHERE Clauses & LIKE and RLIKE  
+COLLECTION, MAP, ARRAY & STRUCT :   
+	CREATE TABLE employees (
+	name STRING,
+	salary FLOAT,
+	subordinates ARRAY<STRING>,
+	deductions MAP<STRING, FLOAT>,
+	address STRUCT<street:STRING, city:STRING, state:STRING, zip:INT>
+	)
+	ROW FORMAT DELIMITED
+	FIELDS TERMINATED BY '\073'
+	COLLECTION ITEMS TERMINATED BY '\072'
+	MAP KEYS TERMINATED BY '\043'
+	LINES TERMINATED BY '\n'
+	STORED AS TEXTFILE;
+	load data inpath '/user/hive/Data/employee1.txt' overwrite into table employees;
+	
+	Data for above scripts…………employee1.txt-----------
+	John Doe;100000.0;Mary Smith:Todd Jones;Federal Taxes#.2:State Taxes#.05:Insurance#.1;1 Michigan Ave.:Chicago:IL:60600
+	Mary Smith;80000.0;Bill King;Federal Taxes#.2:State Taxes#.05:Insurance#.1;100 Ontario St.:Chicago:IL:60601
+	Todd Jones;70000.0;;Federal Taxes#.15:State Taxes#.03:Insurance#.1;200 Chicago Ave.:Oak Park:IL:60700
+	Bill King;60000.0;;Federal Taxes#.15:State Taxes#.03:Insurance#.1;300 Obscure Dr.:Obscuria:IL:60100
+	Data for above scripts…………employee1.txt-----------
+	Execute all the queries here -> http://www.datascience-labs.com/hive/hiveql-data-manipulation/
+	
+	SELECT name, address FROM employees
+	WHERE address.street RLIKE '.*(Chicago|Ontario).*';
+	
+	SELECT name, salary,
+	CASE
+	WHEN salary < 50000.0 THEN 'low'
+	WHEN salary >= 50000.0 AND salary < 70000.0 THEN 'middle'
+	WHEN salary >= 70000.0 AND salary < 100000.0 THEN 'high'
+	ELSE 'very high'
+	END AS bracket FROM employees;
+	
+	FROM (
+	SELECT upper(name), salary, deductions["Federal Taxes"] as fed_taxes,
+	round(salary * (1 - deductions["Federal Taxes"])) as salary_minus_fed_taxes
+	FROM employees
+	) e
+	SELECT e.name, e.salary_minus_fed_taxes
+	WHERE e.salary_minus_fed_taxes > 70000;
+	JOHN DOE 100000.0 0.2 80000
+	
+
+Partitions, Buckets, Managed, External                                                     : 
+	http://hortonworks.com/hadoop-tutorial/using-hive-data-analysis/
+	1. Managed tables vs external tables
+			i. Managed:
+    CREATE TABLE ManagedExample(
+        tweetId BIGINT, username STRING,
+        txt STRING, CreatedAt STRING,
+        profileLocation STRING,
+        favc BIGINT,retweet STRING,retcount BIGINT,followerscount BIGINT)
+    COMMENT 'This is the Twitter streaming data'
+    ROW FORMAT DELIMITED
+    FIELDS TERMINATED BY '\t'
+    STORED AS TEXTFILE;
+External:
+    CREATE EXTERNAL TABLE IF NOT EXISTS ExternalExample(
+        tweetId BIGINT, username STRING,
+        txt STRING, CreatedAt STRING,
+        profileLocation STRING,
+        favc BIGINT,retweet STRING,retcount BIGINT,followerscount BIGINT)
+    COMMENT 'This is the Twitter streaming data'
+    ROW FORMAT DELIMITED
+    FIELDS TERMINATED BY '\t'
+    STORED AS TEXTFILE
+    location '/user/Twitterdata.txt';
+	2. PARTITIONED a Table
+			CREATE TABLE PARTITIONEDExample(
+tweetId INT, username BIGINT, txt STRING,favc INT,retweet STRING,retcount INT,followerscount INT) COMMENT 'This is the Twitter streaming data' PARTITIONED BY(CreatedAt STRING, profileLocation STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' STORED AS TEXTFILE;
+			FROM twitterexampletextexample
+INSERT OVERWRITE TABLE PARTITIONEDExample PARTITION (CreatedAt="26 04:50:56 UTC 2014",profileLocation="Chicago") SELECT tweetId,username,txt,favc,retweet,retcount,followerscount where profileLocation='Chicago' limit 100;
+			
+			i. Creates a folder in HDFS folder "PARTITIONEDExample" called CreatedAt="26 04:50:56 UTC 2014" and another subdirectory of profileLocation="Chicago"
+	3. Bucketing a Table
+		CREATE TABLE BucketingExample(
+        tweetId INT, username BIGINT,
+        txt STRING,CreatedAt STRING,favc INT,retweet STRING,retcount INT,                           followerscount INT)
+    COMMENT 'This is the Twitter streaming data'
+    PARTITIONED BY( profileLocation STRING)
+    CLUSTERED BY(tweetId) INTO 2 BUCKETS
+    ROW FORMAT DELIMITED
+    FIELDS TERMINATED BY '\t'
+    STORED AS TEXTFILE;
+		set hive.enforce.bucketing = true; 
+    FROM twitterexampletextexample
+    INSERT OVERWRITE TABLE BucketingExample PARTITION (profileLocation="Chicago")    SELECT tweetId,username,txt,CreatedAt,favc,retweet,retcount,followerscount       where profileLocation='Chicago' limit 100;
+		
+	
+	Custom UDF Functions                                                                                   : 
+		http://dev.bizo.com/2009/06/custom-udfs-and-hive.html
+		Stateful UDF -> https://gist.github.com/yssharma/4368970  -- Oracle sequence for the session
+		
+	
+	
+	
+
+http://drill.apache.org/docs/json-data-model/
+
+https://github.com/ananddhanabal/programmingpig
 
 Books = LOAD  '/user/hive/Data/BX-BooksC.csv' 
 	USING PigStorage(';')  AS (
