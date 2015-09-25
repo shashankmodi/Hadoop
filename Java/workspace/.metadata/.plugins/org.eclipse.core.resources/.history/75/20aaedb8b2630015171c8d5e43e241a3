@@ -1,0 +1,5 @@
+package com.quintiles.hadoop;
+
+public class AvgTemperatureMapper {
+
+}

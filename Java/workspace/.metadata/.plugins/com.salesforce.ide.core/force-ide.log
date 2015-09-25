@@ -1,0 +1,4 @@
+ WARN [2014-04-23 15:19:33,619] (IntroEditorInput.java:loadDocument:130) - org.xml.sax.SAXParseException; lineNumber: 149; columnNumber: 32; The entity name must immediately follow the '&' in the entity reference.
+ WARN [2014-04-23 15:30:02,070] (ConnectionFactory.java:clearCache:209) - No cached connections
+ WARN [2014-04-23 15:30:02,072] (DescribeObjectRegistry.java:clearCache:654) - No cached describes
+ WARN [2014-04-23 15:30:02,072] (MetadataFactory.java:clearCache:120) - No cached metadata stubs

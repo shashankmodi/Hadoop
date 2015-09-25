@@ -1,0 +1,488 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><?xml-stylesheet type="text/xsl" media="screen" href="/~d/styles/rss2full.xsl"?>
+<?xml-stylesheet type="text/css" media="screen" href="http://feeds.feedburner.com/~d/styles/itemcontent.css"?>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:feedburner="http://rssnamespace.org/feedburner/ext/1.0" xmlns:slash="http://purl.org/rss/1.0/modules/slash/" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" version="2.0">
+
+<channel>
+	<title>Salesforce Developers Blogs</title>
+	
+	<link>http://developer.salesforce.com/blogs</link>
+	<description>Elevating developer skills and connecting with the Salesforce Developers community</description>
+	<lastBuildDate>Wed, 23 Apr 2014 15:20:56 +0000</lastBuildDate>
+	<language>en-US</language>
+		<sy:updatePeriod>hourly</sy:updatePeriod>
+		<sy:updateFrequency>1</sy:updateFrequency>
+	
+	<atom10:link xmlns:atom10="http://www.w3.org/2005/Atom" href="http://feeds.feedburner.com/SforceBlog" rel="self" type="application/rss+xml"/><feedburner:info uri="sforceblog"/><atom10:link xmlns:atom10="http://www.w3.org/2005/Atom" href="http://pubsubhubbub.appspot.com/" rel="hub"/><feedburner:emailServiceId>SforceBlog</feedburner:emailServiceId><feedburner:feedburnerHostname>http://feedburner.google.com</feedburner:feedburnerHostname><feedburner:feedFlare href="http://add.my.yahoo.com/rss?url=http%3A%2F%2Ffeeds.feedburner.com%2FSforceBlog" src="http://us.i1.yimg.com/us.yimg.com/i/us/my/addtomyyahoo4.gif">Subscribe with My Yahoo!</feedburner:feedFlare><feedburner:feedFlare href="http://www.newsgator.com/ngs/subscriber/subext.aspx?url=http%3A%2F%2Ffeeds.feedburner.com%2FSforceBlog" src="http://www.newsgator.com/images/ngsub1.gif">Subscribe with NewsGator</feedburner:feedFlare><feedburner:feedFlare href="http://feeds.my.aol.com/add.jsp?url=http%3A%2F%2Ffeeds.feedburner.com%2FSforceBlog" src="http://o.aolcdn.com/favorites.my.aol.com/webmaster/ffclient/webroot/locale/en-US/images/myAOLButtonSmall.gif">Subscribe with My AOL</feedburner:feedFlare><feedburner:feedFlare href="http://www.bloglines.com/sub/http://feeds.feedburner.com/SforceBlog" src="http://www.bloglines.com/images/sub_modern11.gif">Subscribe with Bloglines</feedburner:feedFlare><feedburner:feedFlare href="http://www.netvibes.com/subscribe.php?url=http%3A%2F%2Ffeeds.feedburner.com%2FSforceBlog" src="http://www.netvibes.com/img/add2netvibes.gif">Subscribe with Netvibes</feedburner:feedFlare><feedburner:feedFlare href="http://fusion.google.com/add?feedurl=http%3A%2F%2Ffeeds.feedburner.com%2FSforceBlog" src="http://buttons.googlesyndication.com/fusion/add.gif">Subscribe with Google</feedburner:feedFlare><feedburner:feedFlare href="http://www.pageflakes.com/subscribe.aspx?url=http%3A%2F%2Ffeeds.feedburner.com%2FSforceBlog" src="http://www.pageflakes.com/ImageFile.ashx?instanceId=Static_4&amp;fileName=ATP_blu_91x17.gif">Subscribe with Pageflakes</feedburner:feedFlare><item>
+		<title>Salesforce Developer Skills Lead to Dream Job</title>
+		<link>http://feedproxy.google.com/~r/SforceBlog/~3/NVpy2mUHdsE/salesforce-developer-skills-dream-jobs.html</link>
+		<comments>https://developer.salesforce.com/blogs/developer-relations/2014/04/salesforce-developer-skills-dream-jobs.html#comments</comments>
+		<pubDate>Wed, 23 Apr 2014 15:20:56 +0000</pubDate>
+		<dc:creator><![CDATA[LeeAnne Templeman]]></dc:creator>
+				<category><![CDATA[Uncategorized]]></category>
+		<category><![CDATA[apex]]></category>
+		<category><![CDATA[apex code]]></category>
+		<category><![CDATA[Careers]]></category>
+		<category><![CDATA[developer certification]]></category>
+		<category><![CDATA[dreamforce]]></category>
+		<category><![CDATA[learn to code]]></category>
+		<category><![CDATA[MVP]]></category>
+		<category><![CDATA[webinar]]></category>
+
+		<guid isPermaLink="false">http://26.63201</guid>
+		<description><![CDATA[<a href="https://developer.salesforce.com/blogs/developer-relations/2014/04/salesforce-developer-skills-dream-jobs.html"><img align="left" hspace="5" width="150" src="http://res.cloudinary.com/hzxejch6p/image/upload/v1398112571/david_MVP_h3wujs.jpg" class="alignleft wp-post-image tfe" alt="salesforce developer jobs, developer skills in high demand as this Salesforce Architect at Google shows" title="Salesforce MVPs give back to the developer community" /></a>When David Liu emailed Marc Benioff for a Dreamforce pass, he didn't expect an answer. Now, he's a Salesforce Architect at Google.]]></description>
+				<content:encoded><![CDATA[<p><img class="wp-image-63221 alignleft" title="Salesforce MVPs give back to the developer community" alt="salesforce developer jobs, developer skills in high demand as this Salesforce Architect at Google shows" src="http://res.cloudinary.com/hzxejch6p/image/upload/v1398112571/david_MVP_h3wujs.jpg" width="257" height="257" />Three years ago, <a title="David Liu Twitter" href="https://twitter.com/dvdkliu" target="_blank">David Liu </a>was a Salesforce Administrator who wished he had learned to code during college. Driven to learn, he taught himself how to code in six months and landed his first job as a Salesforce Developer. Fast forward two years to today – David is a <a title="sfdc MVPs" href="http://blogs.salesforce.com/community/2012/02/salesforce-mvps.html" target="_blank">Salesforce MVP</a> and Salesforce Architect at Google. He believes from the bottom of his heart that Salesforce developer skills are key, and that anyone can do it too! I recently had a conversation with David and wanted to share his story.  If you&#8217;re interested in building your own developer skills, David will be teaching in an upcoming webinar series beginning May 15th, <a title="apex for admins" href="http://bit.ly/1kA7VP0" target="_blank">registration</a> is now open.</p>
+<h3>LT: When did you learn to code? What do you love most about it?</h3>
+<p>DL: I started to code in 2011 and I got my first developer job about six months after I began learning how to code. There are so many things I love about it! The biggest thing is having the powers to do anything. Back when I was in marketing I used to always be jealous of the engineers. Whenever we needed websites or applications they could build it. I wanted to have that power myself and the flexibility to build anything.</p>
+<h3>LT: I’ve met a lot of Salesforce Administrators who are interested in coding, what would you say to them?</h3>
+<p>DL: It’s easier than you expect, you will be shocked! The hardest part is getting started. The first two months you may have no idea what you are doing, but then after that you are in the matrix! It doesn’t matter where you went to school or what your background is, if you want to do it you can do it. It just takes perseverance.</p>
+<h3>LT: How did you get started with Force.com?</h3>
+<p>DL: I used to be a professional email spammer. I was doing a lot of marketing automation and all of the major marketing automation companies integrate with the Salesforce Platform, so I started dabbling in it. There was this moment at one of my companies where we needed to close our books in Salesforce CRM and we couldn’t do what we needed to do with Workflow Rules. A consultant was too expensive for us so I said I would take on this project. I asked my boss to give me a month to build a Force.com application. It was the greatest learning experience of my life, I was so shocked how easy it was to learn to code on the Salesforce Platform. I built the application and they are still using it to this day. I took a lot of classes in the beginning in Java and other languages. There are so many less barriers to entry with the Salesforce Platform. The Salesforce Platform is so different, it’s all done for you.</p>
+<h3>LT: How was the learning curve for Apex/Visualforce?</h3>
+<p>DL: The first two months were tough. The first time I wrote something in Apex I spent a whole day wondering why my code didn’t work. Turns out I was using double quotes instead of single quotes. That’s going to happen to everyone. After that first or second month, once you are over the hill, everything else is totally clear. Just hang in there in the beginning.</p>
+<h3>LT: What was the hardest thing about learning to code?</h3>
+<p>DL: Knowing where to start. In the very beginning I didn’t know where to start and I didn’t have anyone to mentor me. I had mentors but they didn’t know Salesforce Platform. Now there are so many resources. <a title="SFDC99" href="http://www.sfdc99.com/" target="_blank">My site</a> is there, there is a big and well developed community, it shouldn’t be hard to find a mentor.</p>
+<h3>LT: Are you going to Dreamforce this year?</h3>
+<p>DL: Yes! I want to speak at Dreamforce this year! I have a great Dreamforce story. Back when I started with the Salesforce Platform in 2010 I was dreaming of becoming a Salesforce Developer and I really, really wanted to go to Dreamforce. At the time I was working for a really small company and we didn’t have the budget to go. So I cold-emailed Marc Benioff, totally out of nowhere, and told him “I have to go to Dreamforce! If you send me tickets to Dreamforce I promise you that one day I will do great things in your community”. He replied! I was shocked. He said “David I will take you up on your promise, here are your tickets.” It was amazing, Dreamforce was amazing. I am so grateful for that chance to attend.</p>
+<h3>LT: That is such a great story! Does Marc Benioff know about all the amazing work you are doing for the community?</h3>
+<p>DL: I don’t know! If you could get the message to him that would be great. I want him to know the impact he has had on my career. Some day I would love to meet Marc and tell him how important it was to me.</p>
+<h3>LT: Who inspired you?</h3>
+<p>DL: I had the opportunity to meet <a title="Twitter TecNrd" href="https://twitter.com/TehNrd" target="_blank">Jason Venable</a> at my first Dreamforce, he was a real inspiration. I saw him speak on jQuery, and then I made a point to sit next to him at another session to talk to him. I kept bumping into him at Dreamforce and asking him questions on how he became a coder. He was probably sick of me! Here he was, speaking at Dreamforce, he is one of the best in the community, and he comes from a non-coding background! I still visit <a title="tehnrd" href="http://www.tehnrd.com/" target="_blank">his site</a> all the time and read his posts.</p>
+<h3><img class="wp-image-63281 alignleft" alt="" src="http://res.cloudinary.com/hzxejch6p/image/upload/v1398114606/sfdc99logo_syd0ct.png" width="192" height="192" />LT: You have created a really effective Apex learning path on your website, <a title="SFDC99" href="http://www.sfdc99.com/beginner-tutorials/" target="_blank">sfdc99.com</a>, tell me where the idea for that originated.</h3>
+<p>DL: When I first started learning, it wasn’t efficient. There were so many places I had to reference. Back then the community wasn’t as developed as it is today. I could have learned it so much quicker if there was a site to guide me, to inspire me. I didnt really know it was possible to go from a non-coding background to get a job as a Salesforce Developer. I knew Jason Venable did it, but maybe he was just some super genius. Now I know anyone can do it. I wish I had a site like that when I was learning so that’s why I built it. I know there are Admins out there looking to make a similar jump. I want to make it easy for them to learn to code.</p>
+<h3>LT: Whats next for SFDC99? Any exciting projects?</h3>
+<p>DL: Yes! I am having a hall of fame challenge based on all the tutorials that are up, I am going to create a challenge for Admins learning to code. I will rate the apps, put their pictures up, broadcast their apps. I also want to add more on Visualforce, I think that’s important. I want to also incorporate tips on how to get a job as a Salesforce Developer.</p>
+<h3>LT: What are your tips for how to get a job as a Salesforce Developer?</h3>
+<p>DL: People underestimate how much their non-coding background will help them get a job. Understanding the business side, being creative with solutions – that adds value. Coding is a tool to get things done, but it’s not necessarily your only tool. When hiring devs, we want people with a nice well-rounded background. I highly recommend people get certified. I think three <a title="sfdc certifications" href="http://certification.salesforce.com/" target="_blank">certifications</a>(Admin, Advanced Admin, Force.com Developer) are very doable and people should try and get them if they are looking for a Salesforce Developer job.</p>
+<h3><img class="wp-image-63351 alignright" alt="" src="http://res.cloudinary.com/hzxejch6p/image/upload/v1398113705/David_Glasshole_vtw5un.jpg" width="225.3" height="300" />LT: Tell me about your current role at Google.</h3>
+<p>DL: I am a Technical Architect here! Pretty much all technical decisions for Salesforce Platform on my team go through me. I am the only technical person on my team. For example, we just spun up a new instance of Salesforce and being able to provide so much value for such a valuable team at Google is really great. I spend my whole day doing things I love in the Salesforce Platform, whether it’s writing code, Visualforce pages, integrations. Life is pretty good.</p>
+<h3>LT: What are your next goals?</h3>
+<p>DL: Getting my Technical Architect certification is at the top of my list! I also want to raise good children. Hopefully I can teach them some code too, but we will wait and see what they want to do.</p>
+<h3>LT: What resources do you recommend for Force.com newbies?</h3>
+<p>DL: Definitely the <a title="SFDC Developer Community" href="https://developer.salesforce.com/forums/#!/feedtype=RECENT&amp;criteria=ALLQUESTIONS&amp;" target="_blank">Salesforce Developer Community</a>. If you have any coding problem, I guarantee someone else has solved it before. I also recommend the other community sites like <a title="Salesforce Stack Exchange" href="http://salesforce.stackexchange.com/" target="_blank">Salesforce Stack Exchange</a> and <a title="Salesforce Success Answers" href="https://success.salesforce.com/answers" target="_blank">Success Forums</a>. The book <a title="Head First Java" href="http://www.headfirstlabs.com/books/hfjava/" target="_blank">Head First Java</a> changed my life! If I had not read this book I would be email spamming people right now. It is the easiest book to read, super funny and has weird diagrams. You learn really quick. Best $25 you will ever spend. You have to go to <a title="sfdc99" href="http://www.sfdc99.com/" target="_blank">my Site</a>! I write at least 2 posts a week, and if you go through all the tutorials you WILL get a job. If you don’t, contact me and we will work it out. The <a title="sfdc udacity course" href="https://www.udacity.com/course/ud162" target="_blank">Salesforce Udacity</a> course is super helpful. I also go to at least three different local <a title="sfdc user groups" href="https://success.salesforce.com/userGroups" target="_blank">Salesforce User Groups</a> and <a title="DUGs" href="https://developer.salesforce.com/dugs?title=page/Force.com_User_Groups" target="_blank">Developer Groups</a>. I have recently started to see <a title="Linkedin Salesforce Dev Group" href="https://www.linkedin.com/groups?trkInfo=VSRPsearchId%3A402364761398113272971%2CVSRPtargetId%3A142613%2CVSRPcmpt%3Aprimary&amp;trk=vsrp_groups_res_name&amp;gid=142613" target="_blank">Linkedin Groups</a> pick up more too.<br />
+You definitely have to go to <a title="dreamforce 14" href="https://www.salesforce.com/form/dreamforce/df14-prereg.jsp" target="_blank">Dreamforce</a>, it changed my life!</p>
+<h3>LT: Any last words of wisdom?</h3>
+<p>DL: You cannot be a good developer unless you are a good Admin. There is so much you can do without code on the Salesforce Platform. There are times you can do it with code or without code. When you reach that fork in the road, engineers sometimes over-engineer things and do it all with code. Then you have this beast code base you can’t work with. The platform is really flexible. For example, Visual Workflows are amazing, there is so much you can do.<br />
+If you want to be a great coder, never give up.<br />
+<b><span style="font-size: large"><br />
+</span></b></p>
+<p style="text-align: center"><em><strong>Your resiliency is your #1 skill.</strong></em></p>
+<p>&nbsp;</p>
+<p style="text-align: center"><b><span style="font-size: large">To hear more from David, join <a title="Apex4Admins" href="http://bit.ly/1kA7VP0" target="_blank">“Apex for Admins”</a> on May 15th</span></b></p>
+<div class="feedflare">
+<a href="http://feeds.feedburner.com/~ff/SforceBlog?a=NVpy2mUHdsE:VEhMRdcXiXc:yIl2AUoC8zA"><img src="http://feeds.feedburner.com/~ff/SforceBlog?d=yIl2AUoC8zA" border="0"></img></a> <a href="http://feeds.feedburner.com/~ff/SforceBlog?a=NVpy2mUHdsE:VEhMRdcXiXc:qj6IDK7rITs"><img src="http://feeds.feedburner.com/~ff/SforceBlog?d=qj6IDK7rITs" border="0"></img></a> <a href="http://feeds.feedburner.com/~ff/SforceBlog?a=NVpy2mUHdsE:VEhMRdcXiXc:V_sGLiPBpWU"><img src="http://feeds.feedburner.com/~ff/SforceBlog?i=NVpy2mUHdsE:VEhMRdcXiXc:V_sGLiPBpWU" border="0"></img></a> <a href="http://feeds.feedburner.com/~ff/SforceBlog?a=NVpy2mUHdsE:VEhMRdcXiXc:F7zBnMyn0Lo"><img src="http://feeds.feedburner.com/~ff/SforceBlog?i=NVpy2mUHdsE:VEhMRdcXiXc:F7zBnMyn0Lo" border="0"></img></a> <a href="http://feeds.feedburner.com/~ff/SforceBlog?a=NVpy2mUHdsE:VEhMRdcXiXc:l6gmwiTKsz0"><img src="http://feeds.feedburner.com/~ff/SforceBlog?d=l6gmwiTKsz0" border="0"></img></a>
+</div><img src="http://feeds.feedburner.com/~r/SforceBlog/~4/NVpy2mUHdsE" height="1" width="1"/>]]></content:encoded>
+			<wfw:commentRss>https://developer.salesforce.com/blogs/developer-relations/2014/04/salesforce-developer-skills-dream-jobs.html/feed</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		<feedburner:origLink>https://developer.salesforce.com/blogs/developer-relations/2014/04/salesforce-developer-skills-dream-jobs.html</feedburner:origLink></item>
+		<item>
+		<title>Spring ’14 Salesforce.com DevOps Conference Day 1 Wrap-up</title>
+		<link>http://feedproxy.google.com/~r/SforceBlog/~3/52xnSJ5Mq0Q/spring-14-salesforce-com-devops-conference-day-1.html</link>
+		<comments>http://developer.salesforce.com/blogs/engineering/2014/04/spring-14-salesforce-com-devops-conference-day-1.html#comments</comments>
+		<pubDate>Wed, 23 Apr 2014 02:53:14 +0000</pubDate>
+		<dc:creator><![CDATA[Dave Mangot]]></dc:creator>
+				<category><![CDATA[Uncategorized]]></category>
+		<category><![CDATA[devops]]></category>
+
+		<guid isPermaLink="false">http://25.17641</guid>
+		<description><![CDATA[<a href="http://developer.salesforce.com/blogs/engineering/2014/04/spring-14-salesforce-com-devops-conference-day-1.html"><img align="left" hspace="5" width="150" src="http://res.cloudinary.com/hzxejch6p/image/upload/v1398220698/devops1_jkuwrl.jpg" class="alignleft wp-post-image tfe" alt="" title="" /></a>At Salesforce.com we have a kaizen spirit that demands that we periodically set aside time to facilitate collaboration between widely disparate parts of the organization. One way we do this is with our internal DevOps conferences. Today's start of our Spring conference was no exception.]]></description>
+				<content:encoded><![CDATA[<p>At Salesforce.com we have a kaizen spirit that demands that we periodically set aside time to facilitate collaboration between widely disparate parts of the organization. One way we do this is with our internal DevOps conferences. Today&#8217;s start of our Spring conference was no exception.</p>
+<p>The day began with (yummy) breakfast and kicked off with a panel of CTOs moderated by <a title="Reena Matthew" href="https://twitter.com/reenamathew" target="_blank">Reena Matthew</a>. The theme of the panel was resiliency and the discussion covered such topics as how resiliency had been designed into the service and how that has evolved over time as we&#8217;ve grown to billions of transactions. We talked about how things are expected to change over time with more growth, where we thought we could improve, and what is planned for the future. We had great audience participation who asked questions about many different parts of the infrastructure and were so engaged that our poor moderator only got through her first two questions!</p>
+<p style="text-align: center"><img class="wp-image-17681 aligncenter" alt="" src="http://res.cloudinary.com/hzxejch6p/image/upload/v1398220698/devops1_jkuwrl.jpg" width="819" height="461" /></p>
+<p>The next part of the conference was the <a title="ignite" href="http://igniteshow.com/" target="_blank">ignite</a> talks. Our fast paced presentations focused on topics like metrics, monitoring, and resiliency. We even had our first remote ignite presenter! Hopefully the remote presentations will go a little more smoothly for tomorrow&#8217;s ignite talks.</p>
+<p>The final part of day 1 of the conference was the ever popular unconference breakout sessions. We took suggestions from the audience and split into discussions on a number of topics. Here are some examples from today:</p>
+<ul>
+<li>Delivering a database-centric service</li>
+<li>Resiliency, complexity, and anti-fragile systems</li>
+<li>Environment validation</li>
+<li>DevOps behaviors</li>
+<li>Deployment tools</li>
+<li>Service ownership</li>
+</ul>
+<p>Each discussion group setup a videoconference so that we could have our discussions with people from around the world. The only requirement for each group was that they write up a summary of their discussion and post it on Salesforce Chatter so that the discussion could continue long after the conference ends.</p>
+<p style="text-align: center"><img class="wp-image-17701 aligncenter" alt="" src="http://res.cloudinary.com/hzxejch6p/image/upload/v1398221120/devops3_v9hlca.jpg" width="819" height="461" /></p>
+<p>Personally, I was really excited to see so many new faces! We had representation from many different parts of the organization and participation from many folks who hadn&#8217;t attended either of the previous two DevOps conferences. It was exciting to see the passion all the attendees had for solving problems and the incredible dedication everyone had to make salesforce.com better for themselves, their peers, and our customers!</p>
+<p>Looking forward to a great day 2 tomorrow.</p>
+<div class="feedflare">
+<a href="http://feeds.feedburner.com/~ff/SforceBlog?a=52xnSJ5Mq0Q:xZnRQ4gqTkQ:yIl2AUoC8zA"><img src="http://feeds.feedburner.com/~ff/SforceBlog?d=yIl2AUoC8zA" border="0"></img></a> <a href="http://feeds.feedburner.com/~ff/SforceBlog?a=52xnSJ5Mq0Q:xZnRQ4gqTkQ:qj6IDK7rITs"><img src="http://feeds.feedburner.com/~ff/SforceBlog?d=qj6IDK7rITs" border="0"></img></a> <a href="http://feeds.feedburner.com/~ff/SforceBlog?a=52xnSJ5Mq0Q:xZnRQ4gqTkQ:V_sGLiPBpWU"><img src="http://feeds.feedburner.com/~ff/SforceBlog?i=52xnSJ5Mq0Q:xZnRQ4gqTkQ:V_sGLiPBpWU" border="0"></img></a> <a href="http://feeds.feedburner.com/~ff/SforceBlog?a=52xnSJ5Mq0Q:xZnRQ4gqTkQ:F7zBnMyn0Lo"><img src="http://feeds.feedburner.com/~ff/SforceBlog?i=52xnSJ5Mq0Q:xZnRQ4gqTkQ:F7zBnMyn0Lo" border="0"></img></a> <a href="http://feeds.feedburner.com/~ff/SforceBlog?a=52xnSJ5Mq0Q:xZnRQ4gqTkQ:l6gmwiTKsz0"><img src="http://feeds.feedburner.com/~ff/SforceBlog?d=l6gmwiTKsz0" border="0"></img></a>
+</div><img src="http://feeds.feedburner.com/~r/SforceBlog/~4/52xnSJ5Mq0Q" height="1" width="1"/>]]></content:encoded>
+			<wfw:commentRss>http://developer.salesforce.com/blogs/engineering/2014/04/spring-14-salesforce-com-devops-conference-day-1.html/feed</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		<feedburner:origLink>http://developer.salesforce.com/blogs/engineering/2014/04/spring-14-salesforce-com-devops-conference-day-1.html</feedburner:origLink></item>
+		<item>
+		<title>Packaging Canvas Apps for Different Editions</title>
+		<link>http://feedproxy.google.com/~r/SforceBlog/~3/7KU2z0wQlAU/packaging-canvas-apps-for-different-editions.html</link>
+		<comments>https://developer.salesforce.com/blogs/isv/2014/04/packaging-canvas-apps-for-different-editions.html#comments</comments>
+		<pubDate>Tue, 22 Apr 2014 17:35:28 +0000</pubDate>
+		<dc:creator><![CDATA[Andrey Volosevich]]></dc:creator>
+				<category><![CDATA[Uncategorized]]></category>
+		<category><![CDATA[App Distribution]]></category>
+		<category><![CDATA[Best Practices]]></category>
+		<category><![CDATA[canvas]]></category>
+		<category><![CDATA[ISV]]></category>
+		<category><![CDATA[packaging]]></category>
+
+		<guid isPermaLink="false">http://30.11211</guid>
+		<description><![CDATA[<a href="https://developer.salesforce.com/blogs/isv/2014/04/packaging-canvas-apps-for-different-editions.html"><img align="left" hspace="5" width="150" src="http://res.cloudinary.com/hzxejch6p/image/upload/v1393432424/Canvas_App_Settings_nhl0qn.png" class="alignleft wp-post-image tfe" alt="Connected App - Access Method" title="" /></a>We have seen some very impressive adoption rate amongst our customers and ISV partners in leveraging Canvas framework for building integrated composite applications on Salesforce1 platform. Based on some of the lessons learned and feedback received, we decided to publish this article to help our ISV partners understand their options when it comes to packaging Canvas for distribution and for support of different Salesforce1 platform editions.]]></description>
+				<content:encoded><![CDATA[<h1>What Is This Article About?</h1>
+<p dir="ltr">We have seen some very impressive adoption rate amongst our customers and ISV partners in leveraging Canvas framework for building integrated composite applications on Salesforce1 Platform. Based on some of the lessons learned and feedback received, we decided to publish this article to help our ISV partners understand their options when it comes to packaging Canvas for distribution and for support of different Salesforce1 platform editions.</p>
+<p>&nbsp;</p>
+<h1>Canvas Summary</h1>
+<p dir="ltr">Let’s start with a very brief recap of what Canvas is and why you would use Canvas in the first place. Canvas is an integration framework that allows partners to easily integrate third-party applications with Salesforce1 Platform. Canvas allows ISVs to expose an externally hosted application inside the Canvas container and have very meaningful and seamless UI and API based integration between them. Canvas includes a whole host of <a href="http://www.salesforce.com/us/developer/docs/platform_connectpre/Content/canvas_framework_intro.htm" target="_blank">tools</a> and frameworks such as Authentication (OAuth), Support for Cross-domain XHR, Javascript-based events framework, and tools for embedding your app in Visualforce pages, Chatter Publisher actions and even Salesforce1 Mobile Application Container. Please see the <a href="http://www.salesforce.com/us/developer/docs/platform_connectpre/index.htm" target="_blank">Canvas Developer Doc</a> for more details on all of the above as well as all other information you may need to build your solution. For the remainder of this article, we will assume that you have gotten up to speed and developed either a prototype or a release-ready version of your Canvas solution and are now ready to package it for distribution.</p>
+<p>&nbsp;</p>
+<h1></h1>
+<h1>Access Method and Permitted Users</h1>
+<p dir="ltr">Canvas is defined as part of the <a href="https://help.salesforce.com/apex/HTViewHelpDoc?id=connected_app_overview.htm&amp;language=en_US" target="_blank">Connected App</a> metadata entity which has a number of settings and attributes and we are adding new ones with each release. In this article, we are going to specifically focus on two attributes of the Connected App component that are particularly important when it comes to packaging: Access Method and Permitted Users.</p>
+<h2>Access Method</h2>
+<p dir="ltr">Access Method is defined when you create the Connected App definition and enable Canvas as shown below:</p>
+<p dir="ltr"><img class="alignnone wp-image-11361" alt="Connected App - Access Method" src="http://res.cloudinary.com/hzxejch6p/image/upload/v1393432424/Canvas_App_Settings_nhl0qn.png" width="790" height="308" /></p>
+<p dir="ltr">Path in dev or packaging org: Setup &gt; Build &gt; Create &gt; Apps &gt; Connected Apps &gt; New</p>
+<p dir="ltr"><strong>Access method is defined by the Developer of the package. Once the Connected App is placed inside a managed package, the Access Method attribute can no longer be changed.</strong></p>
+<p dir="ltr">Currently, access method has two available options:</p>
+<ol>
+<li><span style="text-decoration: underline">Signed Request (POST)</span> &#8211; this is the default method of authentication for canvas apps in which the signed request containing the consumer secret, context and authorization token are provided to the canvas app. The developer does not need to implement the OAuth authentication flow since the authorization token is passed to the external application as part of the request.</li>
+<li><span style="text-decoration: underline">OAuth Web Request (GET)</span> &#8211; with this method, Canvas apps can use the OAuth 2.0 protocol to authenticate and acquire access tokens. For more information about OAuth and the Salesforce1 platform please check out this <a href="http://wiki.developerforce.com/page/Digging_Deeper_into_OAuth_2.0_on_Force.com" target="_blank">article</a>.</li>
+</ol>
+<h2>Permitted Users</h2>
+<p dir="ltr">Permitted Users is a setting that a customer admin can control. Once a managed package with the ConnectedApp is installed in a customer org, the admin can choose one of the below two settings:</p>
+<p dir="ltr"><img class="alignnone wp-image-11391" alt="Connected App - Permitted Users" src="http://res.cloudinary.com/hzxejch6p/image/upload/v1393432874/Connected_App_-_Permitted_Users_a6tyhf.png" width="937" height="287" />Path in Customer Org: Setup &gt; Administer &gt; Manage &gt; Connected Apps &gt; [Name of Installed App] &gt; Edit</p>
+<ol>
+<li>
+<p dir="ltr">All users may self-authorize &#8211; end users will have to self-authorize Canvas app access via OAuth authorization dialog.</p>
+</li>
+<li>
+<p dir="ltr">Admin approved users are pre-authorized &#8211; end users will not see the OAuth authorization dialog, the authorization flow will run implicitly transparent to the user. This requires Permission Sets or Profiles to be available in the org in order for an admin to grant users access to the ConnectedApp.</p>
+</li>
+</ol>
+<h1></h1>
+<p>&nbsp;</p>
+<h1>How These Settings Work Together</h1>
+<p>Here is the table summarizing possible options and below is the description to illustrate what will happen depending on which settings are selected.</p>
+<p><img class="alignnone wp-image-12151" alt="Canvas packaging in different editions table" src="http://res.cloudinary.com/hzxejch6p/image/upload/v1394742872/Canvas_and_Editions_Table_sgh9sg.png" width="975" height="137" /></p>
+<p><span style="text-decoration: underline">OAuth (Web Request) Connected Apps</span> are currently accessible by all users in all editions including Group, Professional and above. When the Web Request ConnectedApp is installed in the customer org, as part of the initial configuration, the admin can select OAuth Policy setting for Permitted Users to be either “All users may self-authorize” or “Admin approved users are pre-authorized”. The latter requires the access to be granted via Permission Sets or Profiles and therefore may not be available in most PE/GE orgs where Profiles and Permissions Sets are not enabled. You can see the detailed flow diagram for the OAuth (Web Request) Connected App <a href="http://www.salesforce.com/us/developer/docs/platform_connectpre/Content/user_flow_oauth.htm" target="_blank">here</a>.</p>
+<p dir="ltr"><span style="text-decoration: underline">Signed Request Connected Apps</span> require Profiles or Permission Sets feature in order for the org admin to grant users access to the app. Profiles and Permission Sets are advanced features and are not included in PE edition and lower by default. Effectively this means that as of today, most typical Group and Professional Edition customers are not going to be able to use your Signed Request Connected App unless they upgrade to EE or higher or purchase these features as an add-on. You can see the detailed flow diagram for the Signed Request Connected App <a href="http://www.salesforce.com/us/developer/docs/platform_connectpre/Content/user_flow_signed_request.htm" target="_blank">here</a>.</p>
+<h1></h1>
+<p>&nbsp;</p>
+<h1>So, What Does It All Mean When It Comes to Packaging?</h1>
+<p dir="ltr">Let’s break it down based on what type of editions your application needs to support starting with the simplest example first.</p>
+<h3>Supporting ONLY Enterprise and Above</h3>
+<p dir="ltr">Since all orgs of Enterprise Edition and above have Profiles and Permission Sets on by default you can package either Signed Request or Web Request Connected App without any problem. The former is your default option and is somewhat simpler because it does not require implementation of the OAuth token exchange routine.</p>
+<h3>Supporting ONLY Professional and Group</h3>
+<p dir="ltr">Since Profiles and Permission sets are not available in majority of PE/GE editions, you can only offer OAuth Web Request Connected App to those customers as of today. It is possible for your customers to purchase Profile and Permission Sets as an add-on for PE/GE orgs, however, in many cases, this may not be practical either due to extra cost or because it adds a layer of complexity to your sales cycle.</p>
+<h3>Supporting All Editions</h3>
+<p dir="ltr">Finally, possibly more common scenario is when you would like to offer your application to all of our customers from Group Edition and up. Here are your options:</p>
+<p><strong>Option 1 (Recommended):</strong> Provide only OAuth Web Request (GET) Connected App.</p>
+<ul>
+<li>
+<p dir="ltr">Pro: Easy in terms of packaging, one Connected App component for all editions.</p>
+</li>
+<li>
+<p dir="ltr">Con: Slightly more technically complex requiring the implementation of OAuth token exchange process.</p>
+</li>
+</ul>
+<p dir="ltr"><strong>Option 2:</strong> Provide two connected apps. Signed Request for EE and above and OAuth Web Request for PE and below.</p>
+<ul>
+<li>
+<p dir="ltr">Pro: you have the flexibility to implement either authorization flow</p>
+</li>
+<li>
+<p dir="ltr">Con: it makes your packaging and application design more complex</p>
+</li>
+</ul>
+<p>If you do decide to go this route, there are two potential solutions for being able to offer both types of Connected Apps:</p>
+<ol>
+<li>
+<p dir="ltr">Single Package: your package will contain both apps and any components referencing these two apps need to duplicated or be made dynamic based on edition in which the app installed. To determine the org edition, you can use the below Query:  <code>select OrganizationType from Organization</code></p>
+<p><em>Disclaimer: I did not test this myself as of yet. If you do implement this, please send me some feedback so I can update the article with best practices from our partner community.</em></li>
+</ol>
+<ol start="2">
+<li>
+<p dir="ltr">Multiple Packages: Alternatively, you could define separate packages for EE vs PE orgs. This is not something we would typically recommend as such duplication may increase your overhead and complicate your testing and development process. However, in some circumstances it may make sense. For example, you already have such package separation in place due to other reasons.</p>
+</li>
+</ol>
+<h1></h1>
+<p>&nbsp;</p>
+<h1>Testing</h1>
+<p>Ok, hopefully at this point, you determined your design approach and packaged your Canvas and Connected App in a Beta package. Before marking the package as released, you need to test the application against all the supported editions to make sure it works as expected. Normally, in order to test your application, you would go to the partner portal and create test orgs <a href="https://org62.my.salesforce.com/apex/CreateDemoTestOrg?p=PP_CreateTestOrg" target="_blank">here</a>, at least one for each supported edition. This case is no exception, please make sure to test against all editions by following the same process. Remember, as of today, the Connected App component cannot be deprecated. We are working on adding deprecation to more metadata components with each release, but for now, please make sure you test diligently against all editions before flipping the flag on your package to ‘Managed Released’.</p>
+<p>One more tidbit regarding Professional Edition orgs. As you know, many (most) PE/GE orgs do not have API enabled. However, for the purposes of testing, when you create a test PE org from the partner portal, it will have the API turned on. The reason we did this is to allow you to test your apps that leverage API while your app is in development. Once your app passes the certification and gets officially listed on AppExchange, you can request a partner API token that will allow your application to use API even in PE/GE editions where API is not turned on for the customer.</p>
+<p dir="ltr">Hopefully, this article will help you navigate your options for packaging your Canvas app and feel confident when packaging your app for distribution. Please send your comments and feedback!</p>
+<div class="feedflare">
+<a href="http://feeds.feedburner.com/~ff/SforceBlog?a=7KU2z0wQlAU:WaPPw8ovd2A:yIl2AUoC8zA"><img src="http://feeds.feedburner.com/~ff/SforceBlog?d=yIl2AUoC8zA" border="0"></img></a> <a href="http://feeds.feedburner.com/~ff/SforceBlog?a=7KU2z0wQlAU:WaPPw8ovd2A:qj6IDK7rITs"><img src="http://feeds.feedburner.com/~ff/SforceBlog?d=qj6IDK7rITs" border="0"></img></a> <a href="http://feeds.feedburner.com/~ff/SforceBlog?a=7KU2z0wQlAU:WaPPw8ovd2A:V_sGLiPBpWU"><img src="http://feeds.feedburner.com/~ff/SforceBlog?i=7KU2z0wQlAU:WaPPw8ovd2A:V_sGLiPBpWU" border="0"></img></a> <a href="http://feeds.feedburner.com/~ff/SforceBlog?a=7KU2z0wQlAU:WaPPw8ovd2A:F7zBnMyn0Lo"><img src="http://feeds.feedburner.com/~ff/SforceBlog?i=7KU2z0wQlAU:WaPPw8ovd2A:F7zBnMyn0Lo" border="0"></img></a> <a href="http://feeds.feedburner.com/~ff/SforceBlog?a=7KU2z0wQlAU:WaPPw8ovd2A:l6gmwiTKsz0"><img src="http://feeds.feedburner.com/~ff/SforceBlog?d=l6gmwiTKsz0" border="0"></img></a>
+</div><img src="http://feeds.feedburner.com/~r/SforceBlog/~4/7KU2z0wQlAU" height="1" width="1"/>]]></content:encoded>
+			<wfw:commentRss>https://developer.salesforce.com/blogs/isv/2014/04/packaging-canvas-apps-for-different-editions.html/feed</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		<feedburner:origLink>https://developer.salesforce.com/blogs/isv/2014/04/packaging-canvas-apps-for-different-editions.html</feedburner:origLink></item>
+		<item>
+		<title>The DevOps Mini-conference at Salesforce.com</title>
+		<link>http://feedproxy.google.com/~r/SforceBlog/~3/dWoJaDGJkmQ/the-devops-mini-conference-at-salesforce-com.html</link>
+		<comments>http://developer.salesforce.com/blogs/engineering/2014/04/the-devops-mini-conference-at-salesforce-com.html#comments</comments>
+		<pubDate>Mon, 21 Apr 2014 19:30:19 +0000</pubDate>
+		<dc:creator><![CDATA[Dave Mangot]]></dc:creator>
+				<category><![CDATA[Uncategorized]]></category>
+		<category><![CDATA[Best Practices]]></category>
+		<category><![CDATA[devops]]></category>
+		<category><![CDATA[Sharing]]></category>
+		<category><![CDATA[trust]]></category>
+
+		<guid isPermaLink="false">http://25.17551</guid>
+		<description><![CDATA[Affecting a DevOps transformation at a large enterprise like salesforce.com is no small endeavor. Being one of the leading cloud companies in the industry however, well positions us to bring more DevOps practices into our organization. We practice DevOps principles every day, but a few times a year we set aside time to really level up. Tomorrow marks one of these times as we host our third internal DevOps mini-conference. We’ve found that spending this time together to discuss DevOps principles and to share knowledge on a level that reaches far beyond our daily interactions can pay dividends throughout the rest of the year.]]></description>
+				<content:encoded><![CDATA[<p><span style="font-size: 14px;line-height: 1.5em">Affecting a DevOps transformation at a large enterprise like salesforce.com is no small endeavor. Being one of the leading cloud companies in the industry however, well positions us to bring more DevOps practices into our organization. We practice DevOps principles every day, but a few times a year we set aside time to really level up. Tomorrow marks one of these times as we host our third internal DevOps mini-conference. We’ve found that spending this time together to discuss DevOps principles and to share knowledge on a level that reaches far beyond our daily interactions can pay dividends throughout the rest of the year.</span></p>
+<p><span style="line-height: 1.5em">For our DevOps mini-conference, we follow a format very similar to the regular #DevOpsDays conference at which many of us have either presented, or attended. We hold our mini-conferences from 9 a.m till 1 p.m. PT spaced out over two days. There are a number of reasons for this:</span></p>
+<ul>
+<li>Not everyone wants to lose an entire day’s work. Having two half-days for the conference gives attendees the flexibility to exchange with their peers in the morning, and still keep projects moving in the afternoon.</li>
+<li>It gives groups the ability to to continue conversations from the conference into the afternoon if they’d like.</li>
+<li>Given that we are a global organization, the set time also allows for the maximum amount of participation for the most amount of Technology &amp; Product employees.</li>
+</ul>
+<p><span style="line-height: 1.5em">We typically begin each day with a keynote or a panel, to set the tone for the day. Usually this is some kind of big picture view of the world that grounds everyone in the DevOps concepts that they’ll be exploring that day. At our October mini-conference, we talked about The 7 Habits of Human DevOps by <a href="https://twitter.com/thefutureian">Ian Varley</a> and Servant Leadership by Mauricette Forzano. This time, both days will start with a panel. On day one, we’ll have an internal CTO panel discussing resiliency featuring our own <a href="https://twitter.com/scotthansma">Scott Hansma</a>, <a href="https://twitter.com/fiazhossain">Fiaz Hossain</a>, Vishal Sharma, and Keith Stoble. Day two will have an external panel of DevOps practitioners to learn more about how others in the industry use the DevOps principles in their organizations. Panelists will include:</span></p>
+<ul>
+<li><a href="https://www.linkedin.com/in/brunoconnelly">Bruno Connelly</a>, VP Engineering, Site Reliability at <a href="https://www.linkedin.com/">LinkedIn</a></li>
+<li><a href="https://twitter.com/jeremy_carroll">Jeremy Carroll</a>, Operations Engineer, <a href="http://www.pinterest.com/">Pinterest</a></li>
+<li><a href="https://twitter.com/collidr">Pedro Canahuati</a>, Director, Production Engineering &amp; Site Reliability at <a href="https://www.facebook.com">Facebook</a></li>
+<li><a href="https://twitter.com/attackgecko">Jason Wong</a>, Director of Engineering, Infrastructure, <a href="https://www.etsy.com/">Etsy</a></li>
+</ul>
+<p><span style="line-height: 1.5em">After a short break, we have Ignite talks on a variety of topics. Ordinarily Ignite talks are great for conveying a few key concepts in a short amount of time. Given that we have a common vernacular at salesforce.com, these talks are even more powerful, as everyone already has at least a passing familiarity with the ideas being presented.</span></p>
+<p><span style="line-height: 1.5em">We then like to end on something that everyone looks forward to – the unconference sessions. Topics are proposed and voted on, and the winning topics become breakout sessions. We always plan to include remote offices to ensure we’re thinking globally on things like where security fits into DevOps, what could be made better in our deployment pipeline, or how do we use the latest new feature of our monitoring framework.  </span></p>
+<p><span style="line-height: 1.5em">Some of the best unconference discussions turn into projects during the following week’s Hack Day!  While we have PTOn projects where engineers can work on projects like this as part of their regular job, the Hack Day is another opportunity to really get going on that great idea that came out of a mini-conference discussion.</span></p>
+<p><span style="line-height: 1.5em">Check in later this week when I post a summary of the conversations that took place at our 3rd DevOps mini-conference. We&#8217;ll also share the results of our Hack Day next week as well!</span></p>
+<p><span style="line-height: 1.5em">At salesforce.com, we’re always trying to find ways to get better at what we do, find new ways to bring people together, and make our #dreamjobs that much more satisfying for everyone, everyday. If you want to be a part of our DevOps journey, your #dreamjob might be waiting for you too!</span></p>
+<p><span style="line-height: 1.5em">What do you think is the best way to engrain DevOps principles into an enterprise organization? Comment below!</span></p>
+<div class="feedflare">
+<a href="http://feeds.feedburner.com/~ff/SforceBlog?a=dWoJaDGJkmQ:ZSvoaJxosa0:yIl2AUoC8zA"><img src="http://feeds.feedburner.com/~ff/SforceBlog?d=yIl2AUoC8zA" border="0"></img></a> <a href="http://feeds.feedburner.com/~ff/SforceBlog?a=dWoJaDGJkmQ:ZSvoaJxosa0:qj6IDK7rITs"><img src="http://feeds.feedburner.com/~ff/SforceBlog?d=qj6IDK7rITs" border="0"></img></a> <a href="http://feeds.feedburner.com/~ff/SforceBlog?a=dWoJaDGJkmQ:ZSvoaJxosa0:V_sGLiPBpWU"><img src="http://feeds.feedburner.com/~ff/SforceBlog?i=dWoJaDGJkmQ:ZSvoaJxosa0:V_sGLiPBpWU" border="0"></img></a> <a href="http://feeds.feedburner.com/~ff/SforceBlog?a=dWoJaDGJkmQ:ZSvoaJxosa0:F7zBnMyn0Lo"><img src="http://feeds.feedburner.com/~ff/SforceBlog?i=dWoJaDGJkmQ:ZSvoaJxosa0:F7zBnMyn0Lo" border="0"></img></a> <a href="http://feeds.feedburner.com/~ff/SforceBlog?a=dWoJaDGJkmQ:ZSvoaJxosa0:l6gmwiTKsz0"><img src="http://feeds.feedburner.com/~ff/SforceBlog?d=l6gmwiTKsz0" border="0"></img></a>
+</div><img src="http://feeds.feedburner.com/~r/SforceBlog/~4/dWoJaDGJkmQ" height="1" width="1"/>]]></content:encoded>
+			<wfw:commentRss>http://developer.salesforce.com/blogs/engineering/2014/04/the-devops-mini-conference-at-salesforce-com.html/feed</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		<feedburner:origLink>http://developer.salesforce.com/blogs/engineering/2014/04/the-devops-mini-conference-at-salesforce-com.html</feedburner:origLink></item>
+		<item>
+		<title>Building Beautiful Mobile Apps In Visualforce Using AngularJS And Ionic – Part 3  (Remote Objects)</title>
+		<link>http://feedproxy.google.com/~r/SforceBlog/~3/2qbrDXhepV0/building-beautiful-mobile-apps-in-visualforce-using-angularjs-and-ionic-part-3-remote-objects.html</link>
+		<comments>http://developer.salesforce.com/blogs/developer-relations/2014/04/building-beautiful-mobile-apps-in-visualforce-using-angularjs-and-ionic-part-3-remote-objects.html#comments</comments>
+		<pubDate>Mon, 21 Apr 2014 13:00:55 +0000</pubDate>
+		<dc:creator><![CDATA[Raja Rao DV]]></dc:creator>
+				<category><![CDATA[Uncategorized]]></category>
+		<category><![CDATA[angularJS]]></category>
+		<category><![CDATA[ionic]]></category>
+		<category><![CDATA[mobile app]]></category>
+		<category><![CDATA[remote actions]]></category>
+		<category><![CDATA[remote objects]]></category>
+		<category><![CDATA[Spring '14]]></category>
+		<category><![CDATA[visualforce]]></category>
+
+		<guid isPermaLink="false">http://26.61021</guid>
+		<description><![CDATA[<a href="http://developer.salesforce.com/blogs/developer-relations/2014/04/building-beautiful-mobile-apps-in-visualforce-using-angularjs-and-ionic-part-3-remote-objects.html"><img align="left" hspace="5" width="150" src="http://res.cloudinary.com/hzxejch6p/image/upload/v1396613613/ionic_100_nxyiyd.jpg" class="alignleft wp-post-image tfe" alt="" title="" /></a>This is the 3rd installment of the "Building Beautiful Mobile Apps.." video blog series. In this we will explore how we can use the new Visualforce Remote Objects ((available as of Spring '14) ) technique in our AngularJS and Ionic app to interact with Salesforce. We will also see how it compares with Remote Actions.]]></description>
+				<content:encoded><![CDATA[<p><img class="alignleft wp-image-61681" alt="" src="http://res.cloudinary.com/hzxejch6p/image/upload/v1396613613/ionic_100_nxyiyd.jpg" width="100" height="100" /> This is the 3rd installment of the &#8220;Building Beautiful Mobile Apps..&#8221; video blog series. In this we will explore how we can use the new <a href="http://docs.releasenotes.salesforce.com/en-us/api/release-notes/rn_vf_remote_objects.htm" target="_blank">Visualforce Remote Objects</a> (available as of Spring &#8217;14) technique in our AngularJS and Ionic app to interact with Salesforce. We will also see how it compares with <a href="https://www.salesforce.com/us/developer/docs/pages/Content/pages_js_remoting.htm" target="_blank">Remote Actions</a>.<br />
+&nbsp;<br />
+&nbsp;<br />
+&nbsp;<br />
+&nbsp;</p>
+<h1>The Story So Far:</h1>
+<p>Before I get started with this, let me quickly summarize previous blogs. As you can see from the list below, this series contains several bite sized, short videos, to help you quickly learn what you want without spending hours watching videos. So feel free to watch them before Remote Objects video.<br />
+&nbsp;</p>
+<p> 1. <a href="http://developer.salesforce.com/blogs/developer-relations/2014/04/building-beautiful-mobile-apps-in-visualforce-using-angularjs-and-ionic-part-1.html" target="_blank">Part 1</a>: Has 3 Short Videos:</p>
+<p style="padding-left: 30px">1. <a href="https://www.youtube.com/watch?v=-zCQfZUfvxA" target="_blank">Quick Overview Of AngularJS And Ionic Frameworks [~3 mins]</a></p>
+<p style="padding-left: 30px">2. <a href="//youtu.be/FlDK0ed6H-k" target="_blank">Ionic App Code Overview [~ 9 mins]</a></p>
+<p style="padding-left: 30px">3. <a href="//youtu.be/piWILJDw8pY" target="_blank">Port Ionic App to Visualforce [6 mins]</a></p>
+<p>2. <a href="http://developer.salesforce.com/blogs/developer-relations/2014/04/part-2-building-beautiful-mobile-apps-in-visualforce-using-angularjs-and-ionic.html" target="_blank">Part 2</a>: Has 2 Short Videos:</p>
+<p style="padding-left: 30px">1. <a href="https://www.youtube.com/watch?v=3VZNxmFZV9E" target="_blank">Interact With Salesforce Using RemoteTK [~5 mins]</a></p>
+<p style="padding-left: 30px">2. <a href="https://www.youtube.com/watch?v=TyV6ZHTVtFU" target="_blank">Run Ionic App As Salesforce1 Mobile App [~2 mins]</a></p>
+<p> OK, let&#8217;s see how to use Remote Objects in our AngularJS / Ionic App.<br />
+&nbsp;<br />
+&nbsp;<br />
+&nbsp;</p>
+<h1>Interacting With Salesforce Using Remote Objects</h1>
+<p><div style="text-align:right;"><a style="color:#aaa;font-size:9px" href="http://www.clickonf5.org/" title="IFRAME Embed for Youtube Free WordPress Plugin" target="_blank">IFRAME Embed for Youtube</a></div><br />
+(Note: You can change the resolution to 1080p by clicking on the gears icon on Youtube)<br />
+&nbsp;</p>
+<h1>Unmanaged Package</h1>
+<p>You can install unmanaged package of Part 1, 2 and 3 from here: <a href="https://login.salesforce.com/packaging/installPackage.apexp?p0=04t30000001Sb0A" target="_blank">https://login.salesforce.com/packaging/installPackage.apexp?p0=04t30000001Sb0A</a><br />
+&nbsp;<br />
+&nbsp;</p>
+<h1>Next Up: Performance</h1>
+<p>When it comes to mobile apps, performance plays a critical role. Next post is going to be all about performance, so stay tuned. In the mean time if you have any questions, please feel free to ping me on Twitter at: <a href="http://twitter.com/rajaraodv" target="_blank">@rajaraodv</a></p>
+<p>&nbsp;<br />
+&nbsp;<br />
+&nbsp;</p>
+<div class="feedflare">
+<a href="http://feeds.feedburner.com/~ff/SforceBlog?a=2qbrDXhepV0:bGjF0J3aTYk:yIl2AUoC8zA"><img src="http://feeds.feedburner.com/~ff/SforceBlog?d=yIl2AUoC8zA" border="0"></img></a> <a href="http://feeds.feedburner.com/~ff/SforceBlog?a=2qbrDXhepV0:bGjF0J3aTYk:qj6IDK7rITs"><img src="http://feeds.feedburner.com/~ff/SforceBlog?d=qj6IDK7rITs" border="0"></img></a> <a href="http://feeds.feedburner.com/~ff/SforceBlog?a=2qbrDXhepV0:bGjF0J3aTYk:V_sGLiPBpWU"><img src="http://feeds.feedburner.com/~ff/SforceBlog?i=2qbrDXhepV0:bGjF0J3aTYk:V_sGLiPBpWU" border="0"></img></a> <a href="http://feeds.feedburner.com/~ff/SforceBlog?a=2qbrDXhepV0:bGjF0J3aTYk:F7zBnMyn0Lo"><img src="http://feeds.feedburner.com/~ff/SforceBlog?i=2qbrDXhepV0:bGjF0J3aTYk:F7zBnMyn0Lo" border="0"></img></a> <a href="http://feeds.feedburner.com/~ff/SforceBlog?a=2qbrDXhepV0:bGjF0J3aTYk:l6gmwiTKsz0"><img src="http://feeds.feedburner.com/~ff/SforceBlog?d=l6gmwiTKsz0" border="0"></img></a>
+</div><img src="http://feeds.feedburner.com/~r/SforceBlog/~4/2qbrDXhepV0" height="1" width="1"/>]]></content:encoded>
+			<wfw:commentRss>http://developer.salesforce.com/blogs/developer-relations/2014/04/building-beautiful-mobile-apps-in-visualforce-using-angularjs-and-ionic-part-3-remote-objects.html/feed</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		<feedburner:origLink>http://developer.salesforce.com/blogs/developer-relations/2014/04/building-beautiful-mobile-apps-in-visualforce-using-angularjs-and-ionic-part-3-remote-objects.html</feedburner:origLink></item>
+		<item>
+		<title>Apex Code Algorithm Challenge on TopCoder</title>
+		<link>http://feedproxy.google.com/~r/SforceBlog/~3/BTilK7W1li0/mother-son-bowling-challenge-data-modeling-real-life.html</link>
+		<comments>http://developer.salesforce.com/blogs/developer-relations/2014/04/mother-son-bowling-challenge-data-modeling-real-life.html#comments</comments>
+		<pubDate>Thu, 17 Apr 2014 22:09:26 +0000</pubDate>
+		<dc:creator><![CDATA[Mary Scotton]]></dc:creator>
+				<category><![CDATA[Uncategorized]]></category>
+
+		<guid isPermaLink="false">http://26.61941</guid>
+		<description><![CDATA[<a href="http://developer.salesforce.com/blogs/developer-relations/2014/04/mother-son-bowling-challenge-data-modeling-real-life.html"><img align="left" hspace="5" width="150" src="http://res.cloudinary.com/hzxejch6p/image/upload/bo_2px_solid_rgb:514a4a,c_scale,w_500/v1397771612/BowlingApplicationForm_qlbq4u.png" class="alignleft wp-post-image tfe" alt="" title="" /></a>Today, I outsourced the challenge on TopCoder, and you can win some $$$ if you solve it!  It includes the data model as an AppExchange package and all of the detailed requirements. So...who's in?]]></description>
+				<content:encoded><![CDATA[<p>I sat at the head of the table, an unconscious choice. I wasn&#8217;t feeling powerful. In fact, I was intimidated. It was my first time in this type of event planning meeting, and the chairperson was efficient and poised. I sat quietly, taking notes, until I heard these words: &#8220;We need someone to do the lane matching.&#8221; I burst out, &#8220;Oh, I want to do that! I&#8217;ll put it in Salesforce and write an algorithm. It&#8217;ll be fun!&#8221; I was soooo wrong.</p>
+<p>The event was Mother-Son Bowling, and I was in a meeting with PTA volunteers and the PTA co-chair. I was trying to be a good parent and participate at my son&#8217;s school. I thought that matching families that wanted to bowl together was an easy way to add value. It was a technical task, not organizational, so it played to my strengths. In the end, it <em>was</em> fun (mostly), but also really hard. And, well, I did it wrong.</p>
+<p>I&#8217;ll tell you that story, but first I want to give you the chance to write the algorithm yourself.  Today, I outsourced the challenge on <a title="topcoder" href="http://www.topcoder.com/challenge-details/30042041/#.U1A2J-ZdWwN" target="_blank">TopCoder</a>, and you can win some $$$ if you solve it!  It includes the data model as an AppExchange package and all of the detailed requirements.</p>
+<p><img class="aligncenter wp-image-62231" style="line-height: 1.5em" alt="" src="http://res.cloudinary.com/hzxejch6p/image/upload/bo_2px_solid_rgb:514a4a,c_scale,w_500/v1397771612/BowlingApplicationForm_qlbq4u.png" width="504" height="238" /></p>
+<p>Who&#8217;s in? Trust me, it&#8217;ll be fun!</p>
+<p><em>Looking for me on Twitter? I&#8217;m @rockchick322004, and I tweet about the Salesforce1 Platform and Women in Tech.</em></p>
+<div class="feedflare">
+<a href="http://feeds.feedburner.com/~ff/SforceBlog?a=BTilK7W1li0:43gEqrWplvI:yIl2AUoC8zA"><img src="http://feeds.feedburner.com/~ff/SforceBlog?d=yIl2AUoC8zA" border="0"></img></a> <a href="http://feeds.feedburner.com/~ff/SforceBlog?a=BTilK7W1li0:43gEqrWplvI:qj6IDK7rITs"><img src="http://feeds.feedburner.com/~ff/SforceBlog?d=qj6IDK7rITs" border="0"></img></a> <a href="http://feeds.feedburner.com/~ff/SforceBlog?a=BTilK7W1li0:43gEqrWplvI:V_sGLiPBpWU"><img src="http://feeds.feedburner.com/~ff/SforceBlog?i=BTilK7W1li0:43gEqrWplvI:V_sGLiPBpWU" border="0"></img></a> <a href="http://feeds.feedburner.com/~ff/SforceBlog?a=BTilK7W1li0:43gEqrWplvI:F7zBnMyn0Lo"><img src="http://feeds.feedburner.com/~ff/SforceBlog?i=BTilK7W1li0:43gEqrWplvI:F7zBnMyn0Lo" border="0"></img></a> <a href="http://feeds.feedburner.com/~ff/SforceBlog?a=BTilK7W1li0:43gEqrWplvI:l6gmwiTKsz0"><img src="http://feeds.feedburner.com/~ff/SforceBlog?d=l6gmwiTKsz0" border="0"></img></a>
+</div><img src="http://feeds.feedburner.com/~r/SforceBlog/~4/BTilK7W1li0" height="1" width="1"/>]]></content:encoded>
+			<wfw:commentRss>http://developer.salesforce.com/blogs/developer-relations/2014/04/mother-son-bowling-challenge-data-modeling-real-life.html/feed</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		<feedburner:origLink>http://developer.salesforce.com/blogs/developer-relations/2014/04/mother-son-bowling-challenge-data-modeling-real-life.html</feedburner:origLink></item>
+		<item>
+		<title>Salesforce1 Developer Week Kicks Off for 1.5 Million Developers Worldwide</title>
+		<link>http://feedproxy.google.com/~r/SforceBlog/~3/zcxnOZtgv10/salesforce1-developer-week-kicks-off-for-1-5-million-developers-worldwide.html</link>
+		<comments>http://developer.salesforce.com/blogs/developer-relations/2014/04/salesforce1-developer-week-kicks-off-for-1-5-million-developers-worldwide.html#comments</comments>
+		<pubDate>Thu, 17 Apr 2014 21:43:33 +0000</pubDate>
+		<dc:creator><![CDATA[Nick Tran]]></dc:creator>
+				<category><![CDATA[Uncategorized]]></category>
+		<category><![CDATA[Announcements]]></category>
+		<category><![CDATA[salesforce1]]></category>
+
+		<guid isPermaLink="false">http://26.61971</guid>
+		<description><![CDATA[<a href="http://developer.salesforce.com/blogs/developer-relations/2014/04/salesforce1-developer-week-kicks-off-for-1-5-million-developers-worldwide.html"><img align="left" hspace="5" width="150" src="http://res.cloudinary.com/hzxejch6p/image/upload/c_scale,w_656/v1397758870/Blog_DeveloperWeek_DeveloperCollage_umht0q.png" class="alignleft wp-post-image tfe" alt="" title="Salesforce1 Developer Week Participants" /></a>Now with more than 1.5 million developers, the Salesforce developer community has doubled in size over the last 18 months. To mark this huge achievement, we are announcing Salesforce1 Developer Week - a week of meetups around the world starting April 27th. ]]></description>
+				<content:encoded><![CDATA[<p dir="ltr">With the recent launch of the Salesforce1 Platform and the increased demand for next generation mobile apps for the enterprise, there has never been a better time to be a Salesforce developer! The level of energy and passion Salesforce developers bring to every event is unmatched &#8211; the 20,000 developers we saw at Dreamforce was one for the record books. And then there is the crazy demand for Salesforce technical skills. We saw recently that <a href="http://www.businessinsider.com/resume-tech-skills-ranked-by-salary-2014-3">Salesforce Architect is the highest-paying IT career</a> bringing home $200,000 a year.</p>
+<p dir="ltr">The Salesforce developer community’s momentum is unstoppable. Now with more than 1.5 million developers, the community has doubled in size over the last 18 months. With numbers like that, it’s not surprising that the Salesforce1 Platform is the industry&#8217;s <a href="http://blogs.salesforce.com/company/2014/03/gartner-apaas.html">leading Platform as a Service</a>.</p>
+<p dir="ltr" style="text-align: left;">To mark this huge achievement, we are announcing Salesforce1 Developer Week &#8211; a week of meetups around the world starting April 27th. And we have launched a new developer website to support this community&#8217;s epic growth and innovation.</p>
+<p><img class="aligncenter wp-image-62001" title="Salesforce1 Developer Week Participants" alt="" src="http://res.cloudinary.com/hzxejch6p/image/upload/c_scale,w_656/v1397758870/Blog_DeveloperWeek_DeveloperCollage_umht0q.png" width="656" height="252" /></p>
+<h2>Salesforce1 Developer Week</h2>
+<p dir="ltr">During the week of April 27, over 65 Salesforce developer groups worldwide will meet up to learn more about Salesforce1 development, participate in new coding challenges, and network with each other. Additionally, our developer evangelists will be hitting the road to meet and network with the global community.</p>
+<p dir="ltr">To join in the excitement, <a href="https://developer.salesforce.com/developer-week?utm_campaign=devweek&#038;utm_source=website&#038;utm_medium=blog_post">locate your local developer group</a> or start a new one in your city by checking out the <a href="https://developer.salesforce.com/developer-week?utm_campaign=devweek&#038;utm_source=website&#038;utm_medium=blog_post">cities participating</a>. Finally, we will be  airlifting surprise goody packages to each location so don’t miss out!</p>
+<p dir="ltr"><img class="aligncenter wp-image-62061" title="Salesforce1 Developer Week DUGs around the world" alt="" src="http://res.cloudinary.com/hzxejch6p/image/upload/c_scale,h_259/v1397759557/Blog_DeveloperWeek_WorldMap_infoqc.png" width="677" height="259" /></p>
+<h2>The New Home for Every Cloud Developer</h2>
+<p dir="ltr">As we enter this exciting new phase, we are are saying good-bye to the Developer Force website and brand. In its place, we are launching Salesforce Developers, a new website (<a href="http://developer.salesforce.com">http://developer.salesforce.com</a>) and brand to serve our Salesforce1 Platform developers who are building the next generation of apps with Force.com, Heroku, and ExactTarget Fuel. As the new home for Salesforce developers, we aim to make it easier to discover content, connect with the community for support and track networking events.</p>
+<p dir="ltr">With the launch of the new website, we’re introducing a host of exciting features including single sign-on for a much improved user experience as well as the ability for you to have your own developer profile. And because the website now runs on the Salesforce1 Platform, it’ll also benefit from exciting innovations with every major release.</p>
+<p>Stay tuned as there will be even more enhancements coming in the next few months!</p>
+<p><img class="aligncenter wp-image-62121" alt="" src="http://res.cloudinary.com/hzxejch6p/image/upload/c_scale,e_shadow,h_344/v1397765321/Blog_DeveloperWeek_NewWebsite_opt2_gcy1pb.png" width="631" height="352" /></p>
+<div class="feedflare">
+<a href="http://feeds.feedburner.com/~ff/SforceBlog?a=zcxnOZtgv10:vZ24O8tWN4Q:yIl2AUoC8zA"><img src="http://feeds.feedburner.com/~ff/SforceBlog?d=yIl2AUoC8zA" border="0"></img></a> <a href="http://feeds.feedburner.com/~ff/SforceBlog?a=zcxnOZtgv10:vZ24O8tWN4Q:qj6IDK7rITs"><img src="http://feeds.feedburner.com/~ff/SforceBlog?d=qj6IDK7rITs" border="0"></img></a> <a href="http://feeds.feedburner.com/~ff/SforceBlog?a=zcxnOZtgv10:vZ24O8tWN4Q:V_sGLiPBpWU"><img src="http://feeds.feedburner.com/~ff/SforceBlog?i=zcxnOZtgv10:vZ24O8tWN4Q:V_sGLiPBpWU" border="0"></img></a> <a href="http://feeds.feedburner.com/~ff/SforceBlog?a=zcxnOZtgv10:vZ24O8tWN4Q:F7zBnMyn0Lo"><img src="http://feeds.feedburner.com/~ff/SforceBlog?i=zcxnOZtgv10:vZ24O8tWN4Q:F7zBnMyn0Lo" border="0"></img></a> <a href="http://feeds.feedburner.com/~ff/SforceBlog?a=zcxnOZtgv10:vZ24O8tWN4Q:l6gmwiTKsz0"><img src="http://feeds.feedburner.com/~ff/SforceBlog?d=l6gmwiTKsz0" border="0"></img></a>
+</div><img src="http://feeds.feedburner.com/~r/SforceBlog/~4/zcxnOZtgv10" height="1" width="1"/>]]></content:encoded>
+			<wfw:commentRss>http://developer.salesforce.com/blogs/developer-relations/2014/04/salesforce1-developer-week-kicks-off-for-1-5-million-developers-worldwide.html/feed</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		<feedburner:origLink>http://developer.salesforce.com/blogs/developer-relations/2014/04/salesforce1-developer-week-kicks-off-for-1-5-million-developers-worldwide.html</feedburner:origLink></item>
+		<item>
+		<title>Announcing the Platform Partner Growth Program</title>
+		<link>http://feedproxy.google.com/~r/SforceBlog/~3/sIEEnQAS9ig/platform-partner-growth.html</link>
+		<comments>http://developer.salesforce.com/blogs/isv/2014/04/platform-partner-growth.html#comments</comments>
+		<pubDate>Wed, 16 Apr 2014 18:05:53 +0000</pubDate>
+		<dc:creator><![CDATA[Nicolas Pujol]]></dc:creator>
+				<category><![CDATA[Uncategorized]]></category>
+		<category><![CDATA[Announcements]]></category>
+		<category><![CDATA[dreamforce]]></category>
+		<category><![CDATA[heroku]]></category>
+		<category><![CDATA[Partners]]></category>
+
+		<guid isPermaLink="false">http://30.13701</guid>
+		<description><![CDATA[<a href="http://developer.salesforce.com/blogs/isv/2014/04/platform-partner-growth.html"><img align="left" hspace="5" width="150" src="http://res.cloudinary.com/hzxejch6p/image/upload/c_pad,g_south_west,w_100/v1396907937/df-logo_kgch8v.png" class="alignleft wp-post-image tfe" alt="" title="" /></a>Today we’re introducing the first such initiative: The Platform Partner Growth Program.  The new program is designed to recognize the platform growth created by the consulting partner community, and reward the leaders of sourced Saleforce1 annual contract value (“ACV”).]]></description>
+				<content:encoded><![CDATA[<p dir="ltr"><img class="wp-image-3821 alignleft" alt="" src="http://res.cloudinary.com/hzxejch6p/image/upload/c_pad,g_south_west,w_100/v1396907937/df-logo_kgch8v.png" width="100" height="85" />Last year’s Dreamforce event attracted over 100,000 registered attendees on one of the largest tech conferences in the industry as we introduced Salesforce1. As we prepare for this year’s event, we’ll be rolling out a series of new initiatives to build upon this Salesforce1 momentum and engage even more members from the growing Salesforce ecosystem.</p>
+<p dir="ltr">Today we’re introducing the first such initiative: The Platform Partner Growth Program.  The new program is designed to recognize the platform growth created by the consulting partner community, and reward the leaders of sourced Salesforce1 annual contract value (“ACV”).</p>
+<p>So how does it work?  Sourcing new business occurs when a consulting partner uncovers a new opportunity to develop a Salesforce1 solution and then engages the Salesforce team.  On the other hand, when salesforce.com indentifies the opportunity and brings in a consulting partner to do the work, salesforce.com has done the sourcing. The Platform Partner Growth Program will recognize consulting partners with the highest amounts of sourced value in Force.com projects, in Heroku projects, and those sourcing both technologies at scale.</p>
+<p dir="ltr"><img class="alignnone wp-image-3851" alt="" src="http://res.cloudinary.com/hzxejch6p/image/upload/c_scale,w_939/v1396909535/Screen_Shot_2014-04-07_at_15_24_55_okradh.png" width="1878" height="1056" /></p>
+<p><b>Winners will receive:</b></p>
+<ul>
+<li>An award presented at Dreamforce 2014</li>
+<li>Promotion through Salesforce social media and blog</li>
+<li>Invitation to meet Salesforce platform executives and to the Heroku developer briefing center</li>
+<li>Recognition  in internal sales enablement materials created for 2015</li>
+<li>High visibility to customers, our ecosystem and Salesforce field teams</li>
+</ul>
+<p><b>Qualification Criteria (additional details at the end of the post)</b></p>
+<p>There are three ways to win.  Participants will be evaluated by the following achievements made from February 1, 2014 – September 30, 2014 (the “Program Period”):</p>
+<ul>
+<li>Highest Sourced ACV for Force.com</li>
+<li>Highest Sourced ACV for Heroku</li>
+<li>Sourcing opportunities for both technologies at scale: consulting partner(s) with &gt;$1M in Sourced annual contract value (“ACV”) with &gt;$500k Force.com, &gt;$500k Heroku</li>
+</ul>
+<p>Eligibility requirement: must be a consulting partner in good standing for the Program Period. No customer satisfaction issues during the period.</p>
+<p>To participate in the program, make sure to register your leads in the <a href="https://sites.secure.force.com/partners/PP2PartnerLoginPage">Partner Portal</a> for sourced credit.  Select Force.com and/or Heroku in the primary product interest and provide details in the project description field. For detailed instructions, refer to the <a href="https://org62.my.salesforce.com/sfc/p/000000000062/a/300000001LWB/_oBDoKu3MX7fiWR4.aVzuMyA6hCOAJCGL2dvIyXAy64=">Partner Lead Submission Process guide</a>.</p>
+<div>
+<p>We’re here to help you to win! Get in touch with your partner manager to discuss client projects and our sales team is on-call to support your <a href="https://sites.secure.force.com/partners/PP2PartnerLoginPage">opportunities</a>.</p>
+</div>
+<p>Criteria additional details:</p>
+<ul>
+<li>Program runs from February 01 2014 at 12am PST through September 30 2014 11:59pm PST</li>
+<li>Must be a consulting partner in good standing with salesforce.com for the full program period.</li>
+<li>Sourced ACV measured in US dollars.</li>
+<li>Sourced ACV for Force.com requires customer lead registration in the partner portal. Heroku will also accept opportunities where partner demonstrably led the sales cycle even if not in the portal.</li>
+<li>Customer satisfaction means customer issues are resolved in a reasonable time frame.</li>
+<li>Executive meeting has a limit of 10 partner participants. Partner is responsible for travel expenses to Dreamforce, to Salesforce and Heroku offices.</li>
+<li>Winners will be notified by October 03 2014 via email.</li>
+</ul>
+<div class="feedflare">
+<a href="http://feeds.feedburner.com/~ff/SforceBlog?a=sIEEnQAS9ig:zDyfDlUouX8:yIl2AUoC8zA"><img src="http://feeds.feedburner.com/~ff/SforceBlog?d=yIl2AUoC8zA" border="0"></img></a> <a href="http://feeds.feedburner.com/~ff/SforceBlog?a=sIEEnQAS9ig:zDyfDlUouX8:qj6IDK7rITs"><img src="http://feeds.feedburner.com/~ff/SforceBlog?d=qj6IDK7rITs" border="0"></img></a> <a href="http://feeds.feedburner.com/~ff/SforceBlog?a=sIEEnQAS9ig:zDyfDlUouX8:V_sGLiPBpWU"><img src="http://feeds.feedburner.com/~ff/SforceBlog?i=sIEEnQAS9ig:zDyfDlUouX8:V_sGLiPBpWU" border="0"></img></a> <a href="http://feeds.feedburner.com/~ff/SforceBlog?a=sIEEnQAS9ig:zDyfDlUouX8:F7zBnMyn0Lo"><img src="http://feeds.feedburner.com/~ff/SforceBlog?i=sIEEnQAS9ig:zDyfDlUouX8:F7zBnMyn0Lo" border="0"></img></a> <a href="http://feeds.feedburner.com/~ff/SforceBlog?a=sIEEnQAS9ig:zDyfDlUouX8:l6gmwiTKsz0"><img src="http://feeds.feedburner.com/~ff/SforceBlog?d=l6gmwiTKsz0" border="0"></img></a>
+</div><img src="http://feeds.feedburner.com/~r/SforceBlog/~4/sIEEnQAS9ig" height="1" width="1"/>]]></content:encoded>
+			<wfw:commentRss>http://developer.salesforce.com/blogs/isv/2014/04/platform-partner-growth.html/feed</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		<feedburner:origLink>http://developer.salesforce.com/blogs/isv/2014/04/platform-partner-growth.html</feedburner:origLink></item>
+		<item>
+		<title>Tips and Tricks for Bootstrapping Your ISV Business</title>
+		<link>http://feedproxy.google.com/~r/SforceBlog/~3/LGCg_oesuO8/tips-and-tricks-for-bootstrapping-your-isv-business.html</link>
+		<comments>http://developer.salesforce.com/blogs/isv/2014/04/tips-and-tricks-for-bootstrapping-your-isv-business.html#comments</comments>
+		<pubDate>Wed, 16 Apr 2014 18:00:47 +0000</pubDate>
+		<dc:creator><![CDATA[Eric Wu]]></dc:creator>
+				<category><![CDATA[Uncategorized]]></category>
+		<category><![CDATA[community]]></category>
+
+		<guid isPermaLink="false">http://30.13821</guid>
+		<description><![CDATA[For the business whose long term strategy is bootstrapping, doing it effectively is literally the difference between success or failure. They’re operating without a net. But even for businesses whose plan is to raise investment capital, bootstrapping increases the value of the company and creates operational rigor that will serve them well over time.]]></description>
+				<content:encoded><![CDATA[<p dir="ltr"><em>Eric Wu (<a href="https://twitter.com/ewu">@ewu</a>) is an entrepreneur, a die-hard product guy, and the co-founder of <a href="http://bracketlabs.com/">Bracket Labs</a>. He’s also a fan of whiskey, punk rock, street food and Japanese denim.  Eric can be reached in the Salesforce Partner Community at <a href="https://partners.salesforce.com/_ui/core/userprofile/UserProfilePage?u=005300000047F7e&amp;tab=sfdc.ProfilePlatformFeed">@[Eric Wu]</a>.</em></p>
+<p dir="ltr">Whether it&#8217;s a long-term strategy or just a matter of necessity, the ability to effectively bootstrap your startup business will produce big benefits. Bootstrapping, or the creation of a business without outside capital, requires a focus on revenue and expense management that is extreme when compared to the typical early stage venture-backed business.  The bootstrapped business is “pulling itself up by its bootstraps” in that its operations are funded entirely by founder contributions and revenue generated by those operations.</p>
+<p dir="ltr">For the business whose long term strategy is bootstrapping, doing it effectively is literally the difference between success or failure. They’re operating without a net. But even for businesses whose plan is to raise investment capital, bootstrapping increases the value of the company and creates operational rigor that will serve them well over time. After all, what investor wouldn’t be excited by a portfolio company that knows how to get revenue quickly and shave expenses to the bone?</p>
+<p dir="ltr">As the founder of a bootstrapped business, this is a topic that I love to discuss. There are as many approaches to bootstrapping as there are bootstrapped businesses, and there’s always some great new trick to learn. Here are my top three tips for getting it right:</p>
+<p dir="ltr">1) Talk to customers before you build your product</p>
+<p dir="ltr">Probably your biggest expense will be in building your app. Even if you’re the only one writing code, it’s a significant investment of time to get it built. So with that investment on the line, make sure that you’re building the right thing. Get out of the office, meet with prospective customers, and validate that what you’re planning on building is something they’ll actually pay for. If you do this right, you’ll not only ensure product-market fit, you’ll have a list of customers who are ready to buy.</p>
+<p dir="ltr">2) Be wary of fixed expenses</p>
+<p dir="ltr">A fixed expense is any cost that doesn’t fluctuate with the operations of your business. In other words, you pay it no matter how your business is performing. You should try to avoid as many fixed expenses as you can for as long as you can. A prime candidate for avoidance is rent on office space. Rather than signing a lease, consider co-working spaces or a service like <a href="https://www.pivotdesk.com/">PivotDesk</a> which will allow you to rent just the space you need on a monthly basis instead of signing a lease.</p>
+<p dir="ltr">3) Find advisors</p>
+<p dir="ltr">Bootstrapped startups don’t typically have the same accountability mechanisms as venture-backed businesses. But just because you don’t have a board of directors doesn’t mean you should overlook this key element of running your business. There’s real value in having smart outsiders evaluate your business, challenge your assumptions, and track your progress. Find and cultivate a network of advisors and mentors that you can trust to offer their honest opinions and insight.</p>
+<p dir="ltr">Want more? There was an entire session at Dreamforce ‘14 devoted to this topic. My co-founder <a href="https://twitter.com/blakelygraham">Blakely Graham</a> and I joined the founders of <a href="http://www.arrowpointe.com/">Arrowpointe</a>, <a href="http://www.congamerge.com/">Conga</a>, and <a href="http://www.spkeasey.com/">S.P. Keasey</a> to discuss how each company thought about bootstrapping and share our favorite tips. You can listen (unfortunately no video) to the <a href="https://www.youtube.com/watch?v=scwDn8LGYoY" target="_blank">full session here</a>.</p>
+<div class="feedflare">
+<a href="http://feeds.feedburner.com/~ff/SforceBlog?a=LGCg_oesuO8:KwBfGGUno9Q:yIl2AUoC8zA"><img src="http://feeds.feedburner.com/~ff/SforceBlog?d=yIl2AUoC8zA" border="0"></img></a> <a href="http://feeds.feedburner.com/~ff/SforceBlog?a=LGCg_oesuO8:KwBfGGUno9Q:qj6IDK7rITs"><img src="http://feeds.feedburner.com/~ff/SforceBlog?d=qj6IDK7rITs" border="0"></img></a> <a href="http://feeds.feedburner.com/~ff/SforceBlog?a=LGCg_oesuO8:KwBfGGUno9Q:V_sGLiPBpWU"><img src="http://feeds.feedburner.com/~ff/SforceBlog?i=LGCg_oesuO8:KwBfGGUno9Q:V_sGLiPBpWU" border="0"></img></a> <a href="http://feeds.feedburner.com/~ff/SforceBlog?a=LGCg_oesuO8:KwBfGGUno9Q:F7zBnMyn0Lo"><img src="http://feeds.feedburner.com/~ff/SforceBlog?i=LGCg_oesuO8:KwBfGGUno9Q:F7zBnMyn0Lo" border="0"></img></a> <a href="http://feeds.feedburner.com/~ff/SforceBlog?a=LGCg_oesuO8:KwBfGGUno9Q:l6gmwiTKsz0"><img src="http://feeds.feedburner.com/~ff/SforceBlog?d=l6gmwiTKsz0" border="0"></img></a>
+</div><img src="http://feeds.feedburner.com/~r/SforceBlog/~4/LGCg_oesuO8" height="1" width="1"/>]]></content:encoded>
+			<wfw:commentRss>http://developer.salesforce.com/blogs/isv/2014/04/tips-and-tricks-for-bootstrapping-your-isv-business.html/feed</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		<feedburner:origLink>http://developer.salesforce.com/blogs/isv/2014/04/tips-and-tricks-for-bootstrapping-your-isv-business.html</feedburner:origLink></item>
+		<item>
+		<title>Monitoring Apex Test Code Coverage</title>
+		<link>http://feedproxy.google.com/~r/SforceBlog/~3/3Abl3p91R3E/monitoring-apex-test-code-coverage.html</link>
+		<comments>http://developer.salesforce.com/blogs/developer-relations/2014/04/monitoring-apex-test-code-coverage.html#comments</comments>
+		<pubDate>Fri, 11 Apr 2014 00:19:44 +0000</pubDate>
+		<dc:creator><![CDATA[Leon de Beer]]></dc:creator>
+				<category><![CDATA[Uncategorized]]></category>
+		<category><![CDATA[apex test code]]></category>
+		<category><![CDATA[tooling api]]></category>
+
+		<guid isPermaLink="false">http://26.57491</guid>
+		<description><![CDATA[<a href="http://developer.salesforce.com/blogs/developer-relations/2014/04/monitoring-apex-test-code-coverage.html"><img align="left" hspace="5" width="150" src="http://res.cloudinary.com/hzxejch6p/image/upload/v1397153190/Gears_150_jvzimg.jpg" class="alignleft wp-post-image tfe" alt="" title="Apex Testing Code Coverage" /></a>Learn how you can use the recently released Tooling API to maintain detailed knowledge on how our test code is evolving over time; which classes and triggers need more work; and how classes contribute to the overall test code coverage in your org.]]></description>
+				<content:encoded><![CDATA[<p><img class="alignleft wp-image-61271" title="Apex Testing Code Coverage" alt="" src="http://res.cloudinary.com/hzxejch6p/image/upload/v1397153190/Gears_150_jvzimg.jpg" width="150" height="150" />In <a title="Create apex test data" href="http://developer.salesforce.com/blogs/developer-relations/2013/03/apex-test-code-coverage-done-the-easy-way.html" target="_blank">a previous </a>post I discussed why Apex Test code is a good thing and how the creation of test data could be managed using an Apex test code generation tool. In this post I shall discuss how we can use the recently released Tooling API to maintain detailed knowledge on how our test code is evolving over time; which classes and triggers need more work; and how classes contribute to the overall test code coverage in your org.</p>
+<p>With Winter ’14 we released the new Tooling API, which (amongst other things) allowed us access to a number of new objects in our Salesforce org which store code coverage information. The Developer console uses these objects to show us the number of covered and uncovered lines, as well as the details of which test classes contribute to code coverage.</p>
+<h2>An Apex Test Code Coverage Tool</h2>
+<p>For the first time, the tooling API provides us with an easy way to extract this data from your target org – in particular from the ApexCodeCoverage and ApexCodeCoverageAggregate objects – and with that it allows you to develop tools which store and manipulate this data.</p>
+<p>I was recently working on a project where, as part of a development sprint, a significant amount of code was added. As a part of this project we looked at a way of keeping track of how test code development was keeping up with the code. During this project we <a title="Apex test code coverage tool" href="https://bitbucket.org/leondebeer/apextestcodecoverage" target="_blank">developed a simple tool</a> that stores this data in a CSV file, which thereby allows us to open and maintain this data using spreadsheets.</p>
+<p><a title="Apex test code coverage tool" href="https://bitbucket.org/leondebeer/apextestcodecoverage" target="_blank">The too</a>l that we developed can be found here (this is not an official / Salesforce supported product).  It was developed in Java and both the source, JAR and exe can be found. The way the tool works:</p>
+<ul>
+<li>It accepts a number of command line arguments including
+<ul>
+<li>Login (-u)</li>
+<li>Password (Don’t forget your access token!) (-p)</li>
+<li>Authentication End Point (-a)</li>
+</ul>
+</li>
+<li>It uses the REST Tooling Api to retrieve code coverage details from the Org</li>
+<li>It stores the resulting coverage data in a CSV file</li>
+</ul>
+<p>We used this tool to gather data on a daily basis during the development cycle, allowing us to compare coverage results over time and where necessary re-focus our test code development.</p>
+<p>By default this tool lists all classes and lines covered / not covered by test code. If you specify class or trigger names as command line arguments (-c), it will show (for those classes/triggers) which test classes contribute to the coverage for these classes instead. As a result, you can analyse in detail where you test code is (and isn’t) coming from.</p>
+<p>When using this tool please note that:</p>
+<ul>
+<li>The number of Apex classes in our org was not high enough to trigger batched results being returned by the Rest API so this part was never tested. If you run into issues there – give me some sample data and I’ll update the code</li>
+<li>If (in your spreadsheet) you add up the total number of lines covered, uncovered and in total, you can calculate the total test code coverage of your org. Whilst this calculation is not identical to the one used in your Salesforce org, this method has given us pretty accurate results.</li>
+<li>There was an issue in Winter ’14 where some classes made invalid contributions to the overall test coverage results. Use the output of this tool to determine which of these classes have no test coverage and add at least 1% coverage to these classes and triggers to avoid this issue.</li>
+</ul>
+<div class="feedflare">
+<a href="http://feeds.feedburner.com/~ff/SforceBlog?a=3Abl3p91R3E:C0bXYMfchaA:yIl2AUoC8zA"><img src="http://feeds.feedburner.com/~ff/SforceBlog?d=yIl2AUoC8zA" border="0"></img></a> <a href="http://feeds.feedburner.com/~ff/SforceBlog?a=3Abl3p91R3E:C0bXYMfchaA:qj6IDK7rITs"><img src="http://feeds.feedburner.com/~ff/SforceBlog?d=qj6IDK7rITs" border="0"></img></a> <a href="http://feeds.feedburner.com/~ff/SforceBlog?a=3Abl3p91R3E:C0bXYMfchaA:V_sGLiPBpWU"><img src="http://feeds.feedburner.com/~ff/SforceBlog?i=3Abl3p91R3E:C0bXYMfchaA:V_sGLiPBpWU" border="0"></img></a> <a href="http://feeds.feedburner.com/~ff/SforceBlog?a=3Abl3p91R3E:C0bXYMfchaA:F7zBnMyn0Lo"><img src="http://feeds.feedburner.com/~ff/SforceBlog?i=3Abl3p91R3E:C0bXYMfchaA:F7zBnMyn0Lo" border="0"></img></a> <a href="http://feeds.feedburner.com/~ff/SforceBlog?a=3Abl3p91R3E:C0bXYMfchaA:l6gmwiTKsz0"><img src="http://feeds.feedburner.com/~ff/SforceBlog?d=l6gmwiTKsz0" border="0"></img></a>
+</div><img src="http://feeds.feedburner.com/~r/SforceBlog/~4/3Abl3p91R3E" height="1" width="1"/>]]></content:encoded>
+			<wfw:commentRss>http://developer.salesforce.com/blogs/developer-relations/2014/04/monitoring-apex-test-code-coverage.html/feed</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		<feedburner:origLink>http://developer.salesforce.com/blogs/developer-relations/2014/04/monitoring-apex-test-code-coverage.html</feedburner:origLink></item>
+	</channel>
+</rss>
