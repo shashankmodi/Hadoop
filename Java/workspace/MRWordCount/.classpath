@@ -6,5 +6,6 @@
 	<classpathentry kind="lib" path="C:/app/Udhay/hadoop-2.7.1/share/hadoop/mapreduce/hadoop-mapreduce-client-core-2.7.1.jar"/>
 	<classpathentry kind="lib" path="C:/app/Udhay/hadoop-2.7.1/share/hadoop/mapreduce/hadoop-mapreduce-client-jobclient-2.7.1.jar"/>
 	<classpathentry kind="lib" path="C:/app/Udhay/hadoop-2.7.1/share/hadoop/common/lib/commons-lang-2.6.jar"/>
+	<classpathentry kind="lib" path="C:/app/Udhay/Data/Hive/lib/hive-exec-1.2.1.2.3.0.0-2557.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

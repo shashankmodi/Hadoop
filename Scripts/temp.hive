@@ -1,0 +1,3 @@
+insert overwrite table weathermonth 
+select wdate,substr(wdate,5,2) as wmonth,substr(wdate,7,2) as wday,skyCondition,dryTemp
+ from weather where skyCondition="CLR";

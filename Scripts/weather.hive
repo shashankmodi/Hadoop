@@ -1,0 +1,26 @@
+create table if not exists weather 
+	(wban int,wdate string,time string,stationtype int,
+            skyCondition string,skyconditionflg int,visibility double,visibilityflg int,
+            weathertype string,weathertypeflg int,dryTemp int,colrest string)
+partitioned by (year int,month string)
+row format delimited
+	fields terminated by ','
+	lines terminated by '\n'
+	stored as textfile;
+
+load data inpath '/user/root/data/input/201412hourly.txt' into table 
+weather partition(year=2014,month='12');
+
+load data inpath '/user/root/data/input/201501hourly.txt' into table 
+weather partition(year=2015,month='01');
+
+create table if not exists weathermonth
+(wdate string,wmonth string, wday string,skyCondition string,dryTemp int)
+	stored as orc;
+
+insert overwrite table weathermonth 
+select wdate,substr(wdate,5,2),substr(wdate,7,2),skyCondition,dryTemp
+ from weather where skyCondition="CLR" and drytemp >-100;
+
+select wmonth,wday,avg(drytemp),min(drytemp),max(drytemp),count(drytemp) from weathermonth
+group by wmonth,wday;
