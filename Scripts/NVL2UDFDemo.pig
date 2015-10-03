@@ -2,6 +2,7 @@
 #-------------------------------------------------------------------------------------- 
 # Pig Script 
 # NVL2UDFDemo.pig 
+# pig /media/sf_Data/Hadoop/Scripts/NVL2UDFDemo.pig 1>1 2&1 &
 #-------------------------------------------------------------------------------------- 
 */
 register /media/sf_Data/eclipse/quintiles.jar; 
