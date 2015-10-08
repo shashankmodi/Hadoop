@@ -1,3 +1,23 @@
-insert overwrite table weathermonth 
-select wdate,substr(wdate,5,2) as wmonth,substr(wdate,7,2) as wday,skyCondition,dryTemp
- from weather where skyCondition="CLR";
+------------------------------------------------------------------------------------------ 
+--	Weather analysis tasks with Pig, Hive and HBase
+--	
+-- Pig Script for performance comaprision between Pig and Hive
+-- WeatherPerf.hive - Oct 7th 2015
+--	
+-- Thanks to this following site post
+--		http://www.open-bigdata.com/performance-test-pig-vs-hive-code-examples/
+-- Download the data file from above link 
+--		and rename/move it to HDFS /user/root/data/weatherperf.csv
+-- Run the hive scripts and capture the log (make sure the output directories dont exists)
+-- hive -f /media/sf_Data/Hadoop/Scripts/temp.hive >/media/sf_Data/hive.log 2>&1
+--
+-- Each of the 4 tasks stores the results in seperate hive table 
+--	 Examine the log file to note the execution time for each of the task
+---------------------------------------------------------------------------------------- 
+
+
+CREATE EXTERNAL TABLE IF NOT EXISTS weather1 (stationcode STRING, station STRING, datefield STRING, prcp DOUBLE, tmax DOUBLE, tmin DOUBLE) ROW FORMAT DELIMITED FIELDS TERMINATED BY ',';
+LOAD DATA INPATH '/user/root/data/input/weatherperf.csv' OVERWRITE INTO TABLE weather1;
+CREATE TABLE weather_res1 (station STRING, datefield STRING, tmax INT);
+INSERT OVERWRITE TABLE weather_res1
+SELECT station, datefield, tmax FROM weather1 WHERE tmax <> -9999 ORDER BY tmax DESC;

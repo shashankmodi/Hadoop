@@ -51,14 +51,26 @@ H1 = FOREACH G1 {
 };
 STORE H1 into '/user/root/data/input/Weather_Pig3' using PigStorage(',');
 
-/* Task 4 – Average temperatures per year of station STAVENISSE
+/* Task 4 – Average temperatures per year of station OBSERVATORY
 	Select only one weather station and average all time precipitation data.
-	Table:(STAVENISSE, Year, MAX, MIN, Avg HighTemp)	*/
+	Table:(OBSERVATORY, MAX, MIN, Avg HighTemp)	*/
 	
-C1 = FILTER B BY tmax > -9999 AND station MATCHES '.*STAVENISSE.*';
-D1 = GROUP C1 by station;
-E1 = FOREACH D1 GENERATE group as station, MAX(C1.tmax),MIN(C1.tmax),AVG(C1.tmax);
-STORE E1 into '/user/root/data/input/Weather_Pig4' using PigStorage(',');
+C1V = FILTER B BY tmax > -9999 AND station MATCHES '.*OBSERVATORY.*';
+D1V = GROUP C1V by station;
+E1V = FOREACH D1V GENERATE group as station, MAX(C1V.tmax),MIN(C1V.tmax),AVG(C1V.tmax);
+STORE E1V into '/user/root/data/input/Weather_Pig4' using PigStorage(',');
 
 
+/* Task 5 – Average temperatures per year of station OBSERVATORY
+	Select only one weather station and average all time precipitation data.
+	Table:(OBSERVATORY, Year, MAX, MIN, Avg HighTemp) includes year for the 2 stations
+			*/
 
+A = LOAD '/user/root/data/weatherperf.csv' using PigStorage(',');
+B = FOREACH A GENERATE $1 as station, (int) SUBSTRING($2,0,4) as year , (int) $4 as tmax, (int) $5 as tmin;
+C1 = FILTER B BY tmax > -9999 AND station MATCHES '.*OBSERVATORY.*';
+CS1 = FILTER B BY tmax > -9999 AND station MATCHES '.*OBSERVATORY.*';
+STORE CS1 into '/user/root/data/input/Weather_Pig5' using PigStorage(',');
+D1 = GROUP C1 by (station,year);
+E1 = FOREACH D1 GENERATE group.station as station, (int) group.year, MAX(C1.tmax),MIN(C1.tmax),AVG(C1.tmax);
+STORE E1 into '/user/root/data/input/Weather_Pig6' using PigStorage(',');

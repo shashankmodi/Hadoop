@@ -14,15 +14,15 @@
 #
 # Each of the 4 tasks produces seperate directory and stores the results
 #	 Examine the log file to not the execution for each of the 
-#-------------------------------------------------------------------------------------- */
-
+#-------------------------------------------------------------------------------------- 
+*/
 
 A = LOAD '/user/root/data/weatherperf.csv' using PigStorage(',');
-B = FOREACH A GENERATE $1 as station, (int) SUBSTRING($2,0,4) as year , (int) $4 as tmax, (int) $5 as tmin;	
-C1 = FILTER B BY tmax > -9999 AND station MATCHES '.*VILA.*';
-D1 = GROUP C1 by station;
-E1 = FOREACH D1 GENERATE group as station, MAX(C1.tmax),MIN(C1.tmax),AVG(C1.tmax);
-STORE E1 into '/user/root/data/input/Weather_Pig4' using PigStorage(',');
-
-
+B = FOREACH A GENERATE $1 as station, (int) SUBSTRING($2,0,4) as year , (int) $4 as tmax, (int) $5 as tmin;
+C1 = FILTER B BY tmax > -9999 AND station MATCHES '.*OBSERVATORY.*';
+CS1 = FILTER B BY tmax > -9999 AND station MATCHES '.*OBSERVATORY.*';
+STORE CS1 into '/user/root/data/input/Weather_Pig4' using PigStorage(',');
+D1 = GROUP C1 by (station,year);
+E1 = FOREACH D1 GENERATE group.station as station, (int) group.year, MAX(C1.tmax),MIN(C1.tmax),AVG(C1.tmax);
+STORE E1 into '/user/root/data/input/Weather_Pig6' using PigStorage(',');
 
