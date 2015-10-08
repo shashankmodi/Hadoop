@@ -1,0 +1,198 @@
+------------------------------------------------------------------------------------------ 
+--	Weather analysis tasks with Pig, Hive and HBase
+--	
+-- Pig Script for performance comaprision between Pig and Hive
+-- WeatherPerf.hive - Oct 7th 2015
+--	
+-- Thanks to this following site post
+--		http://www.open-bigdata.com/performance-test-pig-vs-hive-code-examples/
+-- Download the data file from above link 
+--		and rename/move it to HDFS /user/root/data/weatherperf.csv
+-- Run the hive scripts and capture the log (make sure the output directories dont exists)
+-- hive -f /media/sf_Data/Hadoop/Scripts/temp.hive >/media/sf_Data/hive.log 2>&1
+--
+-- Each of the 4 tasks stores the results in seperate hive table 
+--	 Examine the log file to note the execution time for each of the task
+---------------------------------------------------------------------------------------- 
+
+SET hive.exec.dynamic.partition.mode=nonstrict;
+SET hive.exec.dynamic.partition=true;
+
+CREATE EXTERNAL TABLE IF NOT EXISTS weather_stage 
+	(stationcode STRING, station STRING, datefield STRING, prcp DOUBLE, 
+		tmax DOUBLE, tmin DOUBLE) 
+	ROW FORMAT DELIMITED FIELDS TERMINATED BY ',';
+LOAD DATA INPATH '/user/root/data/input/weatherperf.csv' 
+	OVERWRITE INTO TABLE weather1;
+
+CREATE TABLE IF NOT EXISTS weather1 
+	(station STRING, datefield STRING, year int, tmax INT,tmin INT) STORED AS ORC;
+INSERT OVERWRITE TABLE weather1
+	PARTITION (year)
+	SELECT station, datefield,cast(SUBSTR(datefield,1,4) as INT) as year, tmax,tmin 
+		FROM weather_stage 
+		WHERE tmax <> -9999;
+
+CREATE TABLE IF NOT EXISTS weather1 
+	(station STRING, datefield STRING, tmax INT,tmin INT)
+	PARTITIONED BY (year INT)
+	STORED AS ORC;
+INSERT INTO weather1
+	PARTITION (year)
+	SELECT station, datefield,cast(SUBSTR(datefield,1,4) as INT) as year, tmax,tmin 
+		FROM weather_stage 
+		WHERE tmax <> -9999;
+
+
+
+CREATE TABLE IF NOT EXISTS weather_res2 
+	(station STRING, datefield INT, tmax INT);
+INSERT OVERWRITE TABLE weather_res2
+	SELECT station, year, MAX(tmax) 
+		FROM weather1 
+		WHERE tmax <> -9999 
+		GROUP BY station, year;
+
+
+CREATE TABLE IF NOT EXISTS weather_res3 
+	(station STRING, datefield INT, tavg INT);
+INSERT OVERWRITE TABLE weather_res3
+	SELECT station, year, AVG(tmax) 
+	FROM weather1 
+	WHERE tmax <> -9999 GROUP BY station, year;
+
+--CREATE EXTERNAL TABLE weather4_temp (station STRING, year INT, maxMeanTemp DOUBLE);
+--INSERT OVERWRITE TABLE weather4_temp1 
+--SELECT station, cast(SUBSTR(datefield,1,4) as INT), AVG((tmax-tmin)/2) FROM weather4 WHERE tmax > -9999 and tmin > -9999 GROUP BY station, cast(SUBSTR(datefield,1,4) as INT); 
+--CREATE EXTERNAL TABLE weather4_temp2 (station STRING, maxMeanTemp DOUBLE);
+--INSERT OVERWRITE TABLE weather4_temp2 SELECT station, MAX(meanTemp) FROM weather4_temp2 GROUP BY station; 
+--CREATE TABLE weather_res4 (station STRING, year INT, tavg INT);
+--INSERT OVERWRITE TABLE weather_res4
+--SELECT w.station, w.year, ww.maxMeanTemp FROM weather4_temp1 w JOIN weather4_temp2 ww ON w.meanTemp = ww.maxMeanTemp;
+
+
+CREATE TABLE IF NOT EXISTS weather_res4 (station STRING, year INT, tavg INT);
+FROM (
+SELECT station, year, AVG((tmax-tmin)/2) as meanTemp 
+	FROM weather1 WHERE tmax > -9999 and tmin > -9999
+) weather4_temp
+INSERT OVERWRITE TABLE weather_res4 
+	SELECT station, year ,MAX(meanTemp) 
+		GROUP BY station, year; 
+--		GROUP BY station; 
+
+
+CREATE EXTERNAL TABLE IF NOT EXISTS weather_res5 
+	(station STRING, datefield INT, tmax INT);
+INSERT OVERWRITE TABLE weather_res5
+	SELECT station, year, AVG(tmax) 
+		FROM weather1 WHERE tmax <> -9999 AND station LIKE '%OBSERVATORY%' 
+		GROUP BY station, year;
+
+
+
+-----------------------------------------------------------------------------
+---- Executed code - Log output is in Hive1008.log including the pig log
+------------------------------------------------------------------------------------------ 
+--	Weather analysis tasks with Pig, Hive and HBase
+---------------------------------------------------------------------------------------- 
+-- Step 1 - Execute the following Pig script to remove unwanted records and use the
+--		output for Hive to load the valid records
+--	The same step could not be done in Hive since order by create 13 mappers 
+--	and singleton reducer. Failed due to memory issue. Hence the Pig script
+--	A = LOAD '/user/root/data/weatherperf.csv' using PigStorage(',');
+--	B = FOREACH A GENERATE $1 as station, (int) SUBSTRING($2,0,4) as year , (int) $4 as tmax, (int) $5 as tmin;
+--	C1 = FILTER B by tmax >-9999 and tmin >-9999; /* C1 = FILTER B by tmax >0;*/
+--	D1 = ORDER C1 BY year;
+--	STORE D1 into '/user/root/data/input/Weather_pig1' using PigStorage(',');
+
+SET hive.exec.dynamic.partition=true;
+SET hive.exec.dynamic.partition.mode=nonstrict;
+
+
+DROP TABLE IF EXISTS weather1 PURGE;
+CREATE TABLE IF NOT EXISTS weather1 
+	(station STRING, year INT, tmax INT,tmin INT)
+	ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+	STORED AS textfile;
+--	LOAD the output of Pig script as input to this Hive load table
+LOAD DATA INPATH '/user/root/data/input/Weather_pig1/part-r-00000' 
+	OVERWRITE INTO TABLE weather1;
+	
+SELECT * FROM weather1 LIMIT 10;
+
+CREATE INDEX y01_index 
+	on TABLE weather1 (year) 
+	as 'COMPACT' WITH DEFERRED REBUILD 	
+	STORED as ORC;
+ALTER INDEX y01_index ON weather1 REBUILD;
+
+SHOW INDEXES ON weather1;
+DESCRIBE default__weather1_y01_index__;
+SELECT * FROM weather1 LIMIT 10;
+
+
+--Move data from TEXTFILE to ORC for better performance
+DROP TABLE IF EXISTS weatherorc PURGE;	
+CREATE TABLE IF NOT EXISTS weatherorc 
+	(station STRING, tmax INT, tmin INT)
+	PARTITIONED BY (year INT)
+	STORED AS ORC;
+--	The following insert failed due to 
+--	TaskAttempt 1 failed, info=[Error: Failure while running task:java.lang.RuntimeException: 
+--	java.lang.OutOfMemoryError: Java heap space
+--	[Reducer 2] killed/failed due to:null]
+--	DAG did not succeed due to VERTEX_FAILURE. failedVertices:1 killedVertices:0
+--	INSERT INTO weatherorc
+--		PARTITION (year)
+--		SELECT station, year, tmax, tmin 
+--			FROM weather1;
+
+SELECT * FROM weatherorc LIMIT 10;
+
+SELECT * FROM weather1 LIMIT 10;
+
+-- Index creation helped to complete these loads in 2GB single node cluster
+CREATE TABLE IF NOT EXISTS weather_res2 
+	(station STRING, year INT, tmax INT);
+INSERT OVERWRITE TABLE weather_res2
+	SELECT station, year, MAX(tmax) 
+		FROM weather1 
+		GROUP BY station, year;
+
+SELECT * FROM weather_res2 LIMIT 10;
+
+CREATE TABLE IF NOT EXISTS weather_res3 
+	(station STRING, year INT, tavg INT);
+INSERT OVERWRITE TABLE weather_res3
+	SELECT station, year, AVG(tmax) 
+	FROM weather1 
+	GROUP BY station, year;
+	
+SELECT * FROM weather_res3 LIMIT 10;
+
+SELECT DISTINCT YEAR FROM weather_res3;
+
+CREATE TABLE IF NOT EXISTS weather_res4 (station STRING, year INT, tavg INT);
+FROM (
+SELECT station, year, AVG((tmax-tmin)/2) as meanTemp 
+	FROM weather1 
+	GROUP BY station, year
+) weather4_temp
+INSERT OVERWRITE TABLE weather_res4 
+	SELECT station, year ,MAX(meanTemp) 
+		GROUP BY station, year; 
+
+SELECT * FROM weather_res4 LIMIT 10;
+
+SELECT station, year, tavg
+	FROM weather_res3 WHERE station LIKE '%OBSERVATORY%' 
+	CLUSTER BY YEAR LIMIT 10; 
+		
+CREATE EXTERNAL TABLE IF NOT EXISTS weather_res5 
+	(station STRING, year INT, tmax INT);
+INSERT OVERWRITE TABLE weather_res5
+	SELECT station, year, tavg
+		FROM weather_res3 WHERE station LIKE '%OBSERVATORY%';
+
+SELECT * FROM weather_res5 LIMIT 10;
