@@ -12,6 +12,9 @@
 # Run the pig scripts and capture the log (make sure the output directories dont exists)
 # pig /media/sf_Data/Hadoop/Scripts/tmp.pig >/media/sf_Data/pig.log 2>&1
 #
+# Restart the hadoop services in Hortonworks using cmd if the tasks are failing..
+# service startup_script restart
+#
 # Each of the 4 tasks produces seperate directory and stores the results
 #	 Examine the log file to not the execution for each of the 
 #-------------------------------------------------------------------------------------- 

@@ -1,23 +1,39 @@
-CREATE TABLE IF NOT EXISTS weather_res4 (station STRING, year INT, tavg INT);
-FROM (
-SELECT station, year, AVG((tmax-tmin)/2) as meanTemp 
-	FROM weather1 
-	GROUP BY station, year
-) weather4_temp
-INSERT OVERWRITE TABLE weather_res4 
-	SELECT station, year ,MAX(meanTemp) 
-		GROUP BY station, year; 
+SET hive.cli.print.header = true;
+set hive.cli.print.current.db = true;
 
-SELECT * FROM weather_res4 LIMIT 10;
+DROP TABLE IF EXISTS stocks_stage PURGE;
+CREATE EXTERNAL TABLE IF NOT EXISTS stocks_stage (
+exchange1 STRING,symbol STRING,ymd STRING,price_open FLOAT,
+price_high FLOAT,price_low FLOAT,price_close FLOAT,volume INT,
+price_adj_close FLOAT)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+LOCATION '/user/root/data/stocks/';
 
-SELECT station, year, tavg
-	FROM weather_res3 WHERE station LIKE '%OBSERVATORY%' 
-	CLUSTER BY YEAR LIMIT 10; 
+DROP TABLE IF EXISTS stocks PURGE;
+CREATE TABLE IF NOT EXISTS stocks (
+ymd STRING,price_open FLOAT,price_high FLOAT,price_low FLOAT,
+price_close FLOAT,volume INT,price_adj_close FLOAT)
+	PARTITIONED BY (exchange1 STRING,symbol STRING)
+	ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+	STORED AS ORC;
+
+SET hive.exec.dynamic.partition.mode=nonstrict;
+SET hive.exec.dynamic.partition=true;
+
+LOAD DATA INPATH '/user/root/data/stocks/stocks.csv' 
+	INTO TABLE stocks_stage;
+
+SELECT ymd,price_open,price_high,price_low,
+	price_close,volume,price_adj_close,exchange1,symbol
+	FROM stocks_stage LIMIT 10;
+
+INSERT OVERWRITE TABLE stocks 
+	PARTITION (exchange1,symbol)
+	SELECT ymd,price_open,price_high,price_low,
+		price_close,volume,price_adj_close,exchange1,symbol
+		FROM stocks_stage;
 		
-CREATE EXTERNAL TABLE IF NOT EXISTS weather_res5 
-	(station STRING, year INT, tmax INT);
-INSERT OVERWRITE TABLE weather_res5
-	SELECT station, year, tavg
-		FROM weather_res3 WHERE station LIKE '%OBSERVATORY%';
+SELECT * FROM stocks LIMIT 10;
 
-SELECT * FROM weather_res5 LIMIT 10;
+DESCRIBE FORMATTED stocks_stage;
+DESCRIBE EXTENDED stocks;

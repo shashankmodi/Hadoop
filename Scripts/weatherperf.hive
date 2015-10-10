@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------------------ 
 --	Weather analysis tasks with Pig, Hive and HBase
 --	
--- Pig Script for performance comaprision between Pig and Hive
+-- Hive Script for performance comaprision between Pig and Hive
 -- WeatherPerf.hive - Oct 7th 2015
 --	
 -- Thanks to this following site post
@@ -11,6 +11,8 @@
 -- Run the hive scripts and capture the log (make sure the output directories dont exists)
 -- hive -f /media/sf_Data/Hadoop/Scripts/temp.hive >/media/sf_Data/hive.log 2>&1
 --
+-- Restart the hadoop services in Hortonworks using cmd if the tasks are failing..
+-- service startup_script restart
 -- Each of the 4 tasks stores the results in seperate hive table 
 --	 Examine the log file to note the execution time for each of the task
 ---------------------------------------------------------------------------------------- 
@@ -108,7 +110,8 @@ INSERT OVERWRITE TABLE weather_res5
 
 SET hive.exec.dynamic.partition=true;
 SET hive.exec.dynamic.partition.mode=nonstrict;
-
+SET hive.cli.print.header = true;
+set hive.cli.print.current.db = true;
 
 DROP TABLE IF EXISTS weather1 PURGE;
 CREATE TABLE IF NOT EXISTS weather1 
@@ -148,9 +151,39 @@ CREATE TABLE IF NOT EXISTS weatherorc
 --		SELECT station, year, tmax, tmin 
 --			FROM weather1;
 
-SELECT * FROM weatherorc LIMIT 10;
+SET hive.exec.dynamic.partition=true;
+SET hive.exec.dynamic.partition.mode=nonstrict;
 
+select * from weather1 limit 10;
+
+DROP TABLE IF EXISTS weatherorc PURGE;	
+CREATE TABLE IF NOT EXISTS weatherorc 
+	(station STRING, tmax INT, tmin INT)
+	PARTITIONED BY (year INT)
+	STORED AS ORC;
+
+INSERT OVERWRITE TABLE weatherorc
+	PARTITION (year)
+	SELECT station, tmax, tmin, year 
+		FROM weather1;
+
+SELECT * FROM weatherorc LIMIT 10;
 SELECT * FROM weather1 LIMIT 10;
+
+DROP TABLE IF EXISTS weather_skewed PURGE;	
+CREATE TABLE IF NOT EXISTS weather_skewed 
+	(station STRING,year INT, tmax INT, tmin INT)
+	COMMENT ' skewed table for testing'
+	SKEWED BY (year) ON (2000,2001)
+	STORED AS SEQUENCEFILE;
+
+INSERT OVERWRITE TABLE weather_skewed
+	SELECT station, tmax, tmin, year 
+		FROM weatherorc where year in (2000,2001);
+		
+SELECT * FROM weather1 LIMIT 10;
+SELECT * FROM weatherorc LIMIT 10;
+SELECT * FROM weather_skewed where year = 2000 LIMIT 10;
 
 -- Index creation helped to complete these loads in 2GB single node cluster
 CREATE TABLE IF NOT EXISTS weather_res2 
@@ -196,3 +229,37 @@ INSERT OVERWRITE TABLE weather_res5
 		FROM weather_res3 WHERE station LIKE '%OBSERVATORY%';
 
 SELECT * FROM weather_res5 LIMIT 10;
+
+SET hive.exec.dynamic.partition=true;
+SET hive.exec.dynamic.partition.mode=nonstrict;
+SET hive.cli.print.header = true;
+set hive.cli.print.current.db = true;
+		
+SELECT * FROM weather1 LIMIT 10;
+SELECT * FROM weatherorc LIMIT 10;
+SELECT * FROM weather_skewed LIMIT 10;
+
+SELECT FROM_UNIXTIME(UNIX_TIMESTAMP()) as XXXXXXXXXCurrentTimeInHIVEXXXXXXXXXXXX;
+
+-- To collect statistics
+SET hive.compute.query.using.stats=true;
+SET hive.stats.dbclass=fs;
+SET hive.stats.fetch.column.stats=true;
+SET hive.stats.fetch.partition.stats=true;
+
+-- To enable predicate push down
+SET hive.optimize.ppd=true;
+
+-- To enable cost based optimization
+SET hive.cbo.enable=true;
+
+describe formatted weather_skewed;
+describe formatted weatherorc;
+
+ANALYZE TABLE weather_skewed COMPUTE STATISTICS;
+ANALYZE TABLE weather1 COMPUTE STATISTICS;
+
+ANALYZE TABLE weatherorc PARTITION(YEAR) COMPUTE STATISTICS NOSCAN;
+ANALYZE TABLE weatherorc PARTITION(YEAR) COMPUTE STATISTICS FOR COLUMNS TMAX,STATION;
+
+SET -v

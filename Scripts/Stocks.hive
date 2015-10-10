@@ -1,0 +1,61 @@
+------------------------------------------------------------------------------------------ 
+--	Stock analysis tasks with Hive
+--	
+-- Hive Script explaining joins examples
+-- Stocks.hive - Oct 10th 2015
+--	
+-- Thanks to this following site post
+--		http://www.datascience-labs.com/hive/hiveql-joins/
+-- Download the data file from above link 
+--		and rename/move it to HDFS /user/root/data/stocks.csv and dividend.csv
+-- Run the hive scripts and capture the log (make sure the output directories dont exists)
+-- hive -f /media/sf_Data/Hadoop/Scripts/temp.hive >/media/sf_Data/hive.log 2>&1
+--
+-- Restart the hadoop services in Hortonworks using cmd if the tasks are failing..
+-- service startup_script restart
+-- hadoop fs -mkdir /user/root/data/stocks
+--  hadoop fs -mkdir /user/root/data/dividends
+--  cd /media/sf_Data
+--  hadoop fs -put stocks.csv /user/root/data/stocks/
+--  hadoop fs -put dividends.csv /user/root/data/stocks/
+--  hadoop fs -put dividends.csv /user/root/data/dividends/
+
+---------------------------------------------------------------------------------------- 
+DROP TABLE IF EXISTS stocks_stage PURGE;
+CREATE EXTERNAL TABLE IF NOT EXISTS stocks_stage (
+exchange STRING,
+symbol STRING,
+ymd STRING,
+price_open FLOAT,
+price_high FLOAT,
+price_low FLOAT,
+price_close FLOAT,
+volume INT,
+price_adj_close FLOAT)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+LOCATION '/user/root/data/stocks/';
+
+DROP TABLE IF EXISTS stocks PURGE;
+CREATE TABLE IF NOT EXISTS stocks (
+ymd STRING,
+price_open FLOAT,
+price_high FLOAT,
+price_low FLOAT,
+price_close FLOAT,
+volume INT,
+price_adj_close FLOAT)
+	PARTITIONED BY (exchange STRING,symbol STRING)
+	ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+	STORED AS ORC;
+
+SET hive.exec.dynamic.partition.mode=nonstrict;
+SET hive.exec.dynamic.partition=true;
+
+LOAD DATA INPATH '/user/root/data/stocks/stocks.csv'
+INTO TABLE stocks_stage
+
+INSERT OVERWRITE TABLE stocks
+	PARTITION (exchange,symbol)
+	SELECT ymd,price_open,price_high,price_low,
+		price_close,volume,price_adj_close,exchange,symbol
+		FROM stocks_stage;
