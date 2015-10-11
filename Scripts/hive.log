@@ -11,3 +11,46 @@ SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
 SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
 
 Logging initialized using configuration in file:/etc/hive/2.3.0.0-2557/0/hive-log4j.properties
+OK
+xxxxxxxxxcurrenttimeinhivexxxxxxxxxxxx
+2015-10-11 02:49:05
+Time taken: 12.708 seconds, Fetched: 1 row(s)
+OK
+dividends.ymd	dividends.dividend	dividends.exchange1	dividends.symbol
+2007-07-17	2.45	NASDAQ	AACC
+2008-06-10	0.16	NASDAQ	AAON
+2007-06-07	0.13333	NASDAQ	AAON
+2006-12-11	0.13333	NASDAQ	AAON
+2006-06-08	0.13333	NASDAQ	AAON
+2009-12-10	0.18	NASDAQ	AAON
+2009-06-09	0.18	NASDAQ	AAON
+2007-12-11	0.16	NASDAQ	AAON
+2008-12-10	0.16	NASDAQ	AAON
+1993-11-19	0.03	NASDAQ	AAPL
+Time taken: 7.903 seconds, Fetched: 10 row(s)
+Query ID = root_20151011024914_7c0b6a3a-c7db-4b59-8540-cdf32d1ed5c4
+Total jobs = 1
+Launching Job 1 out of 1
+
+
+Status: Running (Executing on YARN cluster with App id application_1444528407722_0005)
+
+Map 1: 0/1	Reducer 2: 0/1	
+Map 1: 0/1	Reducer 2: 0/1	
+Map 1: 0/1	Reducer 2: 0/1	
+Map 1: 0/1	Reducer 2: 0/1	
+Map 1: 0/1	Reducer 2: 0/1	
+Map 1: 0/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 1/1	Reducer 2: 0/1	
+Map 1: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Reducer 2: 1/1	
+OK
+exchange1
+NASDAQ
+NYSE
+Time taken: 139.791 seconds, Fetched: 2 row(s)

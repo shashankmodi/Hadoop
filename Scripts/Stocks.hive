@@ -13,11 +13,12 @@
 --
 -- Restart the hadoop services in Hortonworks using cmd if the tasks are failing..
 -- service startup_script restart
+-- hadoop fs -rm -r /user/root/data/stocks
+-- hadoop fs -rm -r /user/root/data/dividends
 -- hadoop fs -mkdir /user/root/data/stocks
 --  hadoop fs -mkdir /user/root/data/dividends
 --  cd /media/sf_Data
 --  hadoop fs -put stocks.csv /user/root/data/stocks/
---  hadoop fs -put dividends.csv /user/root/data/stocks/
 --  hadoop fs -put dividends.csv /user/root/data/dividends/
 
 ---------------------------------------------------------------------------------------- 
@@ -59,3 +60,89 @@ INSERT OVERWRITE TABLE stocks
 	SELECT ymd,price_open,price_high,price_low,
 		price_close,volume,price_adj_close,exchange,symbol
 		FROM stocks_stage;
+		
+
+SELECT FROM_UNIXTIME(UNIX_TIMESTAMP()) as XXXXXXXXXCurrentTimeInHIVEXXXXXXXXXXXX;
+
+SELECT ymd,price_open,price_high,price_low,
+		price_close,volume,price_adj_close
+		FROM stocks_stage
+		where exchange1 = 'NASDAQ' and symbol = 'AAPL' LIMIT 10;
+
+INSERT INTO TABLE stocks 
+PARTITION (exchange1 = 'NASDAQ', symbol = 'AAPL')
+SELECT ymd,price_open,price_high,price_low,
+		price_close,volume,price_adj_close
+		FROM stocks_stage
+		where exchange1 = 'NASDAQ' and symbol = 'AAPL';
+		
+INSERT INTO TABLE stocks 
+PARTITION (exchange1 = 'NASDAQ', symbol = 'INTC')
+SELECT ymd,price_open,price_high,price_low,
+		price_close,volume,price_adj_close
+		FROM stocks_stage
+where exchange1 = 'NASDAQ' and symbol = 'INTC';
+
+INSERT INTO TABLE stocks 
+PARTITION (exchange1 = 'NYSE', symbol = 'GE')
+SELECT ymd,price_open,price_high,price_low,
+		price_close,volume,price_adj_close
+		FROM stocks_stage
+where exchange1 = 'NYSE' and symbol = 'GE';
+
+INSERT INTO TABLE stocks 
+PARTITION (exchange1 = 'NYSE', symbol = 'IBM')
+SELECT ymd,price_open,price_high,price_low,
+		price_close,volume,price_adj_close
+		FROM stocks_stage
+where exchange1 = 'NYSE' and symbol = 'IBM';
+
+
+--INSERT OVERWRITE TABLE stocks 
+--	PARTITION (exchange1,symbol)
+--	SELECT ymd,price_open,price_high,price_low,
+--		price_close,volume,price_adj_close,exchange1,symbol
+--		FROM stocks_stage
+--		CLUSTER BY exchange1,symbol;
+
+SELECT FROM_UNIXTIME(UNIX_TIMESTAMP()) as XXXXXXXXXCurrentTimeInHIVEXXXXXXXXXXXX;
+
+SELECT * FROM stocks LIMIT 10;
+
+DESCRIBE FORMATTED stocks_stage;
+DESCRIBE EXTENDED stocks;
+
+DROP TABLE IF EXISTS dividends_stage PURGE;	
+create table if not exists dividends_stage(
+	exchange1 STRING,
+	symbol STRING,
+	ymd string,
+	dividend float )
+	ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+	STORED AS TEXTFILE;
+
+LOAD DATA INPATH '/user/root/data/dividends/dividends.csv'
+INTO TABLE dividends_stage;
+
+DROP INDEX IF EXISTS ES01_index ON dividends_stage;
+CREATE INDEX ES01_index 
+	on TABLE dividends_stage (exchange1,symbol) 
+	as 'COMPACT' WITH DEFERRED REBUILD 	
+	STORED as ORC;
+ALTER INDEX ES01_index ON dividends_stage REBUILD;
+
+SELECT FROM_UNIXTIME(UNIX_TIMESTAMP()) as XXXXXXXXXCurrentTimeInHIVEXXXXXXXXXXXX;
+
+DROP TABLE IF EXISTS dividends PURGE;
+create table if not exists dividends(
+	ymd string,
+	dividend float )
+	PARTITIONED BY (exchange1 STRING,symbol STRING)
+	STORED AS TEXTFILE;
+	
+INSERT OVERWRITE TABLE dividends
+	PARTITION (exchange1,symbol)
+	SELECT ymd,dividend,exchange1,symbol
+	FROM dividends_stage
+	SORT by exchange1,symbol;
+	
