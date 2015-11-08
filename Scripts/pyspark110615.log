@@ -1,0 +1,252 @@
+# pyspark /media/sf_Data/Hadoop/Scripts/tmpspark.py >/media/sf_Data/Hadoop/Scripts/pyspark.log 2>&1 &
+#pyspark /media/sf_Data/Hadoop/Scripts/tmpspark.py >/media/sf_Data/Hadoop/Scripts/pyspark.log 
+# 2>/media/sf_Data/Hadoop/Scripts/pyspark.log 1>/media/sf_Data/Hadoop/Scripts/pyspark.log
+
+from pyspark import SparkContext
+import datetime
+
+def quiet_logs( sc ):
+  logger = sc._jvm.org.apache.log4j
+  logger.LogManager.getLogger("org"). setLevel( logger.Level.ERROR )
+  logger.LogManager.getLogger("akka").setLevel( logger.Level.ERROR )
+
+tnow = datetime.datetime.now()
+print("Begin of Program...Spark : %s" % tnow)
+  
+sc =SparkContext(appName="WordCount")
+quiet_logs( sc )
+# hdfs://sandbox.hortonworks.com
+#myLines = sc.textFile('hdfs://sandbox.hortonworks.com/user/root/data/book/warandpeace.txt')
+
+lines = sc.parallelize(['Its fun to have fun,','but you have to know how.']) 
+wordcounts = lines.map( lambda x: x.replace(',',' ').replace('.',' ').replace('-',' ').lower()) \
+        .flatMap(lambda x: x.split()) \
+        .map(lambda x: (x, 1)) \
+        .reduceByKey(lambda x,y:x+y) \
+        .map(lambda x:(x[1],x[0])) \
+        .sortByKey(False) 
+print wordcounts.take(5)
+print wordcounts.collect()
+
+## The following script to count the words in a book....
+myLines = sc.textFile('hdfs://sandbox.hortonworks.com/user/root/data/book/warandpeace.txt')
+myLines_filtered = myLines.filter( lambda x: len(x) > 0 )
+print "Lines Count ....",myLines_filtered.count()
+
+words = myLines_filtered.flatMap(lambda x: x.split())
+print "Words Count ....",words.count()
+wordcounts = words.map(lambda x: (x, 1)).reduceByKey(lambda x,y:x+y).map(lambda x:(x[1],x[0])).sortByKey(False)
+print wordcounts.first()
+print wordcounts.take(10)
+print wordcounts.keys().take(5)
+print wordcounts.values().take(5)
+print "Printing... toDebugStrings for all the wordcounts RDDs..."
+print wordcounts.toDebugString()
+print words.toDebugString()
+print myLines.toDebugString()
+
+print "\n\n"
+## The following script to count the bigrams in a book....
+
+bigrams= myLines.map(lambda x: x.split(" ")).flatMap(lambda s: [((s[i],s[i+1]),1) for i in range (0 ,len(s)-1)])
+print bigrams.take(5)
+bigramcounts = bigrams.reduceByKey(lambda x,y:x+y).map(lambda (x,y) : (y,x)).sortByKey(False)
+print bigramcounts.first()
+print bigramcounts.take(10)
+print bigramcounts.keys().take(5)
+print bigramcounts.values().take(5)
+
+print "Printing... toDebugStrings for all the bigrams RDDs..."
+print bigrams.toDebugString()
+print bigramcounts.toDebugString()
+
+
+sc.stop()
+tnow = datetime.datetime.now()
+print("End of Program...Spark : %s" % tnow)
+# Make sure to delete the wc directory before uncommeting
+# wordcounts.saveAsTextFile("wc")
+
+-------------------------------------------------------------------------------------------------
+Begin of Program...Spark : 2015-11-06 19:01:01.939936
+[(2, 'fun'), (2, 'have'), (2, 'to'), (1, 'you'), (1, 'but')]
+[(2, 'fun'), (2, 'have'), (2, 'to'), (1, 'you'), (1, 'but'), (1, 'its'), (1, 'know'), (1, 'how')]
+Lines Count .... 51577
+Words Count .... 566316
+(31708, u'the')
+[(31708, u'the'), (20570, u'and'), (16322, u'to'), (14854, u'of'), (10040, u'a'), (8102, u'in'), (7632, u'his'), (7629, u'he'), (7235, u'that'), (7190, u'was')]
+[31708, 20570, 16322, 14854, 10040]
+[u'the', u'and', u'to', u'of', u'a']
+Printing... toDebugStrings for all the wordcounts RDDs...
+(2) PythonRDD[32] at RDD at PythonRDD.scala:43 []
+ |  MapPartitionsRDD[31] at mapPartitions at PythonRDD.scala:342 []
+ |  ShuffledRDD[30] at partitionBy at NativeMethodAccessorImpl.java:-2 []
+ +-(2) PairwiseRDD[29] at sortByKey at /media/sf_Data/Hadoop/Scripts/tmpspark.py:38 []
+    |  PythonRDD[28] at sortByKey at /media/sf_Data/Hadoop/Scripts/tmpspark.py:38 []
+    |  MapPartitionsRDD[24] at mapPartitions at PythonRDD.scala:342 []
+    |  ShuffledRDD[23] at partitionBy at NativeMethodAccessorImpl.java:-2 []
+    +-(2) PairwiseRDD[22] at reduceByKey at /media/sf_Data/Hadoop/Scripts/tmpspark.py:38 []
+       |  PythonRDD[21] at reduceByKey at /media/sf_Data/Hadoop/Scripts/tmpspark.py:38 []
+       |  hdfs://sandbox.hortonworks.com/user/root/data/book/warandpeace.txt MapPartitionsRDD[17] at textFile at NativeMethodAccessorImpl.java:-2 []
+       |  hdfs://sandbox.hortonworks.com/user/root/data/book/warandpeace.txt HadoopRDD[16] at textFile at NativeMethodAccessorImpl.java:-2 []
+(2) PythonRDD[39] at RDD at PythonRDD.scala:43 []
+ |  hdfs://sandbox.hortonworks.com/user/root/data/book/warandpeace.txt MapPartitionsRDD[17] at textFile at NativeMethodAccessorImpl.java:-2 []
+ |  hdfs://sandbox.hortonworks.com/user/root/data/book/warandpeace.txt HadoopRDD[16] at textFile at NativeMethodAccessorImpl.java:-2 []
+(2) hdfs://sandbox.hortonworks.com/user/root/data/book/warandpeace.txt MapPartitionsRDD[17] at textFile at NativeMethodAccessorImpl.java:-2 []
+ |  hdfs://sandbox.hortonworks.com/user/root/data/book/warandpeace.txt HadoopRDD[16] at textFile at NativeMethodAccessorImpl.java:-2 []
+
+
+
+[((u'The', u'Project'), 1), ((u'Project', u'Gutenberg'), 1), ((u'Gutenberg', u'EBook'), 1), ((u'EBook', u'of'), 1), ((u'of', u'War'), 1)]
+(3833, (u'of', u'the'))
+[(3833, (u'of', u'the')), (2177, (u'to', u'the')), (1994, (u'in', u'the')), (1320, (u'and', u'the')), (1181, (u'at', u'the')), (1100, (u'on', u'the')), (1024, (u'he', u'had')), (985, (u'did', u'not')), (896, (u'with', u'a')), (757, (u'from', u'the'))]
+[3833, 2177, 1994, 1320, 1181]
+[(u'of', u'the'), (u'to', u'the'), (u'in', u'the'), (u'and', u'the'), (u'at', u'the')]
+Printing... toDebugStrings for all the bigrams RDDs...
+(2) PythonRDD[40] at RDD at PythonRDD.scala:43 []
+ |  hdfs://sandbox.hortonworks.com/user/root/data/book/warandpeace.txt MapPartitionsRDD[17] at textFile at NativeMethodAccessorImpl.java:-2 []
+ |  hdfs://sandbox.hortonworks.com/user/root/data/book/warandpeace.txt HadoopRDD[16] at textFile at NativeMethodAccessorImpl.java:-2 []
+(2) PythonRDD[53] at RDD at PythonRDD.scala:43 []
+ |  MapPartitionsRDD[52] at mapPartitions at PythonRDD.scala:342 []
+ |  ShuffledRDD[51] at partitionBy at NativeMethodAccessorImpl.java:-2 []
+ +-(2) PairwiseRDD[50] at sortByKey at /media/sf_Data/Hadoop/Scripts/tmpspark.py:53 []
+    |  PythonRDD[49] at sortByKey at /media/sf_Data/Hadoop/Scripts/tmpspark.py:53 []
+    |  MapPartitionsRDD[45] at mapPartitions at PythonRDD.scala:342 []
+    |  ShuffledRDD[44] at partitionBy at NativeMethodAccessorImpl.java:-2 []
+    +-(2) PairwiseRDD[43] at reduceByKey at /media/sf_Data/Hadoop/Scripts/tmpspark.py:53 []
+       |  PythonRDD[42] at reduceByKey at /media/sf_Data/Hadoop/Scripts/tmpspark.py:53 []
+       |  hdfs://sandbox.hortonworks.com/user/root/data/book/warandpeace.txt MapPartitionsRDD[17] at textFile at NativeMethodAccessorImpl.java:-2 []
+       |  hdfs://sandbox.hortonworks.com/user/root/data/book/warandpeace.txt HadoopRDD[16] at textFile at NativeMethodAccessorImpl.java:-2 []
+End of Program...Spark : 2015-11-06 19:01:41.939045
+-----------------------------------------------------------------------------------------------------------------
+
+# export QD=/media_sf_Data/Hadoop/Scripts
+# export QS=/media_sf_Data
+# pyspark $QS/tmpspark.py >$QD/pyspark.log 2>$QD/pyspark2.log
+
+from pyspark import SparkContext
+import datetime
+from pyspark.sql import SQLContext
+from pyspark.sql import Row
+from pyspark.sql.functions import lit
+
+
+def quiet_logs( sc ):
+  logger = sc._jvm.org.apache.log4j
+  logger.LogManager.getLogger("org").setLevel( logger.Level.ERROR )
+  logger.LogManager.getLogger("akka").setLevel( logger.Level.ERROR )
+
+def basicSum(nums):
+  return nums.fold(0,(lambda x,y:x+y))
+
+tnow = datetime.datetime.now()
+print("Begin of Program...Spark : %s" % tnow)
+  
+sc =SparkContext(appName="Dataframe")
+sqlc = SQLContext(sc)
+quiet_logs( sc )
+
+########### my pySpark code ###############
+NameAge = Row('fname','lname','age') # build a Row subclass
+data_rows = [
+	NameAge('Udhay','Subramanian',40),
+	NameAge('Sundar','Subramanian',35),
+	NameAge('Sundar','Subramanian',35),
+	NameAge('Mridhini','Udhay',8),
+	NameAge('Srishti','Udhay',8),
+	NameAge('Anu','Udhay',35),
+	NameAge('Saraswathi','Palani',38)
+]
+data_rdd= sc.parallelize(data_rows)
+df = sqlc.createDataFrame(data_rows)
+df.registerTempTable("people")
+
+print "data_rdd:",type(data_rdd)
+print "df:",type(df)
+
+print "RDD" , data_rdd.toDebugString()
+print "Data Frame" , df.printSchema()
+print df.show()
+print "where:\t", df.where (df['age'] <30).show()
+print "where eq:\t", df.where (df['fname'] ==lit('Udhay')).show()
+print "count:\t", df.groupBy ("lname").count().show()
+print "select:\t",df.select(df['fname'],df['lname']).show()
+result = sqlc.sql("select fname,age from people where age>=35")
+print "result:",type(result)
+print "select SQL:\t", result.show()
+print "Extract from select SQL:\t", result.map(lambda s: "First Name :"+s.fname).collect()
+print "basicSum :", basicSum(result.map(lambda s:s.age))
+print "Max:\t", df.groupBy("lname").max().show()
+
+#people = sqlc.jsonFile('hdfs://sandbox.hortonworks.com/user/root/data/spark/')
+
+########### my pySpark code ###############
+sc.stop()
+tnow = datetime.datetime.now()
+print("End of Program...Spark : %s" % tnow)
+# Make sure to delete the wc directory before uncommeting
+# wordcounts.saveAsTextFile("wc")
+# print words.toDebugString()
+# print bigramcounts.first()
+# print bigramcounts.take(10)
+# print bigramcounts.keys().take(5)
+# print bigramcounts.values().take(5)
+
+-----------------------------------------------------------------------------------------------------------
+Begin of Program...Spark : 2015-11-08 03:10:56.076917
+data_rdd: <class 'pyspark.rdd.RDD'>
+df: <class 'pyspark.sql.dataframe.DataFrame'>
+RDD (2) ParallelCollectionRDD[0] at parallelize at PythonRDD.scala:392 []
+Data Frame root
+ |-- fname: string (nullable = true)
+ |-- lname: string (nullable = true)
+ |-- age: long (nullable = true)
+
+None
+fname      lname       age
+Udhay      Subramanian 40 
+Sundar     Subramanian 35 
+Sundar     Subramanian 35 
+Mridhini   Udhay       8  
+Srishti    Udhay       8  
+Anu        Udhay       35 
+Saraswathi Palani      38 
+None
+where:	fname    lname age
+Mridhini Udhay 8  
+Srishti  Udhay 8  
+None
+where eq:	fname lname       age
+Udhay Subramanian 40 
+None
+count:	lname       count
+Udhay       3    
+Palani      1    
+Subramanian 3    
+None
+select:	fname      lname      
+Udhay      Subramanian
+Sundar     Subramanian
+Sundar     Subramanian
+Mridhini   Udhay      
+Srishti    Udhay      
+Anu        Udhay      
+Saraswathi Palani     
+None
+result: <class 'pyspark.sql.dataframe.DataFrame'>
+select SQL:	fname      age
+Udhay      40 
+Sundar     35 
+Sundar     35 
+Anu        35 
+Saraswathi 38 
+None
+Extract from select SQL:	[u'First Name :Udhay', u'First Name :Sundar', u'First Name :Sundar', u'First Name :Anu', u'First Name :Saraswathi']
+basicSum : 183
+Max:	lname       MAX(age)
+Udhay       35      
+Palani      38      
+Subramanian 40      
+None
+End of Program...Spark : 2015-11-08 03:11:32.998919
+----------------------------------------------------------------------------------------------------------
