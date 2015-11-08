@@ -45,7 +45,7 @@ price_low FLOAT,
 price_close FLOAT,
 volume INT,
 price_adj_close FLOAT)
-	PARTITIONED BY (exchange STRING,symbol STRING)
+	PARTITIONED BY (exchange1 STRING,symbol STRING)
 	ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
 	STORED AS ORC;
 
@@ -56,7 +56,7 @@ LOAD DATA INPATH '/user/root/data/stocks/stocks.csv'
 INTO TABLE stocks_stage
 
 INSERT OVERWRITE TABLE stocks
-	PARTITION (exchange,symbol)
+	PARTITION (exchange1,symbol)
 	SELECT ymd,price_open,price_high,price_low,
 		price_close,volume,price_adj_close,exchange,symbol
 		FROM stocks_stage;
@@ -146,3 +146,158 @@ INSERT OVERWRITE TABLE dividends
 	FROM dividends_stage
 	SORT by exchange1,symbol;
 	
+
+
+--- Self Join
+SELECT a.ymd, a.price_close, b.price_close
+	FROM stocks a JOIN stocks b ON a.ymd = b.ymd
+	WHERE a.symbol = 'AAPL' AND b.symbol = 'IBM' LIMIT 10;
+
+SELECT a.ymd, a.price_close, b.price_close
+	FROM stocks a ,stocks b WHERE a.ymd = b.ymd
+	AND a.symbol = 'AAPL' AND b.symbol = 'IBM' LIMIT 10;
+
+--Hive will use a separate MapReduce job for each pair of things to join. 
+--In this example, it would use one job for tables a and b, 
+--then a second job to join the output of the first join with c.
+
+SELECT a.ymd, a.price_close, b.price_close , c.price_close
+	FROM stocks a 
+	JOIN stocks b ON a.ymd = b.ymd
+	JOIN stocks c ON a.ymd = c.ymd
+	WHERE a.symbol = 'AAPL' AND b.symbol = 'IBM' AND c.symbol = 'GE' LIMIT 10;
+
+-- Inner join	
+--Hive also assumes that the last table in the query is the largest. 
+-- Following query we have put smaller table dividends last
+SELECT s.ymd, s.symbol, s.price_close, d.dividend
+	FROM stocks s JOIN dividends d 
+	ON s.ymd = d.ymd AND s.symbol = d.symbol
+	WHERE s.symbol = 'AAPL' LIMIT 10;
+
+-- Following query we have put smaller table stocks last, which is better for hive
+SELECT s.ymd, s.symbol, s.price_close, d.dividend
+ FROM dividends d JOIN stocks s ON s.ymd = d.ymd AND s.symbol = d.symbol
+ WHERE s.symbol = 'AAPL' LIMIT 10;
+	
+--Fortunately, you don’t have to put the largest table last in the query. 
+--Hive also provides a “hint” mechanism to tell the query optimizer 
+--which table should be streamed:
+
+SELECT /*+ STREAMTABLE(s) */ s.ymd, s.symbol, s.price_close, d.dividend
+ FROM stocks s JOIN dividends d ON s.ymd = d.ymd AND s.symbol = d.symbol
+ WHERE s.symbol = 'AAPL' LIMIT 10;
+ 
+ 
+ SELECT s.ymd,s.symbol,s.price_close,d.dividend
+ 	FROM stocks s LEFT OUTER JOIN dividends d 
+ 	on s.ymd=d.ymd and s.symbol=d.symbol
+ 	WHERE s.symbol in ('AAPL','GE') LIMIT 10;
+ 	
+ SELECT count(*) as LEFT_OUTER_JOIN
+ 	FROM stocks s LEFT OUTER JOIN dividends d 
+ 	on s.ymd=d.ymd and s.symbol=d.symbol
+ 	WHERE s.symbol in ('AAPL','GE') LIMIT 10;
+ 	
+ SELECT s.ymd,s.symbol,s.price_close,d.dividend
+ 	FROM stocks s RIGHT OUTER JOIN dividends d 
+ 	on s.ymd=d.ymd and s.symbol=d.symbol
+ 	WHERE s.symbol in ('AAPL','GE') LIMIT 10;
+ 	
+ SELECT count(*) as RIGHT_OUTER_JOIN
+ 	FROM stocks s RIGHT OUTER JOIN dividends d 
+ 	on s.ymd=d.ymd and s.symbol=d.symbol
+ 	WHERE s.symbol in ('AAPL','GE') LIMIT 10;
+ 
+ SELECT s.ymd, s.symbol, s.price_close
+ 	FROM stocks s LEFT SEMI JOIN dividends d 
+ 	ON s.ymd = d.ymd AND s.symbol = d.symbol LIMIT 10;
+ 
+ 
+ SELECT s.symbol,count(d.dividend) , sum(d.dividend)
+ 	FROM stocks s LEFT OUTER JOIN dividends d on s.ymd=d.ymd and s.symbol=d.symbol
+ 	WHERE s.symbol in ('AAPL','GE')
+ 	GROUP BY s.symbol;
+ 	
+ 
+ DROP TABLE IF EXISTS dividendsORC PURGE;
+ create table if not exists dividendsORC(	
+ 	exchange1 STRING,
+ 	symbol STRING,
+ 	ymd string,
+ 	dividend float )
+ 	STORED AS ORC tblproperties("orc.compress"="SNAPPY");
+ 
+ INSERT OVERWRITE TABLE dividendsORC
+ 	SELECT ymd,dividend,exchange1,symbol
+ 	FROM dividends_stage;
+ 	
+ INSERT OVERWRITE TABLE dividendsORC
+ 	SELECT ymd,dividend,exchange1,symbol
+ 	FROM dividends_stage
+ 	SORT by exchange1,symbol;
+	
+ SHOW PARTITIONS stocks PARTITION(exchange1,symbol);
+ SHOW PARTITIONS dividends PARTITION(exchange1,symbol = 'AAPL');
+ 
+ 
+ --Adding partition to an existing PARTITIONED table and cannot add to a non partitioned table
+ --ALTER TABLE dividends ADD IF NOT EXISTS 
+ --PARTITION(exchange1='BOMBAY') LOCATION 'user/root/data/BOMBAY'
+ 
+ 
+ -- Prevent partition from being dropped or queried.
+ ALTER TABLE dividends PARTITION(exchange1='NASDAQ') ENABLE NO_DROP;
+ ALTER TABLE dividends PARTITION(exchange1='NASDAQ') ENABLE OFFLINE;
+ 
+ -- Reverse the either operation
+ ALTER TABLE dividends PARTITION(exchange1='NASDAQ') DISABLE NO_DROP;
+ ALTER TABLE dividends PARTITION(exchange1='NASDAQ') DISABLE OFFLINE;
+ALTER TABLE dividends ARCHIVE PARTITION(exchange1='NASDAQ');
+
+SHOW PARTITIONS stocks PARTITION(exchange1,symbol);
+ 
+--A Cartesian product is a join where all the tuples in the left side of the join are paired with all the tuples of the right table. If the left table has 5 rows and the right table has 6 rows, 30 rows of output will be produced:
+
+SELECT * FROM stocks JOIN dividends LIMIT 10;
+SELECT count(*) as Cartesian_product FROM stocks JOIN dividends;
+
+SELECT count(*) as stocks FROM stocks ;
+SELECT count(*) as dividends FROM dividends;
+SELECT count(*) as Cartesian_product FROM stocks JOIN dividends;
+
+DROP TABLE IF EXISTS stocksBucket PURGE;
+CREATE TABLE IF NOT EXISTS stocksBucket (
+symbol STRING,
+ymd STRING,
+price_open FLOAT,
+price_high FLOAT,
+price_low FLOAT,
+price_close FLOAT,
+volume INT,
+price_adj_close FLOAT)
+	PARTITIONED BY (exchange1 STRING)
+	CLUSTERED BY (symbol) SORTED by (YMD) into 4 buckets
+	STORED AS ORC  tblproperties("orc.compress"="SNAPPY");
+
+INSERT OVERWRITE TABLE stocksBucket
+	PARTITION (exchange1)
+	SELECT symbol,ymd,price_open,price_high,price_low,
+		price_close,volume,price_adj_close,exchange1 --- important to have the partition calumn last
+		FROM stocks;
+
+DESCRIBE EXTENDED stocksBucket;
+		
+SELECT * FROM stocksBucket TABLESAMPLE(BUCKET 4 OUT OF 4 on symbol) LIMIT 10;
+
+-- SELECT * FROM stocksBucket TABLESAMPLE(2 PERCENT); 
+--FAILED: SemanticException 3:39 Percentage sampling is not supported in org.apache.hadoop.hive.ql.io.HiveInputFormat. Error encountered near token '2'
+
+SELECT * FROM stocksBucket TABLESAMPLE(10 ROWS);
+
+--SELECT * FROM stocksBucket TABLESAMPLE(1M); --BY size bytes
+--FAILED: SemanticException 3:39 Total Length sampling is not supported in org.apache.hadoop.hive.ql.io.HiveInputFormat. Error encountered near token '1M'
+
+
+Hive --orcfiledump /apps/hive/warehouse/stocksbucket/exchange1=NYSE/000002_0
+

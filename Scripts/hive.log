@@ -13,44 +13,230 @@ SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
 Logging initialized using configuration in file:/etc/hive/2.3.0.0-2557/0/hive-log4j.properties
 OK
 xxxxxxxxxcurrenttimeinhivexxxxxxxxxxxx
-2015-10-11 02:49:05
-Time taken: 12.708 seconds, Fetched: 1 row(s)
+2015-10-12 20:39:33
+Time taken: 9.42 seconds, Fetched: 1 row(s)
 OK
-dividends.ymd	dividends.dividend	dividends.exchange1	dividends.symbol
-2007-07-17	2.45	NASDAQ	AACC
-2008-06-10	0.16	NASDAQ	AAON
-2007-06-07	0.13333	NASDAQ	AAON
-2006-12-11	0.13333	NASDAQ	AAON
-2006-06-08	0.13333	NASDAQ	AAON
-2009-12-10	0.18	NASDAQ	AAON
-2009-06-09	0.18	NASDAQ	AAON
-2007-12-11	0.16	NASDAQ	AAON
-2008-12-10	0.16	NASDAQ	AAON
-1993-11-19	0.03	NASDAQ	AAPL
-Time taken: 7.903 seconds, Fetched: 10 row(s)
-Query ID = root_20151011024914_7c0b6a3a-c7db-4b59-8540-cdf32d1ed5c4
+tab_name
+default__dividends_stage_es01_index__
+default__weather1_y01_index__
+departments_udftest
+dept
+dividends
+dividends_stage
+dividendsorc
+sample_07
+sample_08
+stocks
+stocks_stage
+stocksbucket
+tmp_users
+weather
+weather1
+weather_skewed
+weather_stage
+weathermonth
+weatherorc
+Time taken: 0.658 seconds, Fetched: 19 row(s)
+OK
+partition
+exchange1=NASDAQ/symbol=AAPL
+exchange1=NASDAQ/symbol=INTC
+exchange1=NYSE/symbol=GE
+exchange1=NYSE/symbol=IBM
+Time taken: 1.271 seconds, Fetched: 4 row(s)
+Warning: Map Join MAPJOIN[8][bigTable=stocks] in task 'Map 1' is a cross product
+Query ID = root_20151012203936_399052d6-6334-4501-bd1c-670ff65f8f4f
 Total jobs = 1
 Launching Job 1 out of 1
 
 
-Status: Running (Executing on YARN cluster with App id application_1444528407722_0005)
+Status: Running (Executing on YARN cluster with App id application_1444678512215_0004)
 
-Map 1: 0/1	Reducer 2: 0/1	
-Map 1: 0/1	Reducer 2: 0/1	
-Map 1: 0/1	Reducer 2: 0/1	
-Map 1: 0/1	Reducer 2: 0/1	
-Map 1: 0/1	Reducer 2: 0/1	
-Map 1: 0/1	Reducer 2: 0/1	
-Map 1: 0(+1)/1	Reducer 2: 0/1	
-Map 1: 0(+1)/1	Reducer 2: 0/1	
-Map 1: 0(+1)/1	Reducer 2: 0/1	
-Map 1: 0(+1)/1	Reducer 2: 0/1	
-Map 1: 1/1	Reducer 2: 0/1	
-Map 1: 1/1	Reducer 2: 0(+1)/1	
-Map 1: 1/1	Reducer 2: 0(+1)/1	
-Map 1: 1/1	Reducer 2: 1/1	
+Map 1: -/-	Map 2: -/-	
+Map 1: 0/1	Map 2: -/-	
+Map 1: 0/1	Map 2: -/-	
+Map 1: 0/1	Map 2: 0/1	
+Map 1: 0/1	Map 2: 0/1	
+Map 1: 0/1	Map 2: 0/1	
+Map 1: 0/1	Map 2: 0/1	
+Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+Map 1: 0(+1)/1	Map 2: 1/1	
+Map 1: 0(+1)/1	Map 2: 1/1	
+Map 1: 0(+1)/1	Map 2: 1/1	
+Map 1: 1/1	Map 2: 1/1	
 OK
-exchange1
-NASDAQ
-NYSE
-Time taken: 139.791 seconds, Fetched: 2 row(s)
+stocks.ymd	stocks.price_open	stocks.price_high	stocks.price_low	stocks.price_close	stocks.volume	stocks.price_adj_close	stocks.exchange1	stocks.symbol	dividends.ymd	dividends.dividend	dividends.exchange1	dividends.symbol
+2010-02-08	195.69	197.88	194.0	194.12	17036300	194.12	NASDAQ	AAPL	2007-07-17	2.45	NASDAQ	AACC
+2010-02-08	195.69	197.88	194.0	194.12	17036300	194.12	NASDAQ	AAPL	2002-12-13	0.057	NYSE	IYZ
+2010-02-08	195.69	197.88	194.0	194.12	17036300	194.12	NASDAQ	AAPL	2003-03-07	0.074	NYSE	IYZ
+2010-02-08	195.69	197.88	194.0	194.12	17036300	194.12	NASDAQ	AAPL	2003-06-13	0.112	NYSE	IYZ
+2010-02-08	195.69	197.88	194.0	194.12	17036300	194.12	NASDAQ	AAPL	2003-09-12	0.115	NYSE	IYZ
+2010-02-08	195.69	197.88	194.0	194.12	17036300	194.12	NASDAQ	AAPL	2003-12-12	0.146	NYSE	IYZ
+2010-02-08	195.69	197.88	194.0	194.12	17036300	194.12	NASDAQ	AAPL	2003-12-16	0.133	NYSE	IYZ
+2010-02-08	195.69	197.88	194.0	194.12	17036300	194.12	NASDAQ	AAPL	2004-03-26	0.074	NYSE	IYZ
+2010-02-08	195.69	197.88	194.0	194.12	17036300	194.12	NASDAQ	AAPL	2004-06-25	0.107	NYSE	IYZ
+2010-02-08	195.69	197.88	194.0	194.12	17036300	194.12	NASDAQ	AAPL	2004-09-24	0.198	NYSE	IYZ
+Time taken: 59.258 seconds, Fetched: 10 row(s)
+Warning: Map Join MAPJOIN[11][bigTable=stocks] in task 'Map 1' is a cross product
+Query ID = root_20151012204035_b5d5921e-b1cd-4d79-840e-f7d5edd81b7c
+Total jobs = 1
+Launching Job 1 out of 1
+
+
+Status: Running (Executing on YARN cluster with App id application_1444678512215_0004)
+
+Map 1: -/-	Map 3: -/-	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: -/-	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: -/-	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: -/-	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: 0/1	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: 0/1	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: 0/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 1/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 1/1	Map 3: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Map 3: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Map 3: 1/1	Reducer 2: 1/1	
+OK
+cartesian_product
+2406742040
+Time taken: 72.932 seconds, Fetched: 1 row(s)
+OK
+stocks
+158255
+Time taken: 6.08 seconds, Fetched: 1 row(s)
+OK
+dividends
+15208
+Time taken: 1.382 seconds, Fetched: 1 row(s)
+Warning: Map Join MAPJOIN[11][bigTable=stocks] in task 'Map 1' is a cross product
+Query ID = root_20151012204156_e706ae91-ed5e-4c8a-a624-aa402f594ad1
+Total jobs = 1
+Launching Job 1 out of 1
+
+
+Status: Running (Executing on YARN cluster with App id application_1444678512215_0004)
+
+Map 1: -/-	Map 3: -/-	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: -/-	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: -/-	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: 0/1	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: 0/1	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: 0/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 1/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 1/1	Map 3: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Map 3: 1/1	Reducer 2: 1/1	
+OK
+cartesian_product
+2406742040
+Time taken: 73.291 seconds, Fetched: 1 row(s)
+OK
+Time taken: 3.921 seconds
+OK
+Time taken: 0.518 seconds
+Query ID = root_20151012204314_67f77857-c769-4989-b4ad-7b2cd0d0fc13
+Total jobs = 1
+Launching Job 1 out of 1
+
+
+Status: Running (Executing on YARN cluster with App id application_1444678512215_0004)
+
+Map 1: 0/1	Reducer 2: 0/4	
+Map 1: 0(+1)/1	Reducer 2: 0/4	
+Map 1: 0(+1)/1	Reducer 2: 0/4	
+Map 1: 0(+1)/1	Reducer 2: 0/4	
+Map 1: 1/1	Reducer 2: 0/4	
+Map 1: 1/1	Reducer 2: 0(+1)/4	
+Map 1: 1/1	Reducer 2: 0(+1)/4	
+Map 1: 1/1	Reducer 2: 1(+0)/4	
+Map 1: 1/1	Reducer 2: 1(+1)/4	
+Map 1: 1/1	Reducer 2: 2(+0)/4	
+Map 1: 1/1	Reducer 2: 2(+0)/4	
+Map 1: 1/1	Reducer 2: 2(+1)/4	
+Map 1: 1/1	Reducer 2: 2(+1)/4	
+Map 1: 1/1	Reducer 2: 2(+2)/4	
+Map 1: 1/1	Reducer 2: 2(+2)/4	
+Map 1: 1/1	Reducer 2: 2(+2)/4	
+Map 1: 1/1	Reducer 2: 2(+2)/4	
+Map 1: 1/1	Reducer 2: 2(+1)/4	
+Map 1: 1/1	Reducer 2: 3(+0)/4	
+Map 1: 1/1	Reducer 2: 4/4	
+Map 1: 1/1	Reducer 2: 4/4	
+Loading data to table default.stocksbucket partition (exchange1=null)
+	 Time taken for load dynamic partitions : 2377
+	Loading partition {exchange1=NYSE}
+	Loading partition {exchange1=NASDAQ}
+	 Time taken for adding to write entity : 10
+Partition default.stocksbucket{exchange1=NASDAQ} stats: [numFiles=4, numRows=85601, totalSize=872786, rawDataSize=17633806]
+Partition default.stocksbucket{exchange1=NYSE} stats: [numFiles=4, numRows=72654, totalSize=653313, rawDataSize=14833525]
+OK
+symbol	ymd	price_open	price_high	price_low	price_close	volume	price_adj_close	exchange1
+Time taken: 67.331 seconds
+OK
+col_name	data_type	comment
+symbol              	string              	                    
+ymd                 	string              	                    
+price_open          	float               	                    
+price_high          	float               	                    
+price_low           	float               	                    
+price_close         	float               	                    
+volume              	int                 	                    
+price_adj_close     	float               	                    
+exchange1           	string              	                    
+	 	 
+# Partition Information	 	 
+# col_name            	data_type           	comment             
+	 	 
+exchange1           	string              	                    
+	 	 
+Detailed Table Information	Table(tableName:stocksbucket, dbName:default, owner:root, createTime:1444682594, lastAccessTime:0, retention:0, sd:StorageDescriptor(cols:[FieldSchema(name:symbol, type:string, comment:null), FieldSchema(name:ymd, type:string, comment:null), FieldSchema(name:price_open, type:float, comment:null), FieldSchema(name:price_high, type:float, comment:null), FieldSchema(name:price_low, type:float, comment:null), FieldSchema(name:price_close, type:float, comment:null), FieldSchema(name:volume, type:int, comment:null), FieldSchema(name:price_adj_close, type:float, comment:null), FieldSchema(name:exchange1, type:string, comment:null)], location:hdfs://sandbox.hortonworks.com:8020/apps/hive/warehouse/stocksbucket, inputFormat:org.apache.hadoop.hive.ql.io.orc.OrcInputFormat, outputFormat:org.apache.hadoop.hive.ql.io.orc.OrcOutputFormat, compressed:false, numBuckets:4, serdeInfo:SerDeInfo(name:null, serializationLib:org.apache.hadoop.hive.ql.io.orc.OrcSerde, parameters:{serialization.format=1}), bucketCols:[symbol], sortCols:[Order(col:ymd, order:1)], parameters:{}, skewedInfo:SkewedInfo(skewedColNames:[], skewedColValues:[], skewedColValueLocationMaps:{}), storedAsSubDirectories:false), partitionKeys:[FieldSchema(name:exchange1, type:string, comment:null)], parameters:{orc.compress=SNAPPY, transient_lastDdlTime=1444682594}, viewOriginalText:null, viewExpandedText:null, tableType:MANAGED_TABLE)	
+Time taken: 0.887 seconds, Fetched: 16 row(s)
+OK
+stocksbucket.symbol	stocksbucket.ymd	stocksbucket.price_open	stocksbucket.price_high	stocksbucket.price_low	stocksbucket.price_close	stocksbucket.volume	stocksbucket.price_adj_close	stocksbucket.exchange1
+Time taken: 0.885 seconds
+OK
+stocksbucket.symbol	stocksbucket.ymd	stocksbucket.price_open	stocksbucket.price_high	stocksbucket.price_low	stocksbucket.price_close	stocksbucket.volume	stocksbucket.price_adj_close	stocksbucket.exchange1
+AAPL	1984-09-07	26.5	26.87	26.25	26.5	2981600	3.02	NASDAQ
+AAPL	1984-09-07	26.5	26.87	26.25	26.5	2981600	3.02	NASDAQ
+AAPL	1984-09-07	26.5	26.87	26.25	26.5	2981600	3.02	NASDAQ
+AAPL	1984-09-07	26.5	26.87	26.25	26.5	2981600	3.02	NASDAQ
+AAPL	1984-09-07	26.5	26.87	26.25	26.5	2981600	3.02	NASDAQ
+AAPL	1984-09-10	26.5	26.62	25.87	26.37	2346400	3.01	NASDAQ
+AAPL	1984-09-10	26.5	26.62	25.87	26.37	2346400	3.01	NASDAQ
+AAPL	1984-09-10	26.5	26.62	25.87	26.37	2346400	3.01	NASDAQ
+AAPL	1984-09-10	26.5	26.62	25.87	26.37	2346400	3.01	NASDAQ
+AAPL	1984-09-10	26.5	26.62	25.87	26.37	2346400	3.01	NASDAQ
+Time taken: 0.561 seconds, Fetched: 10 row(s)
+FAILED: SemanticException 3:39 Total Length sampling is not supported in org.apache.hadoop.hive.ql.io.HiveInputFormat. Error encountered near token '1M'

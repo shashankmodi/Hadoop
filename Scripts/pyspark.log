@@ -1,0 +1,4 @@
+
+WARNING: Running python applications through ./bin/pyspark is deprecated as of Spark 1.0.
+Use ./bin/spark-submit <python file>
+

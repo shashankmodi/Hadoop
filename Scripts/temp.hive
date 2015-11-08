@@ -1,10 +1,53 @@
-SET hive.exec.dynamic.partition.mode=nonstrict;
-SET hive.exec.dynamic.partition=true;
 SET hive.cli.print.header = true;
 set hive.cli.print.current.db = true;
+SET hive.execution.engine=tez;
+SET hive.exec.parallel=true;
+SET hive.vectorized.execution.reduce.enabled=true;
+SET hive.exec.dynamic.partition.mode=nonstrict;
+SET hive.exec.dynamic.partition=true;
+SET hive.enforce.bucketing=true;
 
 SELECT FROM_UNIXTIME(UNIX_TIMESTAMP()) as XXXXXXXXXCurrentTimeInHIVEXXXXXXXXXXXX;
+SHOW TABLES; 
 
-SELECT * FROM dividends LIMIT 10;
+SHOW PARTITIONS stocks PARTITION(exchange1,symbol);
+ 
+--A Cartesian product is a join where all the tuples in the left side of the join are paired with all the tuples of the right table. If the left table has 5 rows and the right table has 6 rows, 30 rows of output will be produced:
 
-SELECT distinct exchange1 FROM dividends;
+SELECT * FROM stocks JOIN dividends LIMIT 10;
+SELECT count(*) as Cartesian_product FROM stocks JOIN dividends;
+
+SELECT count(*) as stocks FROM stocks ;
+SELECT count(*) as dividends FROM dividends;
+SELECT count(*) as Cartesian_product FROM stocks JOIN dividends;
+
+DROP TABLE IF EXISTS stocksBucket PURGE;
+CREATE TABLE IF NOT EXISTS stocksBucket (
+symbol STRING,
+ymd STRING,
+price_open FLOAT,
+price_high FLOAT,
+price_low FLOAT,
+price_close FLOAT,
+volume INT,
+price_adj_close FLOAT)
+	PARTITIONED BY (exchange1 STRING)
+	CLUSTERED BY (symbol) SORTED by (YMD) into 4 buckets
+	STORED AS ORC  tblproperties("orc.compress"="SNAPPY");
+
+INSERT OVERWRITE TABLE stocksBucket
+	PARTITION (exchange1)
+	SELECT symbol,ymd,price_open,price_high,price_low,
+		price_close,volume,price_adj_close,exchange1 --- important to have the partition calumn last
+		FROM stocks;
+ 
+DESCRIBE EXTENDED stocksBucket;
+		
+SELECT * FROM stocksBucket TABLESAMPLE(BUCKET 4 OUT OF 4 on symbol) LIMIT 10;
+
+-- SELECT * FROM stocksBucket TABLESAMPLE(2 PERCENT); 
+--FAILED: SemanticException 3:39 Percentage sampling is not supported in org.apache.hadoop.hive.ql.io.HiveInputFormat. Error encountered near token '2'
+
+SELECT * FROM stocksBucket TABLESAMPLE(10 ROWS);
+
+SELECT * FROM stocksBucket TABLESAMPLE(1M); --BY size bytes

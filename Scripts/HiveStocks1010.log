@@ -1,0 +1,2667 @@
+DROP TABLE IF EXISTS stocks_stage PURGE;
+CREATE EXTERNAL TABLE IF NOT EXISTS stocks_stage (
+exchange1 STRING,symbol STRING,ymd STRING,price_open FLOAT,
+price_high FLOAT,price_low FLOAT,price_close FLOAT,volume INT,
+price_adj_close FLOAT)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+LOCATION '/user/root/data/stocks/';
+
+DROP TABLE IF EXISTS stocks PURGE;
+CREATE TABLE IF NOT EXISTS stocks (
+ymd STRING,price_open FLOAT,price_high FLOAT,price_low FLOAT,
+price_close FLOAT,volume INT,price_adj_close FLOAT)
+	PARTITIONED BY (exchange1 STRING,symbol STRING)
+	ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+	STORED AS ORC;
+
+SET hive.exec.dynamic.partition.mode=nonstrict;
+SET hive.exec.dynamic.partition=true;
+
+LOAD DATA INPATH '/user/root/data/stocks/stocks.csv'
+INTO TABLE stocks_stage
+
+INSERT OVERWRITE TABLE stocks
+	PARTITION (exchange,symbol)
+	SELECT ymd,price_open,price_high,price_low,
+		price_close,volume,price_adj_close,exchange1,symbol
+		FROM stocks_stage;
+		
+		
+SET hive.exec.dynamic.partition.mode=nonstrict;
+SET hive.exec.dynamic.partition=true;
+SET hive.cli.print.header = true;
+set hive.cli.print.current.db = true;
+
+SELECT FROM_UNIXTIME(UNIX_TIMESTAMP()) as XXXXXXXXXCurrentTimeInHIVEXXXXXXXXXXXX;
+
+SELECT ymd,price_open,price_high,price_low,
+		price_close,volume,price_adj_close
+		FROM stocks_stage
+		where exchange1 = 'NASDAQ' and symbol = 'AAPL' LIMIT 10;
+
+INSERT INTO TABLE stocks 
+PARTITION (exchange1 = 'NASDAQ', symbol = 'AAPL')
+SELECT ymd,price_open,price_high,price_low,
+		price_close,volume,price_adj_close
+		FROM stocks_stage
+		where exchange1 = 'NASDAQ' and symbol = 'AAPL';
+		
+INSERT INTO TABLE stocks 
+PARTITION (exchange1 = 'NASDAQ', symbol = 'INTC')
+SELECT ymd,price_open,price_high,price_low,
+		price_close,volume,price_adj_close
+		FROM stocks_stage
+where exchange1 = 'NASDAQ' and symbol = 'INTC';
+
+INSERT INTO TABLE stocks 
+PARTITION (exchange1 = 'NYSE', symbol = 'GE')
+SELECT ymd,price_open,price_high,price_low,
+		price_close,volume,price_adj_close
+		FROM stocks_stage
+where exchange1 = 'NYSE' and symbol = 'GE';
+
+INSERT INTO TABLE stocks 
+PARTITION (exchange1 = 'NYSE', symbol = 'IBM')
+SELECT ymd,price_open,price_high,price_low,
+		price_close,volume,price_adj_close
+		FROM stocks_stage
+where exchange1 = 'NYSE' and symbol = 'IBM';
+
+
+--INSERT OVERWRITE TABLE stocks 
+--	PARTITION (exchange1,symbol)
+--	SELECT ymd,price_open,price_high,price_low,
+--		price_close,volume,price_adj_close,exchange1,symbol
+--		FROM stocks_stage
+--		CLUSTER BY exchange1,symbol;
+
+SELECT FROM_UNIXTIME(UNIX_TIMESTAMP()) as XXXXXXXXXCurrentTimeInHIVEXXXXXXXXXXXX;
+
+SELECT * FROM stocks LIMIT 10;
+
+DESCRIBE FORMATTED stocks_stage;
+DESCRIBE EXTENDED stocks;
+
+
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/usr/hdp/2.3.0.0-2557/hadoop/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/usr/hdp/2.3.0.0-2557/spark/lib/spark-assembly-1.3.1.2.3.0.0-2557-hadoop2.7.1.2.3.0.0-2557.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+WARNING: Use "yarn jar" to launch YARN applications.
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/usr/hdp/2.3.0.0-2557/hadoop/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/usr/hdp/2.3.0.0-2557/spark/lib/spark-assembly-1.3.1.2.3.0.0-2557-hadoop2.7.1.2.3.0.0-2557.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+
+Logging initialized using configuration in file:/etc/hive/2.3.0.0-2557/0/hive-log4j.properties
+OK
+xxxxxxxxxcurrenttimeinhivexxxxxxxxxxxx
+2015-10-10 22:59:28
+Time taken: 22.272 seconds, Fetched: 1 row(s)
+OK
+ymd	price_open	price_high	price_low	price_close	volume	price_adj_close
+2010-02-08	195.69	197.88	194.0	194.12	17036300	194.12
+2010-02-05	192.63	196.0	190.85	195.46	30344200	195.46
+2010-02-04	196.73	198.37	191.57	192.05	27022300	192.05
+2010-02-03	195.17	200.2	194.42	199.23	21951800	199.23
+2010-02-02	195.91	196.32	193.38	195.86	24928900	195.86
+2010-02-01	192.37	196.0	191.3	194.73	26717800	194.73
+2010-01-29	201.08	202.2	190.25	192.06	44448700	192.06
+2010-01-28	204.93	205.5	198.7	199.29	41874400	199.29
+2010-01-27	206.85	210.58	199.53	207.88	61478400	207.88
+2010-01-26	205.95	213.71	202.58	205.94	66605200	205.94
+Time taken: 11.749 seconds, Fetched: 10 row(s)
+Query ID = root_20151010225945_2da827a1-e5c5-4573-a03c-bec7b3088523
+Total jobs = 1
+Launching Job 1 out of 1
+
+
+Status: Running (Executing on YARN cluster with App id application_1444517170137_0001)
+
+Map 1: -/-	
+Map 1: 0/7	
+Map 1: 0/7	
+Map 1: 0/7	
+Map 1: 0/7	
+Map 1: 0/7	
+Map 1: 0/7	
+Map 1: 0/7	
+Map 1: 0/7	
+Map 1: 0/7	
+Map 1: 0/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+6)/7	
+Map 1: 2(+5)/7	
+Map 1: 2(+4)/7	
+Map 1: 3(+3)/7	
+Map 1: 5(+2)/7	
+Map 1: 6(+1)/7	
+Map 1: 6(+0)/7	
+Map 1: 7/7	
+Map 1: 7/7	
+Loading data to table default.stocks partition (exchange1=NASDAQ, symbol=AAPL)
+Partition default.stocks{exchange1=NASDAQ, symbol=AAPL} stats: [numFiles=23, numRows=32060, totalSize=516092, rawDataSize=3783080]
+OK
+ymd	price_open	price_high	price_low	price_close	volume	price_adj_close
+Time taken: 168.685 seconds
+Query ID = root_20151010230233_ed2aaf16-8306-4c40-83b8-3360f57abaac
+Total jobs = 1
+Launching Job 1 out of 1
+
+
+Status: Running (Executing on YARN cluster with App id application_1444517170137_0001)
+
+Map 1: 0/7	
+Map 1: 0/7	
+Map 1: 0/7	
+Map 1: 0/7	
+Map 1: 0/7	
+Map 1: 0/7	
+Map 1: 0/7	
+Map 1: 0/7	
+Map 1: 0/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+6)/7	
+Map 1: 5(+0)/7	
+Map 1: 7/7	
+Loading data to table default.stocks partition (exchange1=NASDAQ, symbol=INTC)
+Partition default.stocks{exchange1=NASDAQ, symbol=INTC} stats: [numFiles=39, numRows=53541, totalSize=861681, rawDataSize=6317838]
+OK
+ymd	price_open	price_high	price_low	price_close	volume	price_adj_close
+Time taken: 173.889 seconds
+Query ID = root_20151010230527_526d98f7-5d2e-4864-9586-5aefc79d27ee
+Total jobs = 1
+Launching Job 1 out of 1
+
+
+Status: Running (Executing on YARN cluster with App id application_1444517170137_0001)
+
+Map 1: 0/7	
+Map 1: 0/7	
+Map 1: 0/7	
+Map 1: 0/7	
+Map 1: 0/7	
+Map 1: 0/7	
+Map 1: 0/7	
+Map 1: 0/7	
+Map 1: 0(+5)/7	
+Map 1: 0(+6)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+6)/7	
+Map 1: 0(+6)/7	
+Map 1: 1(+3)/7	
+Map 1: 1(+2)/7	
+Map 1: 2(+2)/7	
+Map 1: 5(+2)/7	
+Map 1: 5(+1)/7	
+Map 1: 6(+1)/7	
+Map 1: 6(+0)/7	
+Map 1: 7/7	
+Map 1: 7/7	
+Loading data to table default.stocks partition (exchange1=NYSE, symbol=GE)
+Partition default.stocks{exchange1=NYSE, symbol=GE} stats: [numFiles=23, numRows=60545, totalSize=844032, rawDataSize=7144310]
+OK
+ymd	price_open	price_high	price_low	price_close	volume	price_adj_close
+Time taken: 205.649 seconds
+Query ID = root_20151010230853_f9185505-0d4c-40fe-a629-2d8883604282
+Total jobs = 1
+Launching Job 1 out of 1
+
+
+Status: Running (Executing on YARN cluster with App id application_1444517170137_0001)
+
+Map 1: 0/7	
+Map 1: 0/7	
+Map 1: 0/7	
+Map 1: 0/7	
+Map 1: 0/7	
+Map 1: 0/7	
+Map 1: 0/7	
+Map 1: 0/7	
+Map 1: 0/7	
+Map 1: 0(+2)/7	
+Map 1: 0(+5)/7	
+Map 1: 0(+6)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+7)/7	
+Map 1: 0(+6)/7	
+Map 1: 1(+5)/7	
+Map 1: 2(+5)/7	
+Map 1: 2(+4)/7	
+Map 1: 5(+2)/7	
+Map 1: 5(+1)/7	
+Map 1: 6(+1)/7	
+Map 1: 7/7	
+Map 1: 7/7	
+Loading data to table default.stocks partition (exchange1=NYSE, symbol=IBM)
+Partition default.stocks{exchange1=NYSE, symbol=IBM} stats: [numFiles=7, numRows=12109, totalSize=184885, rawDataSize=1428862]
+OK
+ymd	price_open	price_high	price_low	price_close	volume	price_adj_close
+Time taken: 177.238 seconds
+OK
+xxxxxxxxxcurrenttimeinhivexxxxxxxxxxxx
+2015-10-10 23:11:51
+Time taken: 0.851 seconds, Fetched: 1 row(s)
+OK
+stocks.ymd	stocks.price_open	stocks.price_high	stocks.price_low	stocks.price_close	stocks.volume	stocks.price_adj_close	stocks.exchange1	stocks.symbol
+2010-02-08	195.69	197.88	194.0	194.12	17036300	194.12	NASDAQ	AAPL
+2010-02-05	192.63	196.0	190.85	195.46	30344200	195.46	NASDAQ	AAPL
+2010-02-04	196.73	198.37	191.57	192.05	27022300	192.05	NASDAQ	AAPL
+2010-02-03	195.17	200.2	194.42	199.23	21951800	199.23	NASDAQ	AAPL
+2010-02-02	195.91	196.32	193.38	195.86	24928900	195.86	NASDAQ	AAPL
+2010-02-01	192.37	196.0	191.3	194.73	26717800	194.73	NASDAQ	AAPL
+2010-01-29	201.08	202.2	190.25	192.06	44448700	192.06	NASDAQ	AAPL
+2010-01-28	204.93	205.5	198.7	199.29	41874400	199.29	NASDAQ	AAPL
+2010-01-27	206.85	210.58	199.53	207.88	61478400	207.88	NASDAQ	AAPL
+2010-01-26	205.95	213.71	202.58	205.94	66605200	205.94	NASDAQ	AAPL
+Time taken: 1.088 seconds, Fetched: 10 row(s)
+OK
+col_name	data_type	comment
+# col_name            	data_type           	comment             
+	 	 
+exchange1           	string              	                    
+symbol              	string              	                    
+ymd                 	string              	                    
+price_open          	float               	                    
+price_high          	float               	                    
+price_low           	float               	                    
+price_close         	float               	                    
+volume              	int                 	                    
+price_adj_close     	float               	                    
+	 	 
+# Detailed Table Information	 	 
+Database:           	default             	 
+Owner:              	root                	 
+CreateTime:         	Sat Oct 10 20:56:41 UTC 2015	 
+LastAccessTime:     	UNKNOWN             	 
+Protect Mode:       	None                	 
+Retention:          	0                   	 
+Location:           	hdfs://sandbox.hortonworks.com:8020/user/root/data/stocks	 
+Table Type:         	EXTERNAL_TABLE      	 
+Table Parameters:	 	 
+	COLUMN_STATS_ACCURATE	true                
+	EXTERNAL            	TRUE                
+	numFiles            	0                   
+	numRows             	0                   
+	rawDataSize         	0                   
+	totalSize           	0                   
+	transient_lastDdlTime	1444510610          
+	 	 
+# Storage Information	 	 
+SerDe Library:      	org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe	 
+InputFormat:        	org.apache.hadoop.mapred.TextInputFormat	 
+OutputFormat:       	org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat	 
+Compressed:         	No                  	 
+Num Buckets:        	-1                  	 
+Bucket Columns:     	[]                  	 
+Sort Columns:       	[]                  	 
+Storage Desc Params:	 	 
+	field.delim         	,                   
+	serialization.format	,                   
+Time taken: 0.774 seconds, Fetched: 41 row(s)
+OK
+col_name	data_type	comment
+ymd                 	string              	                    
+price_open          	float               	                    
+price_high          	float               	                    
+price_low           	float               	                    
+price_close         	float               	                    
+volume              	int                 	                    
+price_adj_close     	float               	                    
+exchange1           	string              	                    
+symbol              	string              	                    
+	 	 
+# Partition Information	 	 
+# col_name            	data_type           	comment             
+	 	 
+exchange1           	string              	                    
+symbol              	string              	                    
+	 	 
+Detailed Table Information	Table(tableName:stocks, dbName:default, owner:root, createTime:1444510605, lastAccessTime:0, retention:0, sd:StorageDescriptor(cols:[FieldSchema(name:ymd, type:string, comment:null), FieldSchema(name:price_open, type:float, comment:null), FieldSchema(name:price_high, type:float, comment:null), FieldSchema(name:price_low, type:float, comment:null), FieldSchema(name:price_close, type:float, comment:null), FieldSchema(name:volume, type:int, comment:null), FieldSchema(name:price_adj_close, type:float, comment:null), FieldSchema(name:exchange1, type:string, comment:null), FieldSchema(name:symbol, type:string, comment:null)], location:hdfs://sandbox.hortonworks.com:8020/apps/hive/warehouse/stocks, inputFormat:org.apache.hadoop.hive.ql.io.orc.OrcInputFormat, outputFormat:org.apache.hadoop.hive.ql.io.orc.OrcOutputFormat, compressed:false, numBuckets:-1, serdeInfo:SerDeInfo(name:null, serializationLib:org.apache.hadoop.hive.ql.io.orc.OrcSerde, parameters:{serialization.format=,, field.delim=,}), bucketCols:[], sortCols:[], parameters:{}, skewedInfo:SkewedInfo(skewedColNames:[], skewedColValues:[], skewedColValueLocationMaps:{}), storedAsSubDirectories:false), partitionKeys:[FieldSchema(name:exchange1, type:string, comment:null), FieldSchema(name:symbol, type:string, comment:null)], parameters:{transient_lastDdlTime=1444510605}, viewOriginalText:null, viewExpandedText:null, tableType:MANAGED_TABLE)	
+Time taken: 1.074 seconds, Fetched: 17 row(s)
+
+
+describe formatted default__weather1_y01_index__;
+
+SELECT year, SIZE(`_offsets`) 
+	FROM default__weather1_y01_index__ 
+	WHERE year in (2000,2001,2002);
+
+SELECT avg(price_close) 
+	from stocks 
+	where exchange1 = 'NASDAQ' and symbol = 'AAPL';
+
+SELECT year(ymd) from stocks LIMIT 10;
+	
+SELECT year(ymd) ,avg(price_close) 
+	from stocks 
+	where exchange1 = 'NASDAQ' and symbol = 'AAPL'
+	group by year(ymd);
+
+SELECT year(ymd),avg(price_close) 
+	from stocks 
+	where exchange1 = 'NASDAQ' and symbol = 'AAPL'
+	group by year(ymd)
+	having avg(price_close) >50.0 and avg(price_close) <100.0;
+
+
+Logging initialized using configuration in file:/etc/hive/2.3.0.0-2557/0/hive-log4j.properties
+OK
+xxxxxxxxxcurrenttimeinhivexxxxxxxxxxxx
+2015-10-11 00:59:36
+Time taken: 18.765 seconds, Fetched: 1 row(s)
+OK
+tab_name
+default__weather1_y01_index__
+departments_udftest
+dept
+sample_07
+sample_08
+stocks
+stocks_stage
+tmp_users
+weather
+weather1
+weather_skewed
+weather_stage
+weathermonth
+weatherorc
+Time taken: 1.065 seconds, Fetched: 14 row(s)
+OK
+col_name	data_type	comment
+# col_name            	data_type           	comment             
+	 	 
+year                	int                 	                    
+_bucketname         	string              	                    
+_offsets            	array<bigint>       	                    
+	 	 
+# Detailed Table Information	 	 
+Database:           	default             	 
+Owner:              	root                	 
+CreateTime:         	Thu Oct 08 16:10:45 UTC 2015	 
+LastAccessTime:     	UNKNOWN             	 
+Protect Mode:       	None                	 
+Retention:          	0                   	 
+Location:           	hdfs://sandbox.hortonworks.com:8020/apps/hive/warehouse/default__weather1_y01_index__	 
+Table Type:         	INDEX_TABLE         	 
+Table Parameters:	 	 
+	COLUMN_STATS_ACCURATE	true                
+	hive.index.basetbl.dfs.lastModifiedTime	1444320657864       
+	numFiles            	1                   
+	numRows             	35                  
+	rawDataSize         	16510463            
+	totalSize           	548151              
+	transient_lastDdlTime	1444320916          
+	 	 
+# Storage Information	 	 
+SerDe Library:      	org.apache.hadoop.hive.ql.io.orc.OrcSerde	 
+InputFormat:        	org.apache.hadoop.hive.ql.io.orc.OrcInputFormat	 
+OutputFormat:       	org.apache.hadoop.hive.ql.io.orc.OrcOutputFormat	 
+Compressed:         	No                  	 
+Num Buckets:        	-1                  	 
+Bucket Columns:     	[]                  	 
+Sort Columns:       	[Order(col:year, order:1)]	 
+Time taken: 2.361 seconds, Fetched: 32 row(s)
+OK
+year	_c1
+2000	66064
+2001	64284
+2002	65088
+Time taken: 3.892 seconds, Fetched: 3 row(s)
+Query ID = root_20151011005946_134e60fc-0514-4b93-8233-b8d06fc8ca94
+Total jobs = 1
+Launching Job 1 out of 1
+
+
+Status: Running (Executing on YARN cluster with App id application_1444517170137_0006)
+
+Map 1: -/-	Reducer 2: 0/1	
+Map 1: 0/1	Reducer 2: 0/1	
+Map 1: 0/1	Reducer 2: 0/1	
+Map 1: 0/1	Reducer 2: 0/1	
+Map 1: 0/1	Reducer 2: 0/1	
+Map 1: 0/1	Reducer 2: 0/1	
+Map 1: 0/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0/1	Reducer 2: 0/1	
+Map 1: 1/1	Reducer 2: 0/1	
+Map 1: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Reducer 2: 1/1	
+OK
+_c0
+51.745206035529534
+Time taken: 109.435 seconds, Fetched: 1 row(s)
+OK
+_c0
+2010
+2010
+2010
+2010
+2010
+2010
+2010
+2010
+2010
+2010
+Time taken: 2.64 seconds, Fetched: 10 row(s)
+Query ID = root_20151011010148_bd67c5be-e10b-4f6c-8bc9-33f927596b3c
+Total jobs = 1
+Launching Job 1 out of 1
+
+
+Status: Running (Executing on YARN cluster with App id application_1444517170137_0006)
+
+Map 1: -/-	Reducer 2: 0/1	
+Map 1: 0/1	Reducer 2: 0/1	
+Map 1: 0/1	Reducer 2: 0/1	
+Map 1: 0/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 1/1	Reducer 2: 0/1	
+Map 1: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Reducer 2: 1/1	
+OK
+_c0	_c1
+1984	25.578625440597534
+1985	20.193676221040867
+1986	32.46102808021274
+1987	53.88968399108163
+1988	41.540079275138766
+1989	41.65976212516664
+1990	37.56268799823263
+1991	52.49553383386182
+1992	54.80338610251119
+1993	41.02671956450572
+1994	34.0813495847914
+1995	40.542103593311616
+1996	24.917559398440865
+1997	17.965850004565574
+1998	30.565119240019058
+1999	57.77071460844979
+2000	71.74892876261757
+2001	20.219112992286682
+2002	19.139444423100304
+2003	18.54476193019322
+2004	35.52694458431668
+2005	52.401745992993554
+2006	70.81063753105255
+2007	128.27390423049016
+2008	141.9790115054888
+2009	146.81412711976066
+2010	204.72159912109376
+Time taken: 38.862 seconds, Fetched: 27 row(s)
+Query ID = root_20151011010228_29bb1ca1-d85d-4745-ada0-d88f453e1b52
+Total jobs = 1
+Launching Job 1 out of 1
+
+
+Status: Running (Executing on YARN cluster with App id application_1444517170137_0006)
+
+Map 1: -/-	Reducer 2: 0/1	
+Map 1: 0/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Reducer 2: 1/1	
+OK
+_c0	_c1
+1987	53.88968399108163
+1991	52.49553383386182
+1992	54.80338610251119
+1999	57.77071460844979
+2000	71.74892876261757
+2005	52.401745992993554
+2006	70.81063753105255
+Time taken: 11.992 seconds, Fetched: 7 row(s)
+OK
+Time taken: 0.417 seconds
+
+SELECT FROM_UNIXTIME(UNIX_TIMESTAMP()) as XXXXXXXXXCurrentTimeInHIVEXXXXXXXXXXXX;
+
+DROP TABLE IF EXISTS dividends PURGE;
+create table if not exists dividends(
+	ymd string,
+	dividend float )
+	PARTITIONED BY (exchange1 STRING,symbol STRING)
+	STORED AS TEXTFILE;
+	
+INSERT OVERWRITE TABLE dividends
+	PARTITION (exchange1,symbol)
+	SELECT ymd,dividend,exchange1,symbol
+	FROM dividends_stage
+	SORT by exchange1,symbol;
+	
+
+
+Logging initialized using configuration in file:/etc/hive/2.3.0.0-2557/0/hive-log4j.properties
+OK
+xxxxxxxxxcurrenttimeinhivexxxxxxxxxxxx
+2015-10-11 02:32:35
+Time taken: 20.147 seconds, Fetched: 1 row(s)
+OK
+Time taken: 7.31 seconds
+OK
+Time taken: 4.558 seconds
+Query ID = root_20151011023247_f333864f-cc54-4528-939a-c1d445a91cf7
+Total jobs = 1
+Launching Job 1 out of 1
+
+
+Status: Running (Executing on YARN cluster with App id application_1444528407722_0004)
+
+Map 1: -/-	Reducer 2: 0/1	
+Map 1: 0/1	Reducer 2: 0/1	
+Map 1: 0/1	Reducer 2: 0/1	
+Map 1: 0/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0/1	Reducer 2: 0/1	
+Map 1: 1/1	Reducer 2: 0/1	
+Map 1: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Reducer 2: 1/1	
+Loading data to table default.dividends partition (exchange1=null, symbol=null)
+	 Time taken for load dynamic partitions : 405308
+	Loading partition {exchange1=NASDAQ, symbol=AACC}
+	Loading partition {exchange1=NYSE, symbol=IMF}
+	Loading partition {exchange1=NYSE, symbol=GEF}
+	Loading partition {exchange1=NASDAQ, symbol=ADRE}
+	Loading partition {exchange1=NYSE, symbol=GJG}
+	Loading partition {exchange1=NYSE, symbol=GD}
+	Loading partition {exchange1=NYSE, symbol=IHF}
+	Loading partition {exchange1=NASDAQ, symbol=ARBX}
+	Loading partition {exchange1=NYSE, symbol=IIT}
+	Loading partition {exchange1=NYSE, symbol=IHC}
+	Loading partition {exchange1=NYSE, symbol=IBA}
+	Loading partition {exchange1=NYSE, symbol=GLT}
+	Loading partition {exchange1=NASDAQ, symbol=AFSI}
+	Loading partition {exchange1=NYSE, symbol=GMK}
+	Loading partition {exchange1=NASDAQ, symbol=ACAP}
+	Loading partition {exchange1=NYSE, symbol=GFA}
+	Loading partition {exchange1=NYSE, symbol=IAI}
+	Loading partition {exchange1=NASDAQ, symbol=IBB}
+	Loading partition {exchange1=NYSE, symbol=GNI}
+	Loading partition {exchange1=NASDAQ, symbol=ACME}
+	Loading partition {exchange1=NYSE, symbol=GJT}
+	Loading partition {exchange1=NYSE, symbol=GS}
+	Loading partition {exchange1=NYSE, symbol=GOV}
+	Loading partition {exchange1=NYSE, symbol=GEJ}
+	Loading partition {exchange1=NYSE, symbol=IXG}
+	Loading partition {exchange1=NYSE, symbol=IWA}
+	Loading partition {exchange1=NYSE, symbol=IGM}
+	Loading partition {exchange1=NASDAQ, symbol=IFSB}
+	Loading partition {exchange1=NYSE, symbol=GJN}
+	Loading partition {exchange1=NYSE, symbol=GPN}
+	Loading partition {exchange1=NYSE, symbol=IMB}
+	Loading partition {exchange1=NASDAQ, symbol=ASFN}
+	Loading partition {exchange1=NYSE, symbol=GDO}
+	Loading partition {exchange1=NASDAQ, symbol=ARDNA}
+	Loading partition {exchange1=NASDAQ, symbol=AMTC}
+	Loading partition {exchange1=NASDAQ, symbol=IFGL}
+	Loading partition {exchange1=NYSE, symbol=GY}
+	Loading partition {exchange1=NYSE, symbol=IKL}
+	Loading partition {exchange1=NYSE, symbol=IGN}
+	Loading partition {exchange1=NASDAQ, symbol=IFSM}
+	Loading partition {exchange1=NYSE, symbol=IEV}
+	Loading partition {exchange1=NYSE, symbol=GAB}
+	Loading partition {exchange1=NASDAQ, symbol=ASGR}
+	Loading partition {exchange1=NYSE, symbol=GLW}
+	Loading partition {exchange1=NASDAQ, symbol=AWBC}
+	Loading partition {exchange1=NASDAQ, symbol=ACAT}
+	Loading partition {exchange1=NYSE, symbol=ICB}
+	Loading partition {exchange1=NYSE, symbol=GJE}
+	Loading partition {exchange1=NYSE, symbol=GPU}
+	Loading partition {exchange1=NASDAQ, symbol=ALDA}
+	Loading partition {exchange1=NYSE, symbol=GLS}
+	Loading partition {exchange1=NYSE, symbol=IJJ}
+	Loading partition {exchange1=NASDAQ, symbol=ALLB}
+	Loading partition {exchange1=NYSE, symbol=GPW}
+	Loading partition {exchange1=NYSE, symbol=IKR}
+	Loading partition {exchange1=NASDAQ, symbol=ARCC}
+	Loading partition {exchange1=NYSE, symbol=GYB}
+	Loading partition {exchange1=NASDAQ, symbol=AHPI}
+	Loading partition {exchange1=NASDAQ, symbol=ABCW}
+	Loading partition {exchange1=NASDAQ, symbol=IPCS}
+	Loading partition {exchange1=NYSE, symbol=IYT}
+	Loading partition {exchange1=NASDAQ, symbol=IFEU}
+	Loading partition {exchange1=NYSE, symbol=GLP}
+	Loading partition {exchange1=NYSE, symbol=IYW}
+	Loading partition {exchange1=NASDAQ, symbol=ATX}
+	Loading partition {exchange1=NYSE, symbol=IEI}
+	Loading partition {exchange1=NASDAQ, symbol=IIN}
+	Loading partition {exchange1=NASDAQ, symbol=IBAS}
+	Loading partition {exchange1=NASDAQ, symbol=AUBN}
+	Loading partition {exchange1=NYSE, symbol=GAS}
+	Loading partition {exchange1=NASDAQ, symbol=AGYS}
+	Loading partition {exchange1=NASDAQ, symbol=AMAT}
+	Loading partition {exchange1=NASDAQ, symbol=ALUS}
+	Loading partition {exchange1=NASDAQ, symbol=AMPH}
+	Loading partition {exchange1=NASDAQ, symbol=AMNB}
+	Loading partition {exchange1=NASDAQ, symbol=AAXJ}
+	Loading partition {exchange1=NYSE, symbol=GJL}
+	Loading partition {exchange1=NYSE, symbol=GGB}
+	Loading partition {exchange1=NASDAQ, symbol=ASFI}
+	Loading partition {exchange1=NASDAQ, symbol=ASML}
+	Loading partition {exchange1=NYSE, symbol=ITB}
+	Loading partition {exchange1=NYSE, symbol=GEA}
+	Loading partition {exchange1=NYSE, symbol=GPD}
+	Loading partition {exchange1=NASDAQ, symbol=ASMI}
+	Loading partition {exchange1=NASDAQ, symbol=ATRO}
+	Loading partition {exchange1=NYSE, symbol=ISI}
+	Loading partition {exchange1=NYSE, symbol=GIM}
+	Loading partition {exchange1=NASDAQ, symbol=AAON}
+	Loading partition {exchange1=NASDAQ, symbol=AMRB}
+	Loading partition {exchange1=NYSE, symbol=GEX}
+	Loading partition {exchange1=NASDAQ, symbol=ANCX}
+	Loading partition {exchange1=NYSE, symbol=IRE}
+	Loading partition {exchange1=NYSE, symbol=IYM}
+	Loading partition {exchange1=NASDAQ, symbol=ALCO}
+	Loading partition {exchange1=NASDAQ, symbol=IXYS}
+	Loading partition {exchange1=NYSE, symbol=IBM}
+	Loading partition {exchange1=NASDAQ, symbol=AFFM}
+	Loading partition {exchange1=NASDAQ, symbol=AINV}
+	Loading partition {exchange1=NYSE, symbol=GCS}
+	Loading partition {exchange1=NYSE, symbol=GAR}
+	Loading partition {exchange1=NASDAQ, symbol=ISYS}
+	Loading partition {exchange1=NASDAQ, symbol=AMPL}
+	Loading partition {exchange1=NYSE, symbol=IMS}
+	Loading partition {exchange1=NASDAQ, symbol=ASCA}
+	Loading partition {exchange1=NYSE, symbol=GBE}
+	Loading partition {exchange1=NYSE, symbol=IQI}
+	Loading partition {exchange1=NASDAQ, symbol=ACWX}
+	Loading partition {exchange1=NASDAQ, symbol=ASRV}
+	Loading partition {exchange1=NASDAQ, symbol=ANNB}
+	Loading partition {exchange1=NYSE, symbol=GPJ}
+	Loading partition {exchange1=NYSE, symbol=GGC}
+	Loading partition {exchange1=NASDAQ, symbol=APII}
+	Loading partition {exchange1=NYSE, symbol=GG}
+	Loading partition {exchange1=NYSE, symbol=IHE}
+	Loading partition {exchange1=NYSE, symbol=GKK}
+	Loading partition {exchange1=NYSE, symbol=GDI}
+	Loading partition {exchange1=NYSE, symbol=IDC}
+	Loading partition {exchange1=NYSE, symbol=IEZ}
+	Loading partition {exchange1=NYSE, symbol=IGK}
+	Loading partition {exchange1=NYSE, symbol=INT}
+	Loading partition {exchange1=NASDAQ, symbol=INDB}
+	Loading partition {exchange1=NASDAQ, symbol=ARTW}
+	Loading partition {exchange1=NYSE, symbol=IYE}
+	Loading partition {exchange1=NYSE, symbol=GMA}
+	Loading partition {exchange1=NYSE, symbol=GJH}
+	Loading partition {exchange1=NYSE, symbol=GNA}
+	Loading partition {exchange1=NYSE, symbol=GNW}
+	Loading partition {exchange1=NYSE, symbol=IGA}
+	Loading partition {exchange1=NASDAQ, symbol=IPSU}
+	Loading partition {exchange1=NASDAQ, symbol=ADBE}
+	Loading partition {exchange1=NYSE, symbol=IX}
+	Loading partition {exchange1=NASDAQ, symbol=ACAS}
+	Loading partition {exchange1=NASDAQ, symbol=ANLY}
+	Loading partition {exchange1=NASDAQ, symbol=ITRN}
+	Loading partition {exchange1=NYSE, symbol=IQC}
+	Loading partition {exchange1=NASDAQ, symbol=IBKC}
+	Loading partition {exchange1=NASDAQ, symbol=ABCB}
+	Loading partition {exchange1=NASDAQ, symbol=ATEA}
+	Loading partition {exchange1=NASDAQ, symbol=APSG}
+	Loading partition {exchange1=NYSE, symbol=IQT}
+	Loading partition {exchange1=NYSE, symbol=IAE}
+	Loading partition {exchange1=NASDAQ, symbol=ARLP}
+	Loading partition {exchange1=NASDAQ, symbol=IRETP}
+	Loading partition {exchange1=NASDAQ, symbol=ACET}
+	Loading partition {exchange1=NASDAQ, symbol=ANDE}
+	Loading partition {exchange1=NYSE, symbol=GDF}
+	Loading partition {exchange1=NASDAQ, symbol=AVCA}
+	Loading partition {exchange1=NYSE, symbol=GEP}
+	Loading partition {exchange1=NYSE, symbol=GER}
+	Loading partition {exchange1=NYSE, symbol=GJM}
+	Loading partition {exchange1=NYSE, symbol=GOF}
+	Loading partition {exchange1=NYSE, symbol=GAM}
+	Loading partition {exchange1=NASDAQ, symbol=ADP}
+	Loading partition {exchange1=NYSE, symbol=GJW}
+	Loading partition {exchange1=NYSE, symbol=GVI}
+	Loading partition {exchange1=NASDAQ, symbol=ACGY}
+	Loading partition {exchange1=NYSE, symbol=GWW}
+	Loading partition {exchange1=NASDAQ, symbol=ISHG}
+	Loading partition {exchange1=NYSE, symbol=IYG}
+	Loading partition {exchange1=NYSE, symbol=ITUB}
+	Loading partition {exchange1=NYSE, symbol=IHI}
+	Loading partition {exchange1=NYSE, symbol=GPC}
+	Loading partition {exchange1=NASDAQ, symbol=APSA}
+	Loading partition {exchange1=NASDAQ, symbol=ACXM}
+	Loading partition {exchange1=NYSE, symbol=GYC}
+	Loading partition {exchange1=NYSE, symbol=ISP}
+	Loading partition {exchange1=NYSE, symbol=IRL}
+	Loading partition {exchange1=NYSE, symbol=GXP}
+	Loading partition {exchange1=NYSE, symbol=GED}
+	Loading partition {exchange1=NYSE, symbol=GOM}
+	Loading partition {exchange1=NYSE, symbol=GLG}
+	Loading partition {exchange1=NYSE, symbol=IQN}
+	Loading partition {exchange1=NYSE, symbol=IVC}
+	Loading partition {exchange1=NASDAQ, symbol=ATRI}
+	Loading partition {exchange1=NASDAQ, symbol=ASRVP}
+	Loading partition {exchange1=NASDAQ, symbol=ADRD}
+	Loading partition {exchange1=NASDAQ, symbol=IACI}
+	Loading partition {exchange1=NASDAQ, symbol=ACFC}
+	Loading partition {exchange1=NYSE, symbol=GOL}
+	Loading partition {exchange1=NASDAQ, symbol=ARTNA}
+	Loading partition {exchange1=NYSE, symbol=IXP}
+	Loading partition {exchange1=NASDAQ, symbol=AIXG}
+	Loading partition {exchange1=NYSE, symbol=IYY}
+	Loading partition {exchange1=NYSE, symbol=IAT}
+	Loading partition {exchange1=NASDAQ, symbol=ALSK}
+	Loading partition {exchange1=NASDAQ, symbol=ALBY}
+	Loading partition {exchange1=NYSE, symbol=ISM}
+	Loading partition {exchange1=NYSE, symbol=GJP}
+	Loading partition {exchange1=NYSE, symbol=IQM}
+	Loading partition {exchange1=NYSE, symbol=IFF}
+	Loading partition {exchange1=NYSE, symbol=IMT}
+	Loading partition {exchange1=NASDAQ, symbol=ADSK}
+	Loading partition {exchange1=NYSE, symbol=IIF}
+	Loading partition {exchange1=NYSE, symbol=GJS}
+	Loading partition {exchange1=NASDAQ, symbol=ALOG}
+	Loading partition {exchange1=NASDAQ, symbol=IOSP}
+	Loading partition {exchange1=NYSE, symbol=GMT}
+	Loading partition {exchange1=NYSE, symbol=GSK}
+	Loading partition {exchange1=NYSE, symbol=IGR}
+	Loading partition {exchange1=NYSE, symbol=IYZ}
+	Loading partition {exchange1=NASDAQ, symbol=IPAS}
+	Loading partition {exchange1=NASDAQ, symbol=AMIN}
+	Loading partition {exchange1=NYSE, symbol=IEO}
+	Loading partition {exchange1=NYSE, symbol=IGD}
+	Loading partition {exchange1=NYSE, symbol=IGE}
+	Loading partition {exchange1=NYSE, symbol=GCV}
+	Loading partition {exchange1=NASDAQ, symbol=AIPC}
+	Loading partition {exchange1=NYSE, symbol=IDA}
+	Loading partition {exchange1=NASDAQ, symbol=IBCP}
+	Loading partition {exchange1=NASDAQ, symbol=ALNC}
+	Loading partition {exchange1=NASDAQ, symbol=IFSIA}
+	Loading partition {exchange1=NASDAQ, symbol=ALEX}
+	Loading partition {exchange1=NYSE, symbol=ITT}
+	Loading partition {exchange1=NYSE, symbol=GFI}
+	Loading partition {exchange1=NYSE, symbol=IRS}
+	Loading partition {exchange1=NASDAQ, symbol=AROW}
+	Loading partition {exchange1=NYSE, symbol=GJF}
+	Loading partition {exchange1=NASDAQ, symbol=IPCC}
+	Loading partition {exchange1=NYSE, symbol=GJI}
+	Loading partition {exchange1=NYSE, symbol=IND}
+	Loading partition {exchange1=NASDAQ, symbol=AMWD}
+	Loading partition {exchange1=NASDAQ, symbol=ANAT}
+	Loading partition {exchange1=NYSE, symbol=IIC}
+	Loading partition {exchange1=NASDAQ, symbol=ARII}
+	Loading partition {exchange1=NYSE, symbol=IXC}
+	Loading partition {exchange1=NASDAQ, symbol=AIRT}
+	Loading partition {exchange1=NYSE, symbol=IJK}
+	Loading partition {exchange1=NYSE, symbol=IWC}
+	Loading partition {exchange1=NYSE, symbol=GHI}
+	Loading partition {exchange1=NYSE, symbol=IT}
+	Loading partition {exchange1=NASDAQ, symbol=AEPI}
+	Loading partition {exchange1=NYSE, symbol=GRR}
+	Loading partition {exchange1=NYSE, symbol=IEX}
+	Loading partition {exchange1=NYSE, symbol=IYF}
+	Loading partition {exchange1=NYSE, symbol=GJB}
+	Loading partition {exchange1=NYSE, symbol=IPG}
+	Loading partition {exchange1=NYSE, symbol=IAG}
+	Loading partition {exchange1=NASDAQ, symbol=APFC}
+	Loading partition {exchange1=NYSE, symbol=GJX}
+	Loading partition {exchange1=NYSE, symbol=IGT}
+	Loading partition {exchange1=NASDAQ, symbol=ADPT}
+	Loading partition {exchange1=NASDAQ, symbol=ITIC}
+	Loading partition {exchange1=NYSE, symbol=IEP}
+	Loading partition {exchange1=NYSE, symbol=GJO}
+	Loading partition {exchange1=NASDAQ, symbol=IBNK}
+	Loading partition {exchange1=NASDAQ, symbol=IFAS}
+	Loading partition {exchange1=NYSE, symbol=GPI}
+	Loading partition {exchange1=NASDAQ, symbol=ICLN}
+	Loading partition {exchange1=NYSE, symbol=IDG}
+	Loading partition {exchange1=NYSE, symbol=IR}
+	Loading partition {exchange1=NASDAQ, symbol=ATLS}
+	Loading partition {exchange1=NYSE, symbol=GSL}
+	Loading partition {exchange1=NYSE, symbol=IXJ}
+	Loading partition {exchange1=NASDAQ, symbol=APAGF}
+	Loading partition {exchange1=NASDAQ, symbol=ATNI}
+	Loading partition {exchange1=NYSE, symbol=INZ}
+	Loading partition {exchange1=NASDAQ, symbol=INFY}
+	Loading partition {exchange1=NYSE, symbol=GNK}
+	Loading partition {exchange1=NYSE, symbol=IYC}
+	Loading partition {exchange1=NYSE, symbol=GBX}
+	Loading partition {exchange1=NYSE, symbol=ITA}
+	Loading partition {exchange1=NYSE, symbol=GDL}
+	Loading partition {exchange1=NYSE, symbol=IAK}
+	Loading partition {exchange1=NASDAQ, symbol=IFNA}
+	Loading partition {exchange1=NASDAQ, symbol=ABBC}
+	Loading partition {exchange1=NYSE, symbol=IYK}
+	Loading partition {exchange1=NYSE, symbol=IJT}
+	Loading partition {exchange1=NYSE, symbol=IVZ}
+	Loading partition {exchange1=NYSE, symbol=GCI}
+	Loading partition {exchange1=NYSE, symbol=GKM}
+	Loading partition {exchange1=NYSE, symbol=IBN}
+	Loading partition {exchange1=NYSE, symbol=IYJ}
+	Loading partition {exchange1=NASDAQ, symbol=INSP}
+	Loading partition {exchange1=NYSE, symbol=IKM}
+	Loading partition {exchange1=NASDAQ, symbol=ATLO}
+	Loading partition {exchange1=NYSE, symbol=GET}
+	Loading partition {exchange1=NYSE, symbol=IDU}
+	Loading partition {exchange1=NYSE, symbol=GPX}
+	Loading partition {exchange1=NYSE, symbol=IGI}
+	Loading partition {exchange1=NYSE, symbol=IRC}
+	Loading partition {exchange1=NASDAQ, symbol=IRET}
+	Loading partition {exchange1=NASDAQ, symbol=AMOV}
+	Loading partition {exchange1=NYSE, symbol=GNV}
+	Loading partition {exchange1=NYSE, symbol=GTN}
+	Loading partition {exchange1=NYSE, symbol=GAH}
+	Loading partition {exchange1=NYSE, symbol=INB}
+	Loading partition {exchange1=NASDAQ, symbol=ISIL}
+	Loading partition {exchange1=NASDAQ, symbol=IBCA}
+	Loading partition {exchange1=NYSE, symbol=GJV}
+	Loading partition {exchange1=NYSE, symbol=GJR}
+	Loading partition {exchange1=NASDAQ, symbol=ALOY}
+	Loading partition {exchange1=NASDAQ, symbol=ISSC}
+	Loading partition {exchange1=NASDAQ, symbol=ARKR}
+	Loading partition {exchange1=NYSE, symbol=IDT}
+	Loading partition {exchange1=NYSE, symbol=GVA}
+	Loading partition {exchange1=NYSE, symbol=GCF}
+	Loading partition {exchange1=NYSE, symbol=GU}
+	Loading partition {exchange1=NYSE, symbol=GBF}
+	Loading partition {exchange1=NASDAQ, symbol=IGOV}
+	Loading partition {exchange1=NASDAQ, symbol=IMKTA}
+	Loading partition {exchange1=NYSE, symbol=IYH}
+	Loading partition {exchange1=NYSE, symbol=GAT}
+	Loading partition {exchange1=NYSE, symbol=GRX}
+	Loading partition {exchange1=NYSE, symbol=IIM}
+	Loading partition {exchange1=NYSE, symbol=GGG}
+	Loading partition {exchange1=NASDAQ, symbol=INTC}
+	Loading partition {exchange1=NASDAQ, symbol=IPAR}
+	Loading partition {exchange1=NASDAQ, symbol=AHGP}
+	Loading partition {exchange1=NYSE, symbol=GPK}
+	Loading partition {exchange1=NASDAQ, symbol=ATAX}
+	Loading partition {exchange1=NYSE, symbol=IVR}
+	Loading partition {exchange1=NYSE, symbol=ING}
+	Loading partition {exchange1=NASDAQ, symbol=ADRA}
+	Loading partition {exchange1=NYSE, symbol=GCH}
+	Loading partition {exchange1=NYSE, symbol=IXN}
+	Loading partition {exchange1=NYSE, symbol=GUT}
+	Loading partition {exchange1=NASDAQ, symbol=ARMH}
+	Loading partition {exchange1=NYSE, symbol=GAI}
+	Loading partition {exchange1=NYSE, symbol=IMN}
+	Loading partition {exchange1=NYSE, symbol=GT}
+	Loading partition {exchange1=NASDAQ, symbol=ALTR}
+	Loading partition {exchange1=NYSE, symbol=GA}
+	Loading partition {exchange1=NYSE, symbol=IYR}
+	Loading partition {exchange1=NYSE, symbol=ITW}
+	Loading partition {exchange1=NASDAQ, symbol=AMTD}
+	Loading partition {exchange1=NYSE, symbol=GF}
+	Loading partition {exchange1=NASDAQ, symbol=AMSWA}
+	Loading partition {exchange1=NASDAQ, symbol=AMIE}
+	Loading partition {exchange1=NASDAQ, symbol=IDSA}
+	Loading partition {exchange1=NASDAQ, symbol=ACCL}
+	Loading partition {exchange1=NYSE, symbol=GMR}
+	Loading partition {exchange1=NYSE, symbol=GYA}
+	Loading partition {exchange1=NYSE, symbol=GHL}
+	Loading partition {exchange1=NYSE, symbol=GUI}
+	Loading partition {exchange1=NYSE, symbol=ILF}
+	Loading partition {exchange1=NYSE, symbol=GDV}
+	Loading partition {exchange1=NYSE, symbol=IOO}
+	Loading partition {exchange1=NASDAQ, symbol=ASBC}
+	Loading partition {exchange1=NYSE, symbol=ICS}
+	Loading partition {exchange1=NYSE, symbol=IGV}
+	Loading partition {exchange1=NYSE, symbol=IJH}
+	Loading partition {exchange1=NYSE, symbol=GSH}
+	Loading partition {exchange1=NASDAQ, symbol=ADTN}
+	Loading partition {exchange1=NYSE, symbol=GES}
+	Loading partition {exchange1=NASDAQ, symbol=IPHS}
+	Loading partition {exchange1=NASDAQ, symbol=ALOT}
+	Loading partition {exchange1=NYSE, symbol=IJD}
+	Loading partition {exchange1=NYSE, symbol=GBL}
+	Loading partition {exchange1=NASDAQ, symbol=INBP}
+	Loading partition {exchange1=NASDAQ, symbol=ASEI}
+	Loading partition {exchange1=NYSE, symbol=GJK}
+	Loading partition {exchange1=NASDAQ, symbol=IUSA}
+	Loading partition {exchange1=NYSE, symbol=GFW}
+	Loading partition {exchange1=NYSE, symbol=ITF}
+	Loading partition {exchange1=NYSE, symbol=IMC}
+	Loading partition {exchange1=NYSE, symbol=GRB}
+	Loading partition {exchange1=NYSE, symbol=IJS}
+	Loading partition {exchange1=NYSE, symbol=ISF}
+	Loading partition {exchange1=NYSE, symbol=GJD}
+	Loading partition {exchange1=NASDAQ, symbol=AAPL}
+	Loading partition {exchange1=NYSE, symbol=IVV}
+	Loading partition {exchange1=NYSE, symbol=ISH}
+	Loading partition {exchange1=NYSE, symbol=GR}
+	Loading partition {exchange1=NASDAQ, symbol=AMFI}
+	Loading partition {exchange1=NASDAQ, symbol=IBOC}
+	Loading partition {exchange1=NYSE, symbol=IRR}
+	Loading partition {exchange1=NYSE, symbol=GFY}
+	Loading partition {exchange1=NASDAQ, symbol=IBIS}
+	Loading partition {exchange1=NYSE, symbol=GWF}
+	Loading partition {exchange1=NASDAQ, symbol=AGNC}
+	Loading partition {exchange1=NASDAQ, symbol=AMOT}
+	Loading partition {exchange1=NYSE, symbol=GE}
+	Loading partition {exchange1=NYSE, symbol=GRA}
+	Loading partition {exchange1=NYSE, symbol=GFZ}
+	Loading partition {exchange1=NYSE, symbol=GIS}
+	Loading partition {exchange1=NASDAQ, symbol=ACWI}
+	Loading partition {exchange1=NYSE, symbol=IGW}
+	Loading partition {exchange1=NASDAQ, symbol=AMTCP}
+	Loading partition {exchange1=NYSE, symbol=IP}
+	Loading partition {exchange1=NYSE, symbol=GAP}
+	Loading partition {exchange1=NYSE, symbol=IVE}
+	Loading partition {exchange1=NYSE, symbol=ITC}
+	Loading partition {exchange1=NYSE, symbol=GRE}
+	Loading partition {exchange1=NYSE, symbol=GUL}
+	Loading partition {exchange1=NYSE, symbol=IFN}
+	Loading partition {exchange1=NASDAQ, symbol=IIIN}
+	Loading partition {exchange1=NYSE, symbol=GJJ}
+	Loading partition {exchange1=NYSE, symbol=IKJ}
+	Loading partition {exchange1=NYSE, symbol=GGT}
+	Loading partition {exchange1=NYSE, symbol=GEC}
+	Loading partition {exchange1=NASDAQ, symbol=ABFS}
+	Loading partition {exchange1=NYSE, symbol=GEG}
+	Loading partition {exchange1=NASDAQ, symbol=AFCE}
+	Loading partition {exchange1=NYSE, symbol=IJR}
+	Loading partition {exchange1=NYSE, symbol=GAJ}
+	Loading partition {exchange1=NYSE, symbol=ISG}
+	Loading partition {exchange1=NASDAQ, symbol=ICOC}
+	Loading partition {exchange1=NASDAQ, symbol=ISCA}
+	Loading partition {exchange1=NASDAQ, symbol=ASBI}
+	Loading partition {exchange1=NYSE, symbol=GRT}
+	Loading partition {exchange1=NYSE, symbol=GTY}
+	Loading partition {exchange1=NASDAQ, symbol=INCB}
+	Loading partition {exchange1=NYSE, symbol=IID}
+	Loading partition {exchange1=NASDAQ, symbol=ADRU}
+	Loading partition {exchange1=NASDAQ, symbol=APOG}
+	Loading partition {exchange1=NYSE, symbol=GPS}
+	Loading partition {exchange1=NASDAQ, symbol=IGTE}
+	Loading partition {exchange1=NYSE, symbol=GUQ}
+	Loading partition {exchange1=NYSE, symbol=ICA}
+	Loading partition {exchange1=NYSE, symbol=IVW}
+	Loading partition {exchange1=NASDAQ, symbol=IBCPO}
+	 Time taken for adding to write entity : 868
+Partition default.dividends{exchange1=NASDAQ, symbol=AACC} stats: [numFiles=1, numRows=1, totalSize=16, rawDataSize=15]
+Partition default.dividends{exchange1=NASDAQ, symbol=AAON} stats: [numFiles=1, numRows=8, totalSize=137, rawDataSize=129]
+Partition default.dividends{exchange1=NASDAQ, symbol=AAPL} stats: [numFiles=1, numRows=35, totalSize=574, rawDataSize=539]
+Partition default.dividends{exchange1=NASDAQ, symbol=AAXJ} stats: [numFiles=1, numRows=2, totalSize=34, rawDataSize=32]
+Partition default.dividends{exchange1=NASDAQ, symbol=ABBC} stats: [numFiles=1, numRows=19, totalSize=306, rawDataSize=287]
+Partition default.dividends{exchange1=NASDAQ, symbol=ABCB} stats: [numFiles=1, numRows=60, totalSize=1140, rawDataSize=1080]
+Partition default.dividends{exchange1=NASDAQ, symbol=ABCW} stats: [numFiles=1, numRows=60, totalSize=989, rawDataSize=929]
+Partition default.dividends{exchange1=NASDAQ, symbol=ABFS} stats: [numFiles=1, numRows=48, totalSize=768, rawDataSize=720]
+Partition default.dividends{exchange1=NASDAQ, symbol=ACAP} stats: [numFiles=1, numRows=10, totalSize=171, rawDataSize=161]
+Partition default.dividends{exchange1=NASDAQ, symbol=ACAS} stats: [numFiles=1, numRows=51, totalSize=812, rawDataSize=761]
+Partition default.dividends{exchange1=NASDAQ, symbol=ACAT} stats: [numFiles=1, numRows=67, totalSize=1103, rawDataSize=1036]
+Partition default.dividends{exchange1=NASDAQ, symbol=ACCL} stats: [numFiles=1, numRows=1, totalSize=16, rawDataSize=15]
+Partition default.dividends{exchange1=NASDAQ, symbol=ACET} stats: [numFiles=1, numRows=41, totalSize=739, rawDataSize=698]
+Partition default.dividends{exchange1=NASDAQ, symbol=ACFC} stats: [numFiles=1, numRows=18, totalSize=287, rawDataSize=269]
+Partition default.dividends{exchange1=NASDAQ, symbol=ACGY} stats: [numFiles=1, numRows=3, totalSize=47, rawDataSize=44]
+Partition default.dividends{exchange1=NASDAQ, symbol=ACME} stats: [numFiles=1, numRows=1, totalSize=15, rawDataSize=14]
+Partition default.dividends{exchange1=NASDAQ, symbol=ACWI} stats: [numFiles=1, numRows=2, totalSize=33, rawDataSize=31]
+Partition default.dividends{exchange1=NASDAQ, symbol=ACWX} stats: [numFiles=1, numRows=2, totalSize=34, rawDataSize=32]
+Partition default.dividends{exchange1=NASDAQ, symbol=ACXM} stats: [numFiles=1, numRows=17, totalSize=272, rawDataSize=255]
+Partition default.dividends{exchange1=NASDAQ, symbol=ADBE} stats: [numFiles=1, numRows=61, totalSize=1125, rawDataSize=1064]
+Partition default.dividends{exchange1=NASDAQ, symbol=ADP} stats: [numFiles=1, numRows=107, totalSize=1882, rawDataSize=1775]
+Partition default.dividends{exchange1=NASDAQ, symbol=ADPT} stats: [numFiles=1, numRows=1, totalSize=17, rawDataSize=16]
+Partition default.dividends{exchange1=NASDAQ, symbol=ADRA} stats: [numFiles=1, numRows=32, totalSize=569, rawDataSize=537]
+Partition default.dividends{exchange1=NASDAQ, symbol=ADRD} stats: [numFiles=1, numRows=30, totalSize=528, rawDataSize=498]
+Partition default.dividends{exchange1=NASDAQ, symbol=ADRE} stats: [numFiles=1, numRows=32, totalSize=562, rawDataSize=530]
+Partition default.dividends{exchange1=NASDAQ, symbol=ADRU} stats: [numFiles=1, numRows=29, totalSize=511, rawDataSize=482]
+Partition default.dividends{exchange1=NASDAQ, symbol=ADSK} stats: [numFiles=1, numRows=60, totalSize=1024, rawDataSize=964]
+Partition default.dividends{exchange1=NASDAQ, symbol=ADTN} stats: [numFiles=1, numRows=27, totalSize=434, rawDataSize=407]
+Partition default.dividends{exchange1=NASDAQ, symbol=AEPI} stats: [numFiles=1, numRows=10, totalSize=172, rawDataSize=162]
+Partition default.dividends{exchange1=NASDAQ, symbol=AFCE} stats: [numFiles=1, numRows=1, totalSize=16, rawDataSize=15]
+Partition default.dividends{exchange1=NASDAQ, symbol=AFFM} stats: [numFiles=1, numRows=17, totalSize=272, rawDataSize=255]
+Partition default.dividends{exchange1=NASDAQ, symbol=AFSI} stats: [numFiles=1, numRows=13, totalSize=210, rawDataSize=197]
+Partition default.dividends{exchange1=NASDAQ, symbol=AGNC} stats: [numFiles=1, numRows=7, totalSize=107, rawDataSize=100]
+Partition default.dividends{exchange1=NASDAQ, symbol=AGYS} stats: [numFiles=1, numRows=78, totalSize=1308, rawDataSize=1230]
+Partition default.dividends{exchange1=NASDAQ, symbol=AHGP} stats: [numFiles=1, numRows=14, totalSize=234, rawDataSize=220]
+Partition default.dividends{exchange1=NASDAQ, symbol=AHPI} stats: [numFiles=1, numRows=13, totalSize=208, rawDataSize=195]
+Partition default.dividends{exchange1=NASDAQ, symbol=AINV} stats: [numFiles=1, numRows=22, totalSize=352, rawDataSize=330]
+Partition default.dividends{exchange1=NASDAQ, symbol=AIPC} stats: [numFiles=1, numRows=5, totalSize=85, rawDataSize=80]
+Partition default.dividends{exchange1=NASDAQ, symbol=AIRT} stats: [numFiles=1, numRows=15, totalSize=238, rawDataSize=223]
+Partition default.dividends{exchange1=NASDAQ, symbol=AIXG} stats: [numFiles=1, numRows=2, totalSize=34, rawDataSize=32]
+Partition default.dividends{exchange1=NASDAQ, symbol=ALBY} stats: [numFiles=1, numRows=20, totalSize=320, rawDataSize=300]
+Partition default.dividends{exchange1=NASDAQ, symbol=ALCO} stats: [numFiles=1, numRows=32, totalSize=529, rawDataSize=497]
+Partition default.dividends{exchange1=NASDAQ, symbol=ALDA} stats: [numFiles=1, numRows=18, totalSize=286, rawDataSize=268]
+Partition default.dividends{exchange1=NASDAQ, symbol=ALEX} stats: [numFiles=1, numRows=5, totalSize=85, rawDataSize=80]
+Partition default.dividends{exchange1=NASDAQ, symbol=ALLB} stats: [numFiles=1, numRows=59, totalSize=1082, rawDataSize=1023]
+Partition default.dividends{exchange1=NASDAQ, symbol=ALNC} stats: [numFiles=1, numRows=43, totalSize=703, rawDataSize=660]
+Partition default.dividends{exchange1=NASDAQ, symbol=ALOG} stats: [numFiles=1, numRows=56, totalSize=879, rawDataSize=823]
+Partition default.dividends{exchange1=NASDAQ, symbol=ALOT} stats: [numFiles=1, numRows=72, totalSize=1306, rawDataSize=1234]
+Partition default.dividends{exchange1=NASDAQ, symbol=ALOY} stats: [numFiles=1, numRows=1, totalSize=16, rawDataSize=15]
+Partition default.dividends{exchange1=NASDAQ, symbol=ALSK} stats: [numFiles=1, numRows=21, totalSize=349, rawDataSize=328]
+Partition default.dividends{exchange1=NASDAQ, symbol=ALTR} stats: [numFiles=1, numRows=12, totalSize=192, rawDataSize=180]
+Partition default.dividends{exchange1=NASDAQ, symbol=ALUS} stats: [numFiles=1, numRows=1, totalSize=15, rawDataSize=14]
+Partition default.dividends{exchange1=NASDAQ, symbol=AMAT} stats: [numFiles=1, numRows=19, totalSize=304, rawDataSize=285]
+Partition default.dividends{exchange1=NASDAQ, symbol=AMFI} stats: [numFiles=1, numRows=88, totalSize=1501, rawDataSize=1413]
+Partition default.dividends{exchange1=NASDAQ, symbol=AMIE} stats: [numFiles=1, numRows=18, totalSize=272, rawDataSize=254]
+Partition default.dividends{exchange1=NASDAQ, symbol=AMIN} stats: [numFiles=1, numRows=2, totalSize=34, rawDataSize=32]
+Partition default.dividends{exchange1=NASDAQ, symbol=AMNB} stats: [numFiles=1, numRows=43, totalSize=688, rawDataSize=645]
+Partition default.dividends{exchange1=NASDAQ, symbol=AMOT} stats: [numFiles=1, numRows=5, totalSize=84, rawDataSize=79]
+Partition default.dividends{exchange1=NASDAQ, symbol=AMOV} stats: [numFiles=1, numRows=23, totalSize=416, rawDataSize=393]
+Partition default.dividends{exchange1=NASDAQ, symbol=AMPH} stats: [numFiles=1, numRows=6, totalSize=91, rawDataSize=85]
+Partition default.dividends{exchange1=NASDAQ, symbol=AMPL} stats: [numFiles=1, numRows=1, totalSize=16, rawDataSize=15]
+Partition default.dividends{exchange1=NASDAQ, symbol=AMRB} stats: [numFiles=1, numRows=31, totalSize=578, rawDataSize=547]
+Partition default.dividends{exchange1=NASDAQ, symbol=AMSWA} stats: [numFiles=1, numRows=55, totalSize=914, rawDataSize=859]
+Partition default.dividends{exchange1=NASDAQ, symbol=AMTC} stats: [numFiles=1, numRows=14, totalSize=224, rawDataSize=210]
+Partition default.dividends{exchange1=NASDAQ, symbol=AMTCP} stats: [numFiles=1, numRows=22, totalSize=374, rawDataSize=352]
+Partition default.dividends{exchange1=NASDAQ, symbol=AMTD} stats: [numFiles=1, numRows=1, totalSize=15, rawDataSize=14]
+Partition default.dividends{exchange1=NASDAQ, symbol=AMWD} stats: [numFiles=1, numRows=53, totalSize=873, rawDataSize=820]
+Partition default.dividends{exchange1=NASDAQ, symbol=ANAT} stats: [numFiles=1, numRows=72, totalSize=1152, rawDataSize=1080]
+Partition default.dividends{exchange1=NASDAQ, symbol=ANCX} stats: [numFiles=1, numRows=17, totalSize=276, rawDataSize=259]
+Partition default.dividends{exchange1=NASDAQ, symbol=ANDE} stats: [numFiles=1, numRows=53, totalSize=907, rawDataSize=854]
+Partition default.dividends{exchange1=NASDAQ, symbol=ANLY} stats: [numFiles=1, numRows=54, totalSize=936, rawDataSize=882]
+Partition default.dividends{exchange1=NASDAQ, symbol=ANNB} stats: [numFiles=1, numRows=9, totalSize=169, rawDataSize=160]
+Partition default.dividends{exchange1=NASDAQ, symbol=APAGF} stats: [numFiles=1, numRows=65, totalSize=1189, rawDataSize=1124]
+Partition default.dividends{exchange1=NASDAQ, symbol=APFC} stats: [numFiles=1, numRows=1, totalSize=17, rawDataSize=16]
+Partition default.dividends{exchange1=NASDAQ, symbol=APII} stats: [numFiles=1, numRows=1, totalSize=16, rawDataSize=15]
+Partition default.dividends{exchange1=NASDAQ, symbol=APOG} stats: [numFiles=1, numRows=89, totalSize=1507, rawDataSize=1418]
+Partition default.dividends{exchange1=NASDAQ, symbol=APSA} stats: [numFiles=1, numRows=7, totalSize=118, rawDataSize=111]
+Partition default.dividends{exchange1=NASDAQ, symbol=APSG} stats: [numFiles=1, numRows=35, totalSize=595, rawDataSize=560]
+Partition default.dividends{exchange1=NASDAQ, symbol=ARBX} stats: [numFiles=1, numRows=1, totalSize=15, rawDataSize=14]
+Partition default.dividends{exchange1=NASDAQ, symbol=ARCC} stats: [numFiles=1, numRows=21, totalSize=332, rawDataSize=311]
+Partition default.dividends{exchange1=NASDAQ, symbol=ARDNA} stats: [numFiles=1, numRows=27, totalSize=432, rawDataSize=405]
+Partition default.dividends{exchange1=NASDAQ, symbol=ARII} stats: [numFiles=1, numRows=14, totalSize=224, rawDataSize=210]
+Partition default.dividends{exchange1=NASDAQ, symbol=ARKR} stats: [numFiles=1, numRows=18, totalSize=288, rawDataSize=270]
+Partition default.dividends{exchange1=NASDAQ, symbol=ARLP} stats: [numFiles=1, numRows=42, totalSize=694, rawDataSize=652]
+Partition default.dividends{exchange1=NASDAQ, symbol=ARMH} stats: [numFiles=1, numRows=12, totalSize=203, rawDataSize=191]
+Partition default.dividends{exchange1=NASDAQ, symbol=AROW} stats: [numFiles=1, numRows=74, totalSize=1398, rawDataSize=1324]
+Partition default.dividends{exchange1=NASDAQ, symbol=ARTNA} stats: [numFiles=1, numRows=55, totalSize=998, rawDataSize=943]
+Partition default.dividends{exchange1=NASDAQ, symbol=ARTW} stats: [numFiles=1, numRows=10, totalSize=162, rawDataSize=152]
+Partition default.dividends{exchange1=NASDAQ, symbol=ASBC} stats: [numFiles=1, numRows=96, totalSize=1752, rawDataSize=1656]
+Partition default.dividends{exchange1=NASDAQ, symbol=ASBI} stats: [numFiles=1, numRows=88, totalSize=1541, rawDataSize=1453]
+Partition default.dividends{exchange1=NASDAQ, symbol=ASCA} stats: [numFiles=1, numRows=23, totalSize=395, rawDataSize=372]
+Partition default.dividends{exchange1=NASDAQ, symbol=ASEI} stats: [numFiles=1, numRows=11, totalSize=165, rawDataSize=154]
+Partition default.dividends{exchange1=NASDAQ, symbol=ASFI} stats: [numFiles=1, numRows=26, totalSize=423, rawDataSize=397]
+Partition default.dividends{exchange1=NASDAQ, symbol=ASFN} stats: [numFiles=1, numRows=3, totalSize=48, rawDataSize=45]
+Partition default.dividends{exchange1=NASDAQ, symbol=ASGR} stats: [numFiles=1, numRows=2, totalSize=32, rawDataSize=30]
+Partition default.dividends{exchange1=NASDAQ, symbol=ASMI} stats: [numFiles=1, numRows=1, totalSize=17, rawDataSize=16]
+Partition default.dividends{exchange1=NASDAQ, symbol=ASML} stats: [numFiles=1, numRows=3, totalSize=49, rawDataSize=46]
+Partition default.dividends{exchange1=NASDAQ, symbol=ASRV} stats: [numFiles=1, numRows=51, totalSize=875, rawDataSize=824]
+Partition default.dividends{exchange1=NASDAQ, symbol=ASRVP} stats: [numFiles=1, numRows=42, totalSize=714, rawDataSize=672]
+Partition default.dividends{exchange1=NASDAQ, symbol=ATAX} stats: [numFiles=1, numRows=204, totalSize=3467, rawDataSize=3263]
+Partition default.dividends{exchange1=NASDAQ, symbol=ATEA} stats: [numFiles=1, numRows=1, totalSize=17, rawDataSize=16]
+Partition default.dividends{exchange1=NASDAQ, symbol=ATLO} stats: [numFiles=1, numRows=37, totalSize=633, rawDataSize=596]
+Partition default.dividends{exchange1=NASDAQ, symbol=ATLS} stats: [numFiles=1, numRows=8, totalSize=143, rawDataSize=135]
+Partition default.dividends{exchange1=NASDAQ, symbol=ATNI} stats: [numFiles=1, numRows=51, totalSize=816, rawDataSize=765]
+Partition default.dividends{exchange1=NASDAQ, symbol=ATRI} stats: [numFiles=1, numRows=56, totalSize=890, rawDataSize=834]
+Partition default.dividends{exchange1=NASDAQ, symbol=ATRO} stats: [numFiles=1, numRows=6, totalSize=102, rawDataSize=96]
+Partition default.dividends{exchange1=NASDAQ, symbol=ATX} stats: [numFiles=1, numRows=27, totalSize=432, rawDataSize=405]
+Partition default.dividends{exchange1=NASDAQ, symbol=AUBN} stats: [numFiles=1, numRows=55, totalSize=900, rawDataSize=845]
+Partition default.dividends{exchange1=NASDAQ, symbol=AVCA} stats: [numFiles=1, numRows=3, totalSize=48, rawDataSize=45]
+Partition default.dividends{exchange1=NASDAQ, symbol=AWBC} stats: [numFiles=1, numRows=8, totalSize=128, rawDataSize=120]
+Partition default.dividends{exchange1=NASDAQ, symbol=IACI} stats: [numFiles=1, numRows=2, totalSize=32, rawDataSize=30]
+Partition default.dividends{exchange1=NASDAQ, symbol=IBAS} stats: [numFiles=1, numRows=1, totalSize=16, rawDataSize=15]
+Partition default.dividends{exchange1=NASDAQ, symbol=IBB} stats: [numFiles=1, numRows=4, totalSize=68, rawDataSize=64]
+Partition default.dividends{exchange1=NASDAQ, symbol=IBCA} stats: [numFiles=1, numRows=2, totalSize=32, rawDataSize=30]
+Partition default.dividends{exchange1=NASDAQ, symbol=IBCP} stats: [numFiles=1, numRows=77, totalSize=1414, rawDataSize=1337]
+Partition default.dividends{exchange1=NASDAQ, symbol=IBCPO} stats: [numFiles=1, numRows=24, totalSize=408, rawDataSize=384]
+Partition default.dividends{exchange1=NASDAQ, symbol=IBIS} stats: [numFiles=1, numRows=1, totalSize=16, rawDataSize=15]
+Partition default.dividends{exchange1=NASDAQ, symbol=IBKC} stats: [numFiles=1, numRows=59, totalSize=969, rawDataSize=910]
+Partition default.dividends{exchange1=NASDAQ, symbol=IBNK} stats: [numFiles=1, numRows=67, totalSize=1156, rawDataSize=1089]
+Partition default.dividends{exchange1=NASDAQ, symbol=IBOC} stats: [numFiles=1, numRows=23, totalSize=422, rawDataSize=399]
+Partition default.dividends{exchange1=NASDAQ, symbol=ICLN} stats: [numFiles=1, numRows=2, totalSize=34, rawDataSize=32]
+Partition default.dividends{exchange1=NASDAQ, symbol=ICOC} stats: [numFiles=1, numRows=13, totalSize=216, rawDataSize=203]
+Partition default.dividends{exchange1=NASDAQ, symbol=IDSA} stats: [numFiles=1, numRows=3, totalSize=45, rawDataSize=42]
+Partition default.dividends{exchange1=NASDAQ, symbol=IFAS} stats: [numFiles=1, numRows=7, totalSize=117, rawDataSize=110]
+Partition default.dividends{exchange1=NASDAQ, symbol=IFEU} stats: [numFiles=1, numRows=7, totalSize=118, rawDataSize=111]
+Partition default.dividends{exchange1=NASDAQ, symbol=IFGL} stats: [numFiles=1, numRows=7, totalSize=118, rawDataSize=111]
+Partition default.dividends{exchange1=NASDAQ, symbol=IFNA} stats: [numFiles=1, numRows=7, totalSize=116, rawDataSize=109]
+Partition default.dividends{exchange1=NASDAQ, symbol=IFSB} stats: [numFiles=1, numRows=9, totalSize=171, rawDataSize=162]
+Partition default.dividends{exchange1=NASDAQ, symbol=IFSIA} stats: [numFiles=1, numRows=60, totalSize=995, rawDataSize=935]
+Partition default.dividends{exchange1=NASDAQ, symbol=IFSM} stats: [numFiles=1, numRows=4, totalSize=68, rawDataSize=64]
+Partition default.dividends{exchange1=NASDAQ, symbol=IGOV} stats: [numFiles=1, numRows=11, totalSize=187, rawDataSize=176]
+Partition default.dividends{exchange1=NASDAQ, symbol=IGTE} stats: [numFiles=1, numRows=2, totalSize=32, rawDataSize=30]
+Partition default.dividends{exchange1=NASDAQ, symbol=IIIN} stats: [numFiles=1, numRows=54, totalSize=866, rawDataSize=812]
+Partition default.dividends{exchange1=NASDAQ, symbol=IIN} stats: [numFiles=1, numRows=37, totalSize=656, rawDataSize=619]
+Partition default.dividends{exchange1=NASDAQ, symbol=IMKTA} stats: [numFiles=1, numRows=77, totalSize=1309, rawDataSize=1232]
+Partition default.dividends{exchange1=NASDAQ, symbol=INBP} stats: [numFiles=1, numRows=1, totalSize=15, rawDataSize=14]
+Partition default.dividends{exchange1=NASDAQ, symbol=INCB} stats: [numFiles=1, numRows=79, totalSize=1366, rawDataSize=1287]
+Partition default.dividends{exchange1=NASDAQ, symbol=INDB} stats: [numFiles=1, numRows=62, totalSize=980, rawDataSize=918]
+Partition default.dividends{exchange1=NASDAQ, symbol=INFY} stats: [numFiles=1, numRows=22, totalSize=388, rawDataSize=366]
+Partition default.dividends{exchange1=NASDAQ, symbol=INSP} stats: [numFiles=1, numRows=2, totalSize=30, rawDataSize=28]
+Partition default.dividends{exchange1=NASDAQ, symbol=INTC} stats: [numFiles=1, numRows=70, totalSize=1187, rawDataSize=1117]
+Partition default.dividends{exchange1=NASDAQ, symbol=IOSP} stats: [numFiles=1, numRows=12, totalSize=198, rawDataSize=186]
+Partition default.dividends{exchange1=NASDAQ, symbol=IPAR} stats: [numFiles=1, numRows=32, totalSize=570, rawDataSize=538]
+Partition default.dividends{exchange1=NASDAQ, symbol=IPAS} stats: [numFiles=1, numRows=1, totalSize=16, rawDataSize=15]
+Partition default.dividends{exchange1=NASDAQ, symbol=IPCC} stats: [numFiles=1, numRows=27, totalSize=443, rawDataSize=416]
+Partition default.dividends{exchange1=NASDAQ, symbol=IPCS} stats: [numFiles=1, numRows=1, totalSize=16, rawDataSize=15]
+Partition default.dividends{exchange1=NASDAQ, symbol=IPHS} stats: [numFiles=1, numRows=13, totalSize=208, rawDataSize=195]
+Partition default.dividends{exchange1=NASDAQ, symbol=IPSU} stats: [numFiles=1, numRows=24, totalSize=381, rawDataSize=357]
+Partition default.dividends{exchange1=NASDAQ, symbol=IRET} stats: [numFiles=1, numRows=47, totalSize=790, rawDataSize=743]
+Partition default.dividends{exchange1=NASDAQ, symbol=IRETP} stats: [numFiles=1, numRows=22, totalSize=374, rawDataSize=352]
+Partition default.dividends{exchange1=NASDAQ, symbol=ISCA} stats: [numFiles=1, numRows=13, totalSize=207, rawDataSize=194]
+Partition default.dividends{exchange1=NASDAQ, symbol=ISHG} stats: [numFiles=1, numRows=11, totalSize=184, rawDataSize=173]
+Partition default.dividends{exchange1=NASDAQ, symbol=ISIL} stats: [numFiles=1, numRows=27, totalSize=428, rawDataSize=401]
+Partition default.dividends{exchange1=NASDAQ, symbol=ISSC} stats: [numFiles=1, numRows=1, totalSize=15, rawDataSize=14]
+Partition default.dividends{exchange1=NASDAQ, symbol=ISYS} stats: [numFiles=1, numRows=17, totalSize=285, rawDataSize=268]
+Partition default.dividends{exchange1=NASDAQ, symbol=ITIC} stats: [numFiles=1, numRows=78, totalSize=1255, rawDataSize=1177]
+Partition default.dividends{exchange1=NASDAQ, symbol=ITRN} stats: [numFiles=1, numRows=4, totalSize=65, rawDataSize=61]
+Partition default.dividends{exchange1=NASDAQ, symbol=IUSA} stats: [numFiles=1, numRows=4, totalSize=63, rawDataSize=59]
+Partition default.dividends{exchange1=NASDAQ, symbol=IXYS} stats: [numFiles=1, numRows=1, totalSize=15, rawDataSize=14]
+Partition default.dividends{exchange1=NYSE, symbol=GA} stats: [numFiles=1, numRows=1, totalSize=16, rawDataSize=15]
+Partition default.dividends{exchange1=NYSE, symbol=GAB} stats: [numFiles=1, numRows=87, totalSize=1510, rawDataSize=1423]
+Partition default.dividends{exchange1=NYSE, symbol=GAH} stats: [numFiles=1, numRows=19, totalSize=323, rawDataSize=304]
+Partition default.dividends{exchange1=NYSE, symbol=GAI} stats: [numFiles=1, numRows=1, totalSize=16, rawDataSize=15]
+Partition default.dividends{exchange1=NYSE, symbol=GAJ} stats: [numFiles=1, numRows=39, totalSize=663, rawDataSize=624]
+Partition default.dividends{exchange1=NYSE, symbol=GAM} stats: [numFiles=1, numRows=44, totalSize=706, rawDataSize=662]
+Partition default.dividends{exchange1=NYSE, symbol=GAP} stats: [numFiles=1, numRows=61, totalSize=945, rawDataSize=884]
+Partition default.dividends{exchange1=NYSE, symbol=GAR} stats: [numFiles=1, numRows=10, totalSize=169, rawDataSize=159]
+Partition default.dividends{exchange1=NYSE, symbol=GAS} stats: [numFiles=1, numRows=101, totalSize=1676, rawDataSize=1575]
+Partition default.dividends{exchange1=NYSE, symbol=GAT} stats: [numFiles=1, numRows=5, totalSize=84, rawDataSize=79]
+Partition default.dividends{exchange1=NYSE, symbol=GBE} stats: [numFiles=1, numRows=3, totalSize=51, rawDataSize=48]
+Partition default.dividends{exchange1=NYSE, symbol=GBF} stats: [numFiles=1, numRows=25, totalSize=421, rawDataSize=396]
+Partition default.dividends{exchange1=NYSE, symbol=GBL} stats: [numFiles=1, numRows=26, totalSize=414, rawDataSize=388]
+Partition default.dividends{exchange1=NYSE, symbol=GBX} stats: [numFiles=1, numRows=48, totalSize=768, rawDataSize=720]
+Partition default.dividends{exchange1=NYSE, symbol=GCF} stats: [numFiles=1, numRows=15, totalSize=254, rawDataSize=239]
+Partition default.dividends{exchange1=NYSE, symbol=GCH} stats: [numFiles=1, numRows=19, totalSize=313, rawDataSize=294]
+Partition default.dividends{exchange1=NYSE, symbol=GCI} stats: [numFiles=1, numRows=97, totalSize=1575, rawDataSize=1478]
+Partition default.dividends{exchange1=NYSE, symbol=GCS} stats: [numFiles=1, numRows=6, totalSize=102, rawDataSize=96]
+Partition default.dividends{exchange1=NYSE, symbol=GCV} stats: [numFiles=1, numRows=57, totalSize=869, rawDataSize=812]
+Partition default.dividends{exchange1=NYSE, symbol=GD} stats: [numFiles=1, numRows=128, totalSize=2228, rawDataSize=2100]
+Partition default.dividends{exchange1=NYSE, symbol=GDF} stats: [numFiles=1, numRows=169, totalSize=2869, rawDataSize=2700]
+Partition default.dividends{exchange1=NYSE, symbol=GDI} stats: [numFiles=1, numRows=1, totalSize=16, rawDataSize=15]
+Partition default.dividends{exchange1=NYSE, symbol=GDL} stats: [numFiles=1, numRows=11, totalSize=168, rawDataSize=157]
+Partition default.dividends{exchange1=NYSE, symbol=GDO} stats: [numFiles=1, numRows=1, totalSize=16, rawDataSize=15]
+Partition default.dividends{exchange1=NYSE, symbol=GDV} stats: [numFiles=1, numRows=62, totalSize=953, rawDataSize=891]
+Partition default.dividends{exchange1=NYSE, symbol=GE} stats: [numFiles=1, numRows=191, totalSize=3469, rawDataSize=3278]
+Partition default.dividends{exchange1=NYSE, symbol=GEA} stats: [numFiles=1, numRows=5, totalSize=85, rawDataSize=80]
+Partition default.dividends{exchange1=NYSE, symbol=GEC} stats: [numFiles=1, numRows=27, totalSize=457, rawDataSize=430]
+Partition default.dividends{exchange1=NYSE, symbol=GED} stats: [numFiles=1, numRows=24, totalSize=408, rawDataSize=384]
+Partition default.dividends{exchange1=NYSE, symbol=GEF} stats: [numFiles=1, numRows=56, totalSize=896, rawDataSize=840]
+Partition default.dividends{exchange1=NYSE, symbol=GEG} stats: [numFiles=1, numRows=12, totalSize=204, rawDataSize=192]
+Partition default.dividends{exchange1=NYSE, symbol=GEJ} stats: [numFiles=1, numRows=11, totalSize=187, rawDataSize=176]
+Partition default.dividends{exchange1=NYSE, symbol=GEP} stats: [numFiles=1, numRows=20, totalSize=340, rawDataSize=320]
+Partition default.dividends{exchange1=NYSE, symbol=GER} stats: [numFiles=1, numRows=14, totalSize=238, rawDataSize=224]
+Partition default.dividends{exchange1=NYSE, symbol=GES} stats: [numFiles=1, numRows=12, totalSize=190, rawDataSize=178]
+Partition default.dividends{exchange1=NYSE, symbol=GET} stats: [numFiles=1, numRows=34, totalSize=536, rawDataSize=502]
+Partition default.dividends{exchange1=NYSE, symbol=GEX} stats: [numFiles=1, numRows=2, totalSize=33, rawDataSize=31]
+Partition default.dividends{exchange1=NYSE, symbol=GF} stats: [numFiles=1, numRows=27, totalSize=437, rawDataSize=410]
+Partition default.dividends{exchange1=NYSE, symbol=GFA} stats: [numFiles=1, numRows=2, totalSize=34, rawDataSize=32]
+Partition default.dividends{exchange1=NYSE, symbol=GFI} stats: [numFiles=1, numRows=33, totalSize=558, rawDataSize=525]
+Partition default.dividends{exchange1=NYSE, symbol=GFW} stats: [numFiles=1, numRows=25, totalSize=421, rawDataSize=396]
+Partition default.dividends{exchange1=NYSE, symbol=GFY} stats: [numFiles=1, numRows=61, totalSize=1030, rawDataSize=969]
+Partition default.dividends{exchange1=NYSE, symbol=GFZ} stats: [numFiles=1, numRows=20, totalSize=340, rawDataSize=320]
+Partition default.dividends{exchange1=NYSE, symbol=GG} stats: [numFiles=1, numRows=87, totalSize=1477, rawDataSize=1390]
+Partition default.dividends{exchange1=NYSE, symbol=GGB} stats: [numFiles=1, numRows=29, totalSize=531, rawDataSize=502]
+Partition default.dividends{exchange1=NYSE, symbol=GGC} stats: [numFiles=1, numRows=60, totalSize=908, rawDataSize=848]
+Partition default.dividends{exchange1=NYSE, symbol=GGG} stats: [numFiles=1, numRows=92, totalSize=1682, rawDataSize=1590]
+Partition default.dividends{exchange1=NYSE, symbol=GGT} stats: [numFiles=1, numRows=27, totalSize=430, rawDataSize=403]
+Partition default.dividends{exchange1=NYSE, symbol=GHI} stats: [numFiles=1, numRows=182, totalSize=3056, rawDataSize=2874]
+Partition default.dividends{exchange1=NYSE, symbol=GHL} stats: [numFiles=1, numRows=22, totalSize=350, rawDataSize=328]
+Partition default.dividends{exchange1=NYSE, symbol=GIM} stats: [numFiles=1, numRows=260, totalSize=4258, rawDataSize=3998]
+Partition default.dividends{exchange1=NYSE, symbol=GIS} stats: [numFiles=1, numRows=104, totalSize=1736, rawDataSize=1632]
+Partition default.dividends{exchange1=NYSE, symbol=GJB} stats: [numFiles=1, numRows=12, totalSize=193, rawDataSize=181]
+Partition default.dividends{exchange1=NYSE, symbol=GJD} stats: [numFiles=1, numRows=11, totalSize=187, rawDataSize=176]
+Partition default.dividends{exchange1=NYSE, symbol=GJE} stats: [numFiles=1, numRows=12, totalSize=204, rawDataSize=192]
+Partition default.dividends{exchange1=NYSE, symbol=GJF} stats: [numFiles=1, numRows=12, totalSize=197, rawDataSize=185]
+Partition default.dividends{exchange1=NYSE, symbol=GJG} stats: [numFiles=1, numRows=12, totalSize=204, rawDataSize=192]
+Partition default.dividends{exchange1=NYSE, symbol=GJH} stats: [numFiles=1, numRows=12, totalSize=204, rawDataSize=192]
+Partition default.dividends{exchange1=NYSE, symbol=GJI} stats: [numFiles=1, numRows=64, totalSize=1084, rawDataSize=1020]
+Partition default.dividends{exchange1=NYSE, symbol=GJJ} stats: [numFiles=1, numRows=67, totalSize=1134, rawDataSize=1067]
+Partition default.dividends{exchange1=NYSE, symbol=GJK} stats: [numFiles=1, numRows=50, totalSize=845, rawDataSize=795]
+Partition default.dividends{exchange1=NYSE, symbol=GJL} stats: [numFiles=1, numRows=49, totalSize=831, rawDataSize=782]
+Partition default.dividends{exchange1=NYSE, symbol=GJM} stats: [numFiles=1, numRows=30, totalSize=505, rawDataSize=475]
+Partition default.dividends{exchange1=NYSE, symbol=GJN} stats: [numFiles=1, numRows=48, totalSize=816, rawDataSize=768]
+Partition default.dividends{exchange1=NYSE, symbol=GJO} stats: [numFiles=1, numRows=50, totalSize=847, rawDataSize=797]
+Partition default.dividends{exchange1=NYSE, symbol=GJP} stats: [numFiles=1, numRows=25, totalSize=424, rawDataSize=399]
+Partition default.dividends{exchange1=NYSE, symbol=GJR} stats: [numFiles=1, numRows=24, totalSize=406, rawDataSize=382]
+Partition default.dividends{exchange1=NYSE, symbol=GJS} stats: [numFiles=1, numRows=45, totalSize=758, rawDataSize=713]
+Partition default.dividends{exchange1=NYSE, symbol=GJT} stats: [numFiles=1, numRows=29, totalSize=487, rawDataSize=458]
+Partition default.dividends{exchange1=NYSE, symbol=GJV} stats: [numFiles=1, numRows=5, totalSize=85, rawDataSize=80]
+Partition default.dividends{exchange1=NYSE, symbol=GJW} stats: [numFiles=1, numRows=5, totalSize=85, rawDataSize=80]
+Partition default.dividends{exchange1=NYSE, symbol=GJX} stats: [numFiles=1, numRows=5, totalSize=85, rawDataSize=80]
+Partition default.dividends{exchange1=NYSE, symbol=GKK} stats: [numFiles=1, numRows=15, totalSize=240, rawDataSize=225]
+Partition default.dividends{exchange1=NYSE, symbol=GKM} stats: [numFiles=1, numRows=28, totalSize=476, rawDataSize=448]
+Partition default.dividends{exchange1=NYSE, symbol=GLG} stats: [numFiles=1, numRows=3, totalSize=51, rawDataSize=48]
+Partition default.dividends{exchange1=NYSE, symbol=GLP} stats: [numFiles=1, numRows=17, totalSize=288, rawDataSize=271]
+Partition default.dividends{exchange1=NYSE, symbol=GLS} stats: [numFiles=1, numRows=11, totalSize=171, rawDataSize=160]
+Partition default.dividends{exchange1=NYSE, symbol=GLT} stats: [numFiles=1, numRows=72, totalSize=1198, rawDataSize=1126]
+Partition default.dividends{exchange1=NYSE, symbol=GLW} stats: [numFiles=1, numRows=89, totalSize=1562, rawDataSize=1473]
+Partition default.dividends{exchange1=NYSE, symbol=GMA} stats: [numFiles=1, numRows=35, totalSize=595, rawDataSize=560]
+Partition default.dividends{exchange1=NYSE, symbol=GMK} stats: [numFiles=1, numRows=5, totalSize=85, rawDataSize=80]
+Partition default.dividends{exchange1=NYSE, symbol=GMR} stats: [numFiles=1, numRows=19, totalSize=295, rawDataSize=276]
+Partition default.dividends{exchange1=NYSE, symbol=GMT} stats: [numFiles=1, numRows=90, totalSize=1479, rawDataSize=1389]
+Partition default.dividends{exchange1=NYSE, symbol=GNA} stats: [numFiles=1, numRows=17, totalSize=272, rawDataSize=255]
+Partition default.dividends{exchange1=NYSE, symbol=GNI} stats: [numFiles=1, numRows=86, totalSize=1320, rawDataSize=1234]
+Partition default.dividends{exchange1=NYSE, symbol=GNK} stats: [numFiles=1, numRows=13, totalSize=200, rawDataSize=187]
+Partition default.dividends{exchange1=NYSE, symbol=GNV} stats: [numFiles=1, numRows=8, totalSize=129, rawDataSize=121]
+Partition default.dividends{exchange1=NYSE, symbol=GNW} stats: [numFiles=1, numRows=17, totalSize=275, rawDataSize=258]
+Partition default.dividends{exchange1=NYSE, symbol=GOF} stats: [numFiles=1, numRows=29, totalSize=493, rawDataSize=464]
+Partition default.dividends{exchange1=NYSE, symbol=GOL} stats: [numFiles=1, numRows=5, totalSize=84, rawDataSize=79]
+Partition default.dividends{exchange1=NYSE, symbol=GOM} stats: [numFiles=1, numRows=18, totalSize=306, rawDataSize=288]
+Partition default.dividends{exchange1=NYSE, symbol=GOV} stats: [numFiles=1, numRows=2, totalSize=30, rawDataSize=28]
+Partition default.dividends{exchange1=NYSE, symbol=GPC} stats: [numFiles=1, numRows=106, totalSize=1856, rawDataSize=1750]
+Partition default.dividends{exchange1=NYSE, symbol=GPD} stats: [numFiles=1, numRows=24, totalSize=405, rawDataSize=381]
+Partition default.dividends{exchange1=NYSE, symbol=GPI} stats: [numFiles=1, numRows=12, totalSize=192, rawDataSize=180]
+Partition default.dividends{exchange1=NYSE, symbol=GPJ} stats: [numFiles=1, numRows=24, totalSize=408, rawDataSize=384]
+Partition default.dividends{exchange1=NYSE, symbol=GPK} stats: [numFiles=1, numRows=1, totalSize=16, rawDataSize=15]
+Partition default.dividends{exchange1=NYSE, symbol=GPN} stats: [numFiles=1, numRows=35, totalSize=560, rawDataSize=525]
+Partition default.dividends{exchange1=NYSE, symbol=GPS} stats: [numFiles=1, numRows=91, totalSize=1632, rawDataSize=1541]
+Partition default.dividends{exchange1=NYSE, symbol=GPU} stats: [numFiles=1, numRows=22, totalSize=374, rawDataSize=352]
+Partition default.dividends{exchange1=NYSE, symbol=GPW} stats: [numFiles=1, numRows=23, totalSize=389, rawDataSize=366]
+Partition default.dividends{exchange1=NYSE, symbol=GPX} stats: [numFiles=1, numRows=1, totalSize=17, rawDataSize=16]
+Partition default.dividends{exchange1=NYSE, symbol=GR} stats: [numFiles=1, numRows=98, totalSize=1612, rawDataSize=1514]
+Partition default.dividends{exchange1=NYSE, symbol=GRA} stats: [numFiles=1, numRows=64, totalSize=1035, rawDataSize=971]
+Partition default.dividends{exchange1=NYSE, symbol=GRB} stats: [numFiles=1, numRows=56, totalSize=896, rawDataSize=840]
+Partition default.dividends{exchange1=NYSE, symbol=GRE} stats: [numFiles=1, numRows=2, totalSize=35, rawDataSize=33]
+Partition default.dividends{exchange1=NYSE, symbol=GRR} stats: [numFiles=1, numRows=13, totalSize=213, rawDataSize=200]
+Partition default.dividends{exchange1=NYSE, symbol=GRT} stats: [numFiles=1, numRows=64, totalSize=1049, rawDataSize=985]
+Partition default.dividends{exchange1=NYSE, symbol=GRX} stats: [numFiles=1, numRows=5, totalSize=77, rawDataSize=72]
+Partition default.dividends{exchange1=NYSE, symbol=GS} stats: [numFiles=1, numRows=43, totalSize=689, rawDataSize=646]
+Partition default.dividends{exchange1=NYSE, symbol=GSH} stats: [numFiles=1, numRows=13, totalSize=215, rawDataSize=202]
+Partition default.dividends{exchange1=NYSE, symbol=GSK} stats: [numFiles=1, numRows=64, totalSize=1086, rawDataSize=1022]
+Partition default.dividends{exchange1=NYSE, symbol=GSL} stats: [numFiles=1, numRows=3, totalSize=48, rawDataSize=45]
+Partition default.dividends{exchange1=NYSE, symbol=GT} stats: [numFiles=1, numRows=132, totalSize=2188, rawDataSize=2056]
+Partition default.dividends{exchange1=NYSE, symbol=GTN} stats: [numFiles=1, numRows=25, totalSize=401, rawDataSize=376]
+Partition default.dividends{exchange1=NYSE, symbol=GTY} stats: [numFiles=1, numRows=77, totalSize=1258, rawDataSize=1181]
+Partition default.dividends{exchange1=NYSE, symbol=GU} stats: [numFiles=1, numRows=2, totalSize=34, rawDataSize=32]
+Partition default.dividends{exchange1=NYSE, symbol=GUI} stats: [numFiles=1, numRows=24, totalSize=403, rawDataSize=379]
+Partition default.dividends{exchange1=NYSE, symbol=GUL} stats: [numFiles=1, numRows=24, totalSize=408, rawDataSize=384]
+Partition default.dividends{exchange1=NYSE, symbol=GUQ} stats: [numFiles=1, numRows=23, totalSize=391, rawDataSize=368]
+Partition default.dividends{exchange1=NYSE, symbol=GUT} stats: [numFiles=1, numRows=122, totalSize=1951, rawDataSize=1829]
+Partition default.dividends{exchange1=NYSE, symbol=GVA} stats: [numFiles=1, numRows=71, totalSize=1216, rawDataSize=1145]
+Partition default.dividends{exchange1=NYSE, symbol=GVI} stats: [numFiles=1, numRows=25, totalSize=423, rawDataSize=398]
+Partition default.dividends{exchange1=NYSE, symbol=GWF} stats: [numFiles=1, numRows=26, totalSize=442, rawDataSize=416]
+Partition default.dividends{exchange1=NYSE, symbol=GWW} stats: [numFiles=1, numRows=101, totalSize=1668, rawDataSize=1567]
+Partition default.dividends{exchange1=NYSE, symbol=GXP} stats: [numFiles=1, numRows=89, totalSize=1486, rawDataSize=1397]
+Partition default.dividends{exchange1=NYSE, symbol=GY} stats: [numFiles=1, numRows=70, totalSize=1122, rawDataSize=1052]
+Partition default.dividends{exchange1=NYSE, symbol=GYA} stats: [numFiles=1, numRows=12, totalSize=193, rawDataSize=181]
+Partition default.dividends{exchange1=NYSE, symbol=GYB} stats: [numFiles=1, numRows=22, totalSize=371, rawDataSize=349]
+Partition default.dividends{exchange1=NYSE, symbol=GYC} stats: [numFiles=1, numRows=17, totalSize=289, rawDataSize=272]
+Partition default.dividends{exchange1=NYSE, symbol=IAE} stats: [numFiles=1, numRows=11, totalSize=187, rawDataSize=176]
+Partition default.dividends{exchange1=NYSE, symbol=IAG} stats: [numFiles=1, numRows=7, totalSize=113, rawDataSize=106]
+Partition default.dividends{exchange1=NYSE, symbol=IAI} stats: [numFiles=1, numRows=11, totalSize=184, rawDataSize=173]
+Partition default.dividends{exchange1=NYSE, symbol=IAK} stats: [numFiles=1, numRows=10, totalSize=168, rawDataSize=158]
+Partition default.dividends{exchange1=NYSE, symbol=IAT} stats: [numFiles=1, numRows=10, totalSize=170, rawDataSize=160]
+Partition default.dividends{exchange1=NYSE, symbol=IBA} stats: [numFiles=1, numRows=35, totalSize=589, rawDataSize=554]
+Partition default.dividends{exchange1=NYSE, symbol=IBM} stats: [numFiles=1, numRows=190, totalSize=3247, rawDataSize=3057]
+Partition default.dividends{exchange1=NYSE, symbol=IBN} stats: [numFiles=1, numRows=10, totalSize=168, rawDataSize=158]
+Partition default.dividends{exchange1=NYSE, symbol=ICA} stats: [numFiles=1, numRows=10, totalSize=165, rawDataSize=155]
+Partition default.dividends{exchange1=NYSE, symbol=ICB} stats: [numFiles=1, numRows=290, totalSize=4810, rawDataSize=4520]
+Partition default.dividends{exchange1=NYSE, symbol=ICS} stats: [numFiles=1, numRows=172, totalSize=2889, rawDataSize=2717]
+Partition default.dividends{exchange1=NYSE, symbol=IDA} stats: [numFiles=1, numRows=95, totalSize=1552, rawDataSize=1457]
+Partition default.dividends{exchange1=NYSE, symbol=IDC} stats: [numFiles=1, numRows=12, totalSize=192, rawDataSize=180]
+Partition default.dividends{exchange1=NYSE, symbol=IDG} stats: [numFiles=1, numRows=9, totalSize=153, rawDataSize=144]
+Partition default.dividends{exchange1=NYSE, symbol=IDT} stats: [numFiles=1, numRows=2, totalSize=33, rawDataSize=31]
+Partition default.dividends{exchange1=NYSE, symbol=IDU} stats: [numFiles=1, numRows=34, totalSize=573, rawDataSize=539]
+Partition default.dividends{exchange1=NYSE, symbol=IEI} stats: [numFiles=1, numRows=24, totalSize=405, rawDataSize=381]
+Partition default.dividends{exchange1=NYSE, symbol=IEO} stats: [numFiles=1, numRows=10, totalSize=170, rawDataSize=160]
+Partition default.dividends{exchange1=NYSE, symbol=IEP} stats: [numFiles=1, numRows=42, totalSize=653, rawDataSize=611]
+Partition default.dividends{exchange1=NYSE, symbol=IEV} stats: [numFiles=1, numRows=16, totalSize=280, rawDataSize=264]
+Partition default.dividends{exchange1=NYSE, symbol=IEX} stats: [numFiles=1, numRows=61, totalSize=1074, rawDataSize=1013]
+Partition default.dividends{exchange1=NYSE, symbol=IEZ} stats: [numFiles=1, numRows=10, totalSize=170, rawDataSize=160]
+Partition default.dividends{exchange1=NYSE, symbol=IFF} stats: [numFiles=1, numRows=111, totalSize=1863, rawDataSize=1752]
+Partition default.dividends{exchange1=NYSE, symbol=IFN} stats: [numFiles=1, numRows=9, totalSize=145, rawDataSize=136]
+Partition default.dividends{exchange1=NYSE, symbol=IGA} stats: [numFiles=1, numRows=16, totalSize=272, rawDataSize=256]
+Partition default.dividends{exchange1=NYSE, symbol=IGD} stats: [numFiles=1, numRows=57, totalSize=969, rawDataSize=912]
+Partition default.dividends{exchange1=NYSE, symbol=IGE} stats: [numFiles=1, numRows=28, totalSize=510, rawDataSize=482]
+Partition default.dividends{exchange1=NYSE, symbol=IGI} stats: [numFiles=1, numRows=6, totalSize=102, rawDataSize=96]
+Partition default.dividends{exchange1=NYSE, symbol=IGK} stats: [numFiles=1, numRows=6, totalSize=102, rawDataSize=96]
+Partition default.dividends{exchange1=NYSE, symbol=IGM} stats: [numFiles=1, numRows=16, totalSize=272, rawDataSize=256]
+Partition default.dividends{exchange1=NYSE, symbol=IGN} stats: [numFiles=1, numRows=6, totalSize=102, rawDataSize=96]
+Partition default.dividends{exchange1=NYSE, symbol=IGR} stats: [numFiles=1, numRows=68, totalSize=1153, rawDataSize=1085]
+Partition default.dividends{exchange1=NYSE, symbol=IGT} stats: [numFiles=1, numRows=51, totalSize=867, rawDataSize=816]
+Partition default.dividends{exchange1=NYSE, symbol=IGV} stats: [numFiles=1, numRows=4, totalSize=68, rawDataSize=64]
+Partition default.dividends{exchange1=NYSE, symbol=IGW} stats: [numFiles=1, numRows=11, totalSize=184, rawDataSize=173]
+Partition default.dividends{exchange1=NYSE, symbol=IHC} stats: [numFiles=1, numRows=25, totalSize=447, rawDataSize=422]
+Partition default.dividends{exchange1=NYSE, symbol=IHE} stats: [numFiles=1, numRows=10, totalSize=169, rawDataSize=159]
+Partition default.dividends{exchange1=NYSE, symbol=IHF} stats: [numFiles=1, numRows=1, totalSize=17, rawDataSize=16]
+Partition default.dividends{exchange1=NYSE, symbol=IHI} stats: [numFiles=1, numRows=3, totalSize=50, rawDataSize=47]
+Partition default.dividends{exchange1=NYSE, symbol=IIC} stats: [numFiles=1, numRows=172, totalSize=2887, rawDataSize=2715]
+Partition default.dividends{exchange1=NYSE, symbol=IID} stats: [numFiles=1, numRows=28, totalSize=476, rawDataSize=448]
+Partition default.dividends{exchange1=NYSE, symbol=IIF} stats: [numFiles=1, numRows=12, totalSize=204, rawDataSize=192]
+Partition default.dividends{exchange1=NYSE, symbol=IIM} stats: [numFiles=1, numRows=173, totalSize=2923, rawDataSize=2750]
+Partition default.dividends{exchange1=NYSE, symbol=IIT} stats: [numFiles=1, numRows=20, totalSize=337, rawDataSize=317]
+Partition default.dividends{exchange1=NYSE, symbol=IJD} stats: [numFiles=1, numRows=28, totalSize=476, rawDataSize=448]
+Partition default.dividends{exchange1=NYSE, symbol=IJH} stats: [numFiles=1, numRows=33, totalSize=571, rawDataSize=538]
+Partition default.dividends{exchange1=NYSE, symbol=IJJ} stats: [numFiles=1, numRows=33, totalSize=565, rawDataSize=532]
+Partition default.dividends{exchange1=NYSE, symbol=IJK} stats: [numFiles=1, numRows=31, totalSize=534, rawDataSize=503]
+Partition default.dividends{exchange1=NYSE, symbol=IJR} stats: [numFiles=1, numRows=31, totalSize=549, rawDataSize=518]
+Partition default.dividends{exchange1=NYSE, symbol=IJS} stats: [numFiles=1, numRows=32, totalSize=549, rawDataSize=517]
+Partition default.dividends{exchange1=NYSE, symbol=IJT} stats: [numFiles=1, numRows=30, totalSize=523, rawDataSize=493]
+Partition default.dividends{exchange1=NYSE, symbol=IKJ} stats: [numFiles=1, numRows=29, totalSize=493, rawDataSize=464]
+Partition default.dividends{exchange1=NYSE, symbol=IKL} stats: [numFiles=1, numRows=26, totalSize=442, rawDataSize=416]
+Partition default.dividends{exchange1=NYSE, symbol=IKM} stats: [numFiles=1, numRows=24, totalSize=408, rawDataSize=384]
+Partition default.dividends{exchange1=NYSE, symbol=IKR} stats: [numFiles=1, numRows=22, totalSize=374, rawDataSize=352]
+Partition default.dividends{exchange1=NYSE, symbol=ILF} stats: [numFiles=1, numRows=13, totalSize=225, rawDataSize=212]
+Partition default.dividends{exchange1=NYSE, symbol=IMB} stats: [numFiles=1, numRows=7, totalSize=119, rawDataSize=112]
+Partition default.dividends{exchange1=NYSE, symbol=IMC} stats: [numFiles=1, numRows=224, totalSize=3770, rawDataSize=3546]
+Partition default.dividends{exchange1=NYSE, symbol=IMF} stats: [numFiles=1, numRows=66, totalSize=1077, rawDataSize=1011]
+Partition default.dividends{exchange1=NYSE, symbol=IMN} stats: [numFiles=1, numRows=23, totalSize=364, rawDataSize=341]
+Partition default.dividends{exchange1=NYSE, symbol=IMS} stats: [numFiles=1, numRows=171, totalSize=2880, rawDataSize=2709]
+Partition default.dividends{exchange1=NYSE, symbol=IMT} stats: [numFiles=1, numRows=212, totalSize=3567, rawDataSize=3355]
+Partition default.dividends{exchange1=NYSE, symbol=INB} stats: [numFiles=1, numRows=20, totalSize=320, rawDataSize=300]
+Partition default.dividends{exchange1=NYSE, symbol=IND} stats: [numFiles=1, numRows=25, totalSize=420, rawDataSize=395]
+Partition default.dividends{exchange1=NYSE, symbol=ING} stats: [numFiles=1, numRows=23, totalSize=390, rawDataSize=367]
+Partition default.dividends{exchange1=NYSE, symbol=INT} stats: [numFiles=1, numRows=62, totalSize=1121, rawDataSize=1059]
+Partition default.dividends{exchange1=NYSE, symbol=INZ} stats: [numFiles=1, numRows=28, totalSize=448, rawDataSize=420]
+Partition default.dividends{exchange1=NYSE, symbol=IOO} stats: [numFiles=1, numRows=8, totalSize=136, rawDataSize=128]
+Partition default.dividends{exchange1=NYSE, symbol=IP} stats: [numFiles=1, numRows=161, totalSize=2670, rawDataSize=2509]
+Partition default.dividends{exchange1=NYSE, symbol=IPG} stats: [numFiles=1, numRows=61, totalSize=1105, rawDataSize=1044]
+Partition default.dividends{exchange1=NYSE, symbol=IQC} stats: [numFiles=1, numRows=172, totalSize=2852, rawDataSize=2680]
+Partition default.dividends{exchange1=NYSE, symbol=IQI} stats: [numFiles=1, numRows=172, totalSize=2903, rawDataSize=2731]
+Partition default.dividends{exchange1=NYSE, symbol=IQM} stats: [numFiles=1, numRows=172, totalSize=2857, rawDataSize=2685]
+Partition default.dividends{exchange1=NYSE, symbol=IQN} stats: [numFiles=1, numRows=172, totalSize=2877, rawDataSize=2705]
+Partition default.dividends{exchange1=NYSE, symbol=IQT} stats: [numFiles=1, numRows=218, totalSize=3631, rawDataSize=3413]
+Partition default.dividends{exchange1=NYSE, symbol=IR} stats: [numFiles=1, numRows=98, totalSize=1715, rawDataSize=1617]
+Partition default.dividends{exchange1=NYSE, symbol=IRC} stats: [numFiles=1, numRows=66, totalSize=1096, rawDataSize=1030]
+Partition default.dividends{exchange1=NYSE, symbol=IRE} stats: [numFiles=1, numRows=23, totalSize=392, rawDataSize=369]
+Partition default.dividends{exchange1=NYSE, symbol=IRL} stats: [numFiles=1, numRows=17, totalSize=279, rawDataSize=262]
+Partition default.dividends{exchange1=NYSE, symbol=IRR} stats: [numFiles=1, numRows=13, totalSize=221, rawDataSize=208]
+Partition default.dividends{exchange1=NYSE, symbol=IRS} stats: [numFiles=1, numRows=9, totalSize=167, rawDataSize=158]
+Partition default.dividends{exchange1=NYSE, symbol=ISF} stats: [numFiles=1, numRows=10, totalSize=170, rawDataSize=160]
+Partition default.dividends{exchange1=NYSE, symbol=ISG} stats: [numFiles=1, numRows=17, totalSize=289, rawDataSize=272]
+Partition default.dividends{exchange1=NYSE, symbol=ISH} stats: [numFiles=1, numRows=44, totalSize=722, rawDataSize=678]
+Partition default.dividends{exchange1=NYSE, symbol=ISI} stats: [numFiles=1, numRows=17, totalSize=293, rawDataSize=276]
+Partition default.dividends{exchange1=NYSE, symbol=ISM} stats: [numFiles=1, numRows=46, totalSize=778, rawDataSize=732]
+Partition default.dividends{exchange1=NYSE, symbol=ISP} stats: [numFiles=1, numRows=25, totalSize=425, rawDataSize=400]
+Partition default.dividends{exchange1=NYSE, symbol=IT} stats: [numFiles=1, numRows=1, totalSize=17, rawDataSize=16]
+Partition default.dividends{exchange1=NYSE, symbol=ITA} stats: [numFiles=1, numRows=10, totalSize=169, rawDataSize=159]
+Partition default.dividends{exchange1=NYSE, symbol=ITB} stats: [numFiles=1, numRows=9, totalSize=153, rawDataSize=144]
+Partition default.dividends{exchange1=NYSE, symbol=ITC} stats: [numFiles=1, numRows=18, totalSize=300, rawDataSize=282]
+Partition default.dividends{exchange1=NYSE, symbol=ITF} stats: [numFiles=1, numRows=10, totalSize=174, rawDataSize=164]
+Partition default.dividends{exchange1=NYSE, symbol=ITT} stats: [numFiles=1, numRows=56, totalSize=936, rawDataSize=880]
+Partition default.dividends{exchange1=NYSE, symbol=ITUB} stats: [numFiles=1, numRows=98, totalSize=1786, rawDataSize=1688]
+Partition default.dividends{exchange1=NYSE, symbol=ITW} stats: [numFiles=1, numRows=89, totalSize=1498, rawDataSize=1409]
+Partition default.dividends{exchange1=NYSE, symbol=IVC} stats: [numFiles=1, numRows=63, totalSize=1070, rawDataSize=1007]
+Partition default.dividends{exchange1=NYSE, symbol=IVE} stats: [numFiles=1, numRows=32, totalSize=538, rawDataSize=506]
+Partition default.dividends{exchange1=NYSE, symbol=IVR} stats: [numFiles=1, numRows=2, totalSize=32, rawDataSize=30]
+Partition default.dividends{exchange1=NYSE, symbol=IVV} stats: [numFiles=1, numRows=33, totalSize=558, rawDataSize=525]
+Partition default.dividends{exchange1=NYSE, symbol=IVW} stats: [numFiles=1, numRows=32, totalSize=544, rawDataSize=512]
+Partition default.dividends{exchange1=NYSE, symbol=IVZ} stats: [numFiles=1, numRows=32, totalSize=540, rawDataSize=508]
+Partition default.dividends{exchange1=NYSE, symbol=IWA} stats: [numFiles=1, numRows=21, totalSize=357, rawDataSize=336]
+Partition default.dividends{exchange1=NYSE, symbol=IWC} stats: [numFiles=1, numRows=9, totalSize=153, rawDataSize=144]
+Partition default.dividends{exchange1=NYSE, symbol=IX} stats: [numFiles=1, numRows=8, totalSize=138, rawDataSize=130]
+Partition default.dividends{exchange1=NYSE, symbol=IXC} stats: [numFiles=1, numRows=12, totalSize=216, rawDataSize=204]
+Partition default.dividends{exchange1=NYSE, symbol=IXG} stats: [numFiles=1, numRows=12, totalSize=204, rawDataSize=192]
+Partition default.dividends{exchange1=NYSE, symbol=IXJ} stats: [numFiles=1, numRows=12, totalSize=204, rawDataSize=192]
+Partition default.dividends{exchange1=NYSE, symbol=IXN} stats: [numFiles=1, numRows=8, totalSize=135, rawDataSize=127]
+Partition default.dividends{exchange1=NYSE, symbol=IXP} stats: [numFiles=1, numRows=12, totalSize=202, rawDataSize=190]
+Partition default.dividends{exchange1=NYSE, symbol=IYC} stats: [numFiles=1, numRows=33, totalSize=557, rawDataSize=524]
+Partition default.dividends{exchange1=NYSE, symbol=IYE} stats: [numFiles=1, numRows=34, totalSize=607, rawDataSize=573]
+Partition default.dividends{exchange1=NYSE, symbol=IYF} stats: [numFiles=1, numRows=35, totalSize=589, rawDataSize=554]
+Partition default.dividends{exchange1=NYSE, symbol=IYG} stats: [numFiles=1, numRows=34, totalSize=574, rawDataSize=540]
+Partition default.dividends{exchange1=NYSE, symbol=IYH} stats: [numFiles=1, numRows=35, totalSize=591, rawDataSize=556]
+Partition default.dividends{exchange1=NYSE, symbol=IYJ} stats: [numFiles=1, numRows=36, totalSize=603, rawDataSize=567]
+Partition default.dividends{exchange1=NYSE, symbol=IYK} stats: [numFiles=1, numRows=35, totalSize=591, rawDataSize=556]
+Partition default.dividends{exchange1=NYSE, symbol=IYM} stats: [numFiles=1, numRows=36, totalSize=609, rawDataSize=573]
+Partition default.dividends{exchange1=NYSE, symbol=IYR} stats: [numFiles=1, numRows=36, totalSize=613, rawDataSize=577]
+Partition default.dividends{exchange1=NYSE, symbol=IYT} stats: [numFiles=1, numRows=17, totalSize=287, rawDataSize=270]
+Partition default.dividends{exchange1=NYSE, symbol=IYW} stats: [numFiles=1, numRows=14, totalSize=237, rawDataSize=223]
+Partition default.dividends{exchange1=NYSE, symbol=IYY} stats: [numFiles=1, numRows=33, totalSize=557, rawDataSize=524]
+Partition default.dividends{exchange1=NYSE, symbol=IYZ} stats: [numFiles=1, numRows=33, totalSize=558, rawDataSize=525]
+OK
+ymd	dividend	exchange1	symbol
+Time taken: 670.955 seconds
+
+SELECT FROM_UNIXTIME(UNIX_TIMESTAMP()) as XXXXXXXXXCurrentTimeInHIVEXXXXXXXXXXXX;
+
+SELECT * FROM dividends LIMIT 10;
+
+SELECT distinct exchange1 FROM dividends;
+
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/usr/hdp/2.3.0.0-2557/hadoop/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/usr/hdp/2.3.0.0-2557/spark/lib/spark-assembly-1.3.1.2.3.0.0-2557-hadoop2.7.1.2.3.0.0-2557.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+WARNING: Use "yarn jar" to launch YARN applications.
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/usr/hdp/2.3.0.0-2557/hadoop/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/usr/hdp/2.3.0.0-2557/spark/lib/spark-assembly-1.3.1.2.3.0.0-2557-hadoop2.7.1.2.3.0.0-2557.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+
+Logging initialized using configuration in file:/etc/hive/2.3.0.0-2557/0/hive-log4j.properties
+OK
+xxxxxxxxxcurrenttimeinhivexxxxxxxxxxxx
+2015-10-11 02:49:05
+Time taken: 12.708 seconds, Fetched: 1 row(s)
+OK
+dividends.ymd	dividends.dividend	dividends.exchange1	dividends.symbol
+2007-07-17	2.45	NASDAQ	AACC
+2008-06-10	0.16	NASDAQ	AAON
+2007-06-07	0.13333	NASDAQ	AAON
+2006-12-11	0.13333	NASDAQ	AAON
+2006-06-08	0.13333	NASDAQ	AAON
+2009-12-10	0.18	NASDAQ	AAON
+2009-06-09	0.18	NASDAQ	AAON
+2007-12-11	0.16	NASDAQ	AAON
+2008-12-10	0.16	NASDAQ	AAON
+1993-11-19	0.03	NASDAQ	AAPL
+Time taken: 7.903 seconds, Fetched: 10 row(s)
+Query ID = root_20151011024914_7c0b6a3a-c7db-4b59-8540-cdf32d1ed5c4
+Total jobs = 1
+Launching Job 1 out of 1
+
+
+Status: Running (Executing on YARN cluster with App id application_1444528407722_0005)
+
+Map 1: 0/1	Reducer 2: 0/1	
+Map 1: 0/1	Reducer 2: 0/1	
+Map 1: 0/1	Reducer 2: 0/1	
+Map 1: 0/1	Reducer 2: 0/1	
+Map 1: 0/1	Reducer 2: 0/1	
+Map 1: 0/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 1/1	Reducer 2: 0/1	
+Map 1: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Reducer 2: 1/1	
+OK
+exchange1
+NASDAQ
+NYSE
+Time taken: 139.791 seconds, Fetched: 2 row(s)
+
+
+
+
+--- Self Join
+SELECT a.ymd, a.price_close, b.price_close
+	FROM stocks a JOIN stocks b ON a.ymd = b.ymd
+	WHERE a.symbol = 'AAPL' AND b.symbol = 'IBM' LIMIT 10;
+
+SELECT a.ymd, a.price_close, b.price_close
+	FROM stocks a ,stocks b WHERE a.ymd = b.ymd
+	AND a.symbol = 'AAPL' AND b.symbol = 'IBM' LIMIT 10;
+
+--Hive will use a separate MapReduce job for each pair of things to join. 
+--In this example, it would use one job for tables a and b, 
+--then a second job to join the output of the first join with c.
+
+SELECT a.ymd, a.price_close, b.price_close , c.price_close
+	FROM stocks a 
+	JOIN stocks b ON a.ymd = b.ymd
+	JOIN stocks c ON a.ymd = c.ymd
+	WHERE a.symbol = 'AAPL' AND b.symbol = 'IBM' AND c.symbol = 'GE' LIMIT 10;
+
+-- Inner join	
+--Hive also assumes that the last table in the query is the largest. 
+-- Following query we have put smaller table dividends last
+SELECT s.ymd, s.symbol, s.price_close, d.dividend
+	FROM stocks s JOIN dividends d 
+	ON s.ymd = d.ymd AND s.symbol = d.symbol
+	WHERE s.symbol = 'AAPL' LIMIT 10;
+
+-- Following query we have put smaller table stocks last, which is better for hive
+SELECT s.ymd, s.symbol, s.price_close, d.dividend
+ FROM dividends d JOIN stocks s ON s.ymd = d.ymd AND s.symbol = d.symbol
+ WHERE s.symbol = 'AAPL' LIMIT 10;
+	
+--Fortunately, you don’t have to put the largest table last in the query. 
+--Hive also provides a “hint” mechanism to tell the query optimizer 
+--which table should be streamed:
+
+SELECT /*+ STREAMTABLE(s) */ s.ymd, s.symbol, s.price_close, d.dividend
+ FROM stocks s JOIN dividends d ON s.ymd = d.ymd AND s.symbol = d.symbol
+ WHERE s.symbol = 'AAPL' LIMIT 10;
+ 
+ SLF4J: Class path contains multiple SLF4J bindings.
+ SLF4J: Found binding in [jar:file:/usr/hdp/2.3.0.0-2557/hadoop/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+ SLF4J: Found binding in [jar:file:/usr/hdp/2.3.0.0-2557/spark/lib/spark-assembly-1.3.1.2.3.0.0-2557-hadoop2.7.1.2.3.0.0-2557.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+ SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+ SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+ WARNING: Use "yarn jar" to launch YARN applications.
+ SLF4J: Class path contains multiple SLF4J bindings.
+ SLF4J: Found binding in [jar:file:/usr/hdp/2.3.0.0-2557/hadoop/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+ SLF4J: Found binding in [jar:file:/usr/hdp/2.3.0.0-2557/spark/lib/spark-assembly-1.3.1.2.3.0.0-2557-hadoop2.7.1.2.3.0.0-2557.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+ SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+ SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+ 
+ Logging initialized using configuration in file:/etc/hive/2.3.0.0-2557/0/hive-log4j.properties
+ OK
+ xxxxxxxxxcurrenttimeinhivexxxxxxxxxxxx
+ 2015-10-11 22:15:36
+ Time taken: 9.892 seconds, Fetched: 1 row(s)
+ OK
+ tab_name
+ default__dividends_stage_es01_index__
+ default__weather1_y01_index__
+ departments_udftest
+ dept
+ dividends
+ dividends_stage
+ sample_07
+ sample_08
+ stocks
+ stocks_stage
+ tmp_users
+ weather
+ weather1
+ weather_skewed
+ weather_stage
+ weathermonth
+ weatherorc
+ Time taken: 0.822 seconds, Fetched: 17 row(s)
+ Query ID = root_20151011221537_66864712-853a-4d6a-a7b7-bb69d0418e93
+ Total jobs = 1
+ Launching Job 1 out of 1
+ 
+ 
+ Status: Running (Executing on YARN cluster with App id application_1444600603137_0003)
+ 
+ Map 1: -/-	Map 2: -/-	
+ Map 1: 0/1	Map 2: 0/1	
+ Map 1: 0/1	Map 2: 0/1	
+ Map 1: 0/1	Map 2: 0/1	
+ Map 1: 0/1	Map 2: 0/1	
+ Map 1: 0/1	Map 2: 0/1	
+ Map 1: 0/1	Map 2: 0/1	
+ Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+ Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+ Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+ Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+ Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+ Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+ Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+ Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+ Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+ Map 1: 0(+1)/1	Map 2: 1/1	
+ Map 1: 0(+1)/1	Map 2: 1/1	
+ Map 1: 1/1	Map 2: 1/1	
+ Map 1: 1/1	Map 2: 1/1	
+ OK
+ a.ymd	a.price_close	b.price_close
+ 2010-02-08	194.12	121.88
+ 2010-02-05	195.46	123.52
+ 2010-02-04	192.05	123.0
+ 2010-02-03	199.23	125.66
+ 2010-02-02	195.86	125.53
+ 2010-02-01	194.73	124.67
+ 2010-01-29	192.06	122.39
+ 2010-01-28	199.29	123.75
+ 2010-01-27	207.88	126.33
+ 2010-01-26	205.94	125.75
+ Time taken: 78.971 seconds, Fetched: 10 row(s)
+ Query ID = root_20151011221658_7a2987f3-8e78-4a1b-9d17-91d421f30281
+ Total jobs = 1
+ Launching Job 1 out of 1
+ 
+ 
+ Status: Running (Executing on YARN cluster with App id application_1444600603137_0003)
+ 
+ Map 1: -/-	Map 2: -/-	
+ Map 1: -/-	Map 2: -/-	
+ Map 1: 0/1	Map 2: 0/1	
+ Map 1: 0/1	Map 2: 0/1	
+ Map 1: 0/1	Map 2: 0/1	
+ Map 1: 0/1	Map 2: 0/1	
+ Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+ Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+ Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+ Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+ Map 1: 0(+1)/1	Map 2: 1/1	
+ Map 1: 1/1	Map 2: 1/1	
+ OK
+ a.ymd	a.price_close	b.price_close
+ 2010-02-08	194.12	121.88
+ 2010-02-05	195.46	123.52
+ 2010-02-04	192.05	123.0
+ 2010-02-03	199.23	125.66
+ 2010-02-02	195.86	125.53
+ 2010-02-01	194.73	124.67
+ 2010-01-29	192.06	122.39
+ 2010-01-28	199.29	123.75
+ 2010-01-27	207.88	126.33
+ 2010-01-26	205.94	125.75
+ Time taken: 42.139 seconds, Fetched: 10 row(s)
+ Query ID = root_20151011221740_68141fe3-fe41-4aa4-8f3d-57caf4aa0385
+ Total jobs = 1
+ Launching Job 1 out of 1
+ 
+ 
+ Status: Running (Executing on YARN cluster with App id application_1444600603137_0003)
+ 
+ Map 1: -/-	Map 2: 0/1	Map 3: -/-	
+ Map 1: 0/1	Map 2: 0/1	Map 3: 0/1	
+ Map 1: 0/1	Map 2: 0/1	Map 3: 0/1	
+ Map 1: 0/1	Map 2: 0/1	Map 3: 0/1	
+ Map 1: 0/1	Map 2: 0(+1)/1	Map 3: 0(+1)/1	
+ Map 1: 0(+1)/1	Map 2: 0(+1)/1	Map 3: 0(+1)/1	
+ Map 1: 0(+1)/1	Map 2: 0(+1)/1	Map 3: 0(+1)/1	
+ Map 1: 0(+1)/1	Map 2: 0(+1)/1	Map 3: 0(+1)/1	
+ Map 1: 0(+1)/1	Map 2: 0(+1)/1	Map 3: 0(+1)/1	
+ Map 1: 0(+1)/1	Map 2: 0(+1)/1	Map 3: 0(+1)/1	
+ Map 1: 0(+1)/1	Map 2: 0(+1)/1	Map 3: 0(+1)/1	
+ Map 1: 0(+1)/1	Map 2: 0(+1)/1	Map 3: 0(+1)/1	
+ Map 1: 0(+1)/1	Map 2: 0(+1)/1	Map 3: 0(+1)/1	
+ Map 1: 0(+1)/1	Map 2: 1/1	Map 3: 0(+1)/1	
+ Map 1: 0(+1)/1	Map 2: 1/1	Map 3: 0(+1)/1	
+ Map 1: 1/1	Map 2: 1/1	Map 3: 0(+1)/1	
+ Map 1: 1/1	Map 2: 1/1	Map 3: 0(+1)/1	
+ Map 1: 1/1	Map 2: 1/1	Map 3: 0(+1)/1	
+ Map 1: 1/1	Map 2: 1/1	Map 3: 0(+1)/1	
+ Map 1: 1/1	Map 2: 1/1	Map 3: 1/1	
+ OK
+ a.ymd	a.price_close	b.price_close	c.price_close
+ 2010-02-08	194.12	121.88	15.6
+ 2010-02-08	194.12	121.88	15.6
+ 2010-02-08	194.12	121.88	15.6
+ 2010-02-08	194.12	121.88	15.6
+ 2010-02-08	194.12	121.88	15.6
+ 2010-02-05	195.46	123.52	15.79
+ 2010-02-05	195.46	123.52	15.79
+ 2010-02-05	195.46	123.52	15.79
+ 2010-02-05	195.46	123.52	15.79
+ 2010-02-05	195.46	123.52	15.79
+ Time taken: 65.771 seconds, Fetched: 10 row(s)
+ Query ID = root_20151011221847_9b72821a-97fc-4138-abca-cc8f0a2b22d7
+ Total jobs = 1
+ Launching Job 1 out of 1
+ 
+ 
+ Status: Running (Executing on YARN cluster with App id application_1444600603137_0003)
+ 
+ Map 1: -/-	Map 2: -/-	
+ Map 1: -/-	Map 2: 0/1	
+ Map 1: -/-	Map 2: 0(+1)/1	
+ Map 1: -/-	Map 2: 1/1	
+ Map 1: 0(+1)/1	Map 2: 1/1	
+ Map 1: 1/1	Map 2: 1/1	
+ OK
+ s.ymd	s.symbol	s.price_close	d.dividend
+ 1995-11-21	AAPL	38.63	0.03
+ 1995-08-16	AAPL	44.5	0.03
+ 1995-05-26	AAPL	42.69	0.03
+ 1995-02-13	AAPL	43.75	0.03
+ 1994-11-18	AAPL	40.0	0.03
+ 1994-08-15	AAPL	34.63	0.03
+ 1994-05-27	AAPL	29.94	0.03
+ 1994-02-07	AAPL	36.5	0.03
+ 1993-11-19	AAPL	33.0	0.03
+ 1993-08-16	AAPL	27.5	0.03
+ Time taken: 10.251 seconds, Fetched: 10 row(s)
+ Query ID = root_20151011221857_79759bda-02bd-401d-a91f-775be8c81a2d
+ Total jobs = 1
+ Launching Job 1 out of 1
+ 
+ 
+ Status: Running (Executing on YARN cluster with App id application_1444600603137_0003)
+ 
+ Map 1: 0(+1)/1	Map 2: -/-	
+ Map 1: 1/1	Map 2: -/-	
+ Map 1: 1/1	Map 2: 0(+1)/1	
+ Map 1: 1/1	Map 2: 1/1	
+ OK
+ s.ymd	s.symbol	s.price_close	d.dividend
+ 1995-11-21	AAPL	38.63	0.03
+ 1995-08-16	AAPL	44.5	0.03
+ 1995-05-26	AAPL	42.69	0.03
+ 1995-02-13	AAPL	43.75	0.03
+ 1994-11-18	AAPL	40.0	0.03
+ 1994-08-15	AAPL	34.63	0.03
+ 1994-05-27	AAPL	29.94	0.03
+ 1994-02-07	AAPL	36.5	0.03
+ 1993-11-19	AAPL	33.0	0.03
+ 1993-08-16	AAPL	27.5	0.03
+ Time taken: 4.557 seconds, Fetched: 10 row(s)
+ Query ID = root_20151011221902_da544cd8-4fe8-4a0f-9454-64096cfbcb17
+ Total jobs = 1
+ Launching Job 1 out of 1
+ 
+ 
+ Status: Running (Executing on YARN cluster with App id application_1444600603137_0003)
+ 
+ Map 1: -/-	Map 2: 1/1	
+ Map 1: 0(+1)/1	Map 2: 1/1	
+ Map 1: 1/1	Map 2: 1/1	
+ OK
+ s.ymd	s.symbol	s.price_close	d.dividend
+ 1995-11-21	AAPL	38.63	0.03
+ 1995-08-16	AAPL	44.5	0.03
+ 1995-05-26	AAPL	42.69	0.03
+ 1995-02-13	AAPL	43.75	0.03
+ 1994-11-18	AAPL	40.0	0.03
+ 1994-08-15	AAPL	34.63	0.03
+ 1994-05-27	AAPL	29.94	0.03
+ 1994-02-07	AAPL	36.5	0.03
+ 1993-11-19	AAPL	33.0	0.03
+ 1993-08-16	AAPL	27.5	0.03
+ Time taken: 4.829 seconds, Fetched: 10 row(s)
+
+SELECT s.ymd,s.symbol,s.price_close,d.dividend
+	FROM stocks s LEFT OUTER JOIN dividends d 
+	on s.ymd=d.ymd and s.symbol=d.symbol
+	WHERE s.symbol in ('AAPL','GE') LIMIT 10;
+	
+SELECT count(*) as LEFT_OUTER_JOIN
+	FROM stocks s LEFT OUTER JOIN dividends d 
+	on s.ymd=d.ymd and s.symbol=d.symbol
+	WHERE s.symbol in ('AAPL','GE') LIMIT 10;
+	
+SELECT s.ymd,s.symbol,s.price_close,d.dividend
+	FROM stocks s RIGHT OUTER JOIN dividends d 
+	on s.ymd=d.ymd and s.symbol=d.symbol
+	WHERE s.symbol in ('AAPL','GE') LIMIT 10;
+	
+SELECT count(*) as RIGHT_OUTER_JOIN
+	FROM stocks s RIGHT OUTER JOIN dividends d 
+	on s.ymd=d.ymd and s.symbol=d.symbol
+	WHERE s.symbol in ('AAPL','GE') LIMIT 10;
+
+SELECT s.ymd, s.symbol, s.price_close
+	FROM stocks s LEFT SEMI JOIN dividends d 
+	ON s.ymd = d.ymd AND s.symbol = d.symbol LIMIT 10;
+
+
+SELECT s.symbol,count(d.dividend) , sum(d.dividend)
+	FROM stocks s LEFT OUTER JOIN dividends d on s.ymd=d.ymd and s.symbol=d.symbol
+	WHERE s.symbol in ('AAPL','GE')
+	GROUP BY s.symbol;
+	
+
+DROP TABLE IF EXISTS dividendsORC PURGE;
+create table if not exists dividendsORC(	
+	exchange1 STRING,
+	symbol STRING,
+	ymd string,
+	dividend float )
+	STORED AS ORC tblproperties("orc.compress"="SNAPPY");
+
+INSERT OVERWRITE TABLE dividendsORC
+	SELECT ymd,dividend,exchange1,symbol
+	FROM dividends_stage;
+	
+INSERT OVERWRITE TABLE dividendsORC
+	SELECT ymd,dividend,exchange1,symbol
+	FROM dividends_stage
+	SORT by exchange1,symbol;
+	
+	SLF4J: Class path contains multiple SLF4J bindings.
+	SLF4J: Found binding in [jar:file:/usr/hdp/2.3.0.0-2557/hadoop/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+	SLF4J: Found binding in [jar:file:/usr/hdp/2.3.0.0-2557/spark/lib/spark-assembly-1.3.1.2.3.0.0-2557-hadoop2.7.1.2.3.0.0-2557.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+	SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+	SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+	WARNING: Use "yarn jar" to launch YARN applications.
+	SLF4J: Class path contains multiple SLF4J bindings.
+	SLF4J: Found binding in [jar:file:/usr/hdp/2.3.0.0-2557/hadoop/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+	SLF4J: Found binding in [jar:file:/usr/hdp/2.3.0.0-2557/spark/lib/spark-assembly-1.3.1.2.3.0.0-2557-hadoop2.7.1.2.3.0.0-2557.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+	SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+	SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+	
+	Logging initialized using configuration in file:/etc/hive/2.3.0.0-2557/0/hive-log4j.properties
+	OK
+	xxxxxxxxxcurrenttimeinhivexxxxxxxxxxxx
+	2015-10-11 23:13:08
+	Time taken: 16.303 seconds, Fetched: 1 row(s)
+	OK
+	tab_name
+	default__dividends_stage_es01_index__
+	default__weather1_y01_index__
+	departments_udftest
+	dept
+	dividends
+	dividends_stage
+	sample_07
+	sample_08
+	stocks
+	stocks_stage
+	tmp_users
+	weather
+	weather1
+	weather_skewed
+	weather_stage
+	weathermonth
+	weatherorc
+	Time taken: 2.514 seconds, Fetched: 17 row(s)
+	Query ID = root_20151011231311_e6d62cbe-d02d-422b-b552-464571df46e0
+	Total jobs = 1
+	Launching Job 1 out of 1
+	
+	
+	Status: Running (Executing on YARN cluster with App id application_1444600603137_0005)
+	
+	Map 1: -/-	Map 2: -/-	
+	Map 1: 0/1	Map 2: 0/1	
+	Map 1: 0/1	Map 2: 0/1	
+	Map 1: 0/1	Map 2: 0/1	
+	Map 1: 0/1	Map 2: 0/1	
+	Map 1: 0/1	Map 2: 0/1	
+	Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+	Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+	Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+	Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+	Map 1: 0(+1)/1	Map 2: 1/1	
+	Map 1: 1/1	Map 2: 1/1	
+	OK
+	s.ymd	s.symbol	s.price_close	d.dividend
+	2010-02-08	AAPL	194.12	NULL
+	2010-02-05	AAPL	195.46	NULL
+	2010-02-04	AAPL	192.05	NULL
+	2010-02-03	AAPL	199.23	NULL
+	2010-02-02	AAPL	195.86	NULL
+	2010-02-01	AAPL	194.73	NULL
+	2010-01-29	AAPL	192.06	NULL
+	2010-01-28	AAPL	199.29	NULL
+	2010-01-27	AAPL	207.88	NULL
+	2010-01-26	AAPL	205.94	NULL
+	Time taken: 43.783 seconds, Fetched: 10 row(s)
+	Query ID = root_20151011231356_94e508fc-07c8-41e6-88bd-03f976780a69
+	Total jobs = 1
+	Launching Job 1 out of 1
+	
+	
+	Status: Running (Executing on YARN cluster with App id application_1444600603137_0005)
+	
+	Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+	Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+	Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+	Map 1: 1/1	Map 3: 1/1	Reducer 2: 0(+1)/1	
+	Map 1: 1/1	Map 3: 1/1	Reducer 2: 1/1	
+	OK
+	left_outer_join
+	92605
+	Time taken: 20.897 seconds, Fetched: 1 row(s)
+	Query ID = root_20151011231420_7c385c88-948c-4b96-896d-434eed168e7c
+	Total jobs = 1
+	Launching Job 1 out of 1
+	
+	
+	Status: Running (Executing on YARN cluster with App id application_1444600603137_0005)
+	
+	Map 1: -/-	Map 2: -/-	
+	Map 1: 0/1	Map 2: -/-	
+	Map 1: 0/1	Map 2: -/-	
+	Map 1: 0/1	Map 2: -/-	
+	Map 1: 0(+1)/1	Map 2: -/-	
+	Map 1: 0(+1)/1	Map 2: -/-	
+	Map 1: 0(+1)/1	Map 2: -/-	
+	Map 1: 0(+1)/1	Map 2: 0/1	
+	Map 1: 0(+1)/1	Map 2: 0/1	
+	Map 1: 0(+1)/1	Map 2: 0/1	
+	Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+	Map 1: 0/1	Map 2: 0(+1)/1	
+	Map 1: 1/1	Map 2: 0(+1)/1	
+	Map 1: 1/1	Map 2: 0(+1)/1	
+	Map 1: 1/1	Map 2: 0(+1)/1	
+	Map 1: 1/1	Map 2: 1/1	
+	OK
+	s.ymd	s.symbol	s.price_close	d.dividend
+	1993-11-19	AAPL	33.0	0.03
+	1993-11-19	AAPL	33.0	0.03
+	1993-11-19	AAPL	33.0	0.03
+	1993-11-19	AAPL	33.0	0.03
+	1993-11-19	AAPL	33.0	0.03
+	1993-05-28	AAPL	56.63	0.03
+	1993-05-28	AAPL	56.63	0.03
+	1993-05-28	AAPL	56.63	0.03
+	1993-05-28	AAPL	56.63	0.03
+	1993-05-28	AAPL	56.63	0.03
+	Time taken: 62.557 seconds, Fetched: 10 row(s)
+	Query ID = root_20151011231523_277415c4-9db3-4c11-afae-75d4fdb10fde
+	Total jobs = 1
+	Launching Job 1 out of 1
+	
+	
+	Status: Running (Executing on YARN cluster with App id application_1444600603137_0005)
+	
+	Map 1: -/-	Map 2: -/-	Reducer 3: 0/1	
+	Map 1: 0/1	Map 2: -/-	Reducer 3: 0/1	
+	Map 1: 0/1	Map 2: -/-	Reducer 3: 0/1	
+	Map 1: 0/1	Map 2: 0/1	Reducer 3: 0/1	
+	Map 1: 0/1	Map 2: 0/1	Reducer 3: 0/1	
+	Map 1: 0(+1)/1	Map 2: 0/1	Reducer 3: 0/1	
+	Map 1: 0(+1)/1	Map 2: 0/1	Reducer 3: 0/1	
+	Map 1: 0(+1)/1	Map 2: 0/1	Reducer 3: 0/1	
+	Map 1: 0(+1)/1	Map 2: 0(+1)/1	Reducer 3: 0/1	
+	Map 1: 0(+1)/1	Map 2: 0(+1)/1	Reducer 3: 0/1	
+	Map 1: 0(+1)/1	Map 2: 0(+1)/1	Reducer 3: 0/1	
+	Map 1: 0(+1)/1	Map 2: 0(+1)/1	Reducer 3: 0/1	
+	Map 1: 0(+1)/1	Map 2: 0(+1)/1	Reducer 3: 0/1	
+	Map 1: 0(+1)/1	Map 2: 0(+1)/1	Reducer 3: 0/1	
+	Map 1: 0(+1)/1	Map 2: 0(+1)/1	Reducer 3: 0/1	
+	Map 1: 0(+1)/1	Map 2: 0(+1)/1	Reducer 3: 0/1	
+	Map 1: 0(+1)/1	Map 2: 0(+1)/1	Reducer 3: 0/1	
+	Map 1: 1/1	Map 2: 0(+1)/1	Reducer 3: 0/1	
+	Map 1: 1/1	Map 2: 0(+1)/1	Reducer 3: 0/1	
+	Map 1: 1/1	Map 2: 0(+1)/1	Reducer 3: 0/1	
+	Map 1: 1/1	Map 2: 0(+1)/1	Reducer 3: 0/1	
+	Map 1: 1/1	Map 2: 0(+1)/1	Reducer 3: 0/1	
+	Map 1: 1/1	Map 2: 0(+1)/1	Reducer 3: 0/1	
+	Map 1: 1/1	Map 2: 0(+1)/1	Reducer 3: 0/1	
+	Map 1: 1/1	Map 2: 0(+1)/1	Reducer 3: 0/1	
+	Map 1: 1/1	Map 2: 0(+1)/1	Reducer 3: 0/1	
+	Map 1: 1/1	Map 2: 0(+1)/1	Reducer 3: 0/1	
+	Map 1: 1/1	Map 2: 0(+1)/1	Reducer 3: 0/1	
+	Map 1: 1/1	Map 2: 1/1	Reducer 3: 0/1	
+	Map 1: 1/1	Map 2: 1/1	Reducer 3: 0(+1)/1	
+	Map 1: 1/1	Map 2: 1/1	Reducer 3: 1/1	
+	OK
+	right_outer_join
+	1130
+	Time taken: 107.102 seconds, Fetched: 1 row(s)
+	Query ID = root_20151011231711_45ea3d9d-10c6-4d00-a751-dad44c3130a5
+	Total jobs = 1
+	Launching Job 1 out of 1
+	
+	
+	Status: Running (Executing on YARN cluster with App id application_1444600603137_0005)
+	
+	Map 1: -/-	Map 2: -/-	
+	Map 1: -/-	Map 2: -/-	
+	Map 1: -/-	Map 2: 0/1	
+	Map 1: -/-	Map 2: 0/1	
+	Map 1: -/-	Map 2: 0(+1)/1	
+	Map 1: -/-	Map 2: 0(+1)/1	
+	Map 1: -/-	Map 2: 0(+1)/1	
+	Map 1: -/-	Map 2: 0(+1)/1	
+	Map 1: -/-	Map 2: 0(+1)/1	
+	Map 1: -/-	Map 2: 1/1	
+	Map 1: 0(+1)/1	Map 2: 1/1	
+	Map 1: 0(+1)/1	Map 2: 1/1	
+	Map 1: 1/1	Map 2: 1/1	
+	OK
+	s.ymd	s.symbol	s.price_close
+	1995-11-21	AAPL	38.63
+	1995-08-16	AAPL	44.5
+	1995-05-26	AAPL	42.69
+	1995-02-13	AAPL	43.75
+	1994-11-18	AAPL	40.0
+	1994-08-15	AAPL	34.63
+	1994-05-27	AAPL	29.94
+	1994-02-07	AAPL	36.5
+	1993-11-19	AAPL	33.0
+	1993-08-16	AAPL	27.5
+	Time taken: 44.386 seconds, Fetched: 10 row(s)
+	Query ID = root_20151011231755_6873a9da-311c-4bb2-8e1e-4b93dc284f15
+	Total jobs = 1
+	Launching Job 1 out of 1
+	
+	
+	Status: Running (Executing on YARN cluster with App id application_1444600603137_0005)
+	
+	Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+	Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+	Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+	Map 1: 1/1	Map 3: 1/1	Reducer 2: 0/1	
+	Map 1: 1/1	Map 3: 1/1	Reducer 2: 0(+1)/1	
+	Map 1: 1/1	Map 3: 1/1	Reducer 2: 0/1	
+	Map 1: 1/1	Map 3: 1/1	Reducer 2: 1/1	
+	OK
+	s.symbol	_c1	_c2
+	AAPL	175	4.749999921768904
+	GE	955	64.11809981800616
+	Time taken: 15.15 seconds, Fetched: 2 row(s)
+	OK
+	Time taken: 2.435 seconds
+	OK
+	Time taken: 15.914 seconds
+	Query ID = root_20151011231829_ee3cff5b-3384-4ba2-b6fa-63344ecd4863
+	Total jobs = 1
+	Launching Job 1 out of 1
+	
+	
+	Status: Running (Executing on YARN cluster with App id application_1444600603137_0005)
+	
+	Map 1: 0/1	
+	Map 1: 0/1	
+	Map 1: 0(+1)/1	
+	Map 1: 0(+1)/1	
+	Map 1: 0(+1)/1	
+	Map 1: 1/1	
+	Loading data to table default.dividendsorc
+	Table default.dividendsorc stats: [numFiles=1, numRows=15208, totalSize=57104, rawDataSize=4106160]
+	OK
+	_col0	_col1	_col2	_col3
+	Time taken: 34.634 seconds
+	Query ID = root_20151011231903_c3388dfa-b99e-4b19-831e-27cfb3ad0052
+	Total jobs = 1
+	Launching Job 1 out of 1
+	
+	
+	Status: Running (Executing on YARN cluster with App id application_1444600603137_0005)
+	
+	Map 1: 0/1	Reducer 2: 0/1	
+	Map 1: 0/1	Reducer 2: 0/1	
+	Map 1: 0/1	Reducer 2: 0/1	
+	Map 1: 0/1	Reducer 2: 0/1	
+	Map 1: 0(+1)/1	Reducer 2: 0/1	
+	Map 1: 0(+1)/1	Reducer 2: 0/1	
+	Map 1: 1/1	Reducer 2: 0/1	
+	Map 1: 1/1	Reducer 2: 0(+1)/1	
+	Map 1: 1/1	Reducer 2: 0(+1)/1	
+	Map 1: 1/1	Reducer 2: 1/1	
+	Loading data to table default.dividendsorc
+	Moved: 'hdfs://sandbox.hortonworks.com:8020/apps/hive/warehouse/dividendsorc/000000_0' to trash at: hdfs://sandbox.hortonworks.com:8020/user/root/.Trash/Current
+	Table default.dividendsorc stats: [numFiles=1, numRows=15208, totalSize=61717, rawDataSize=4106160]
+	OK
+	_col0	_col1	_col2	_col3
+	Time taken: 25.148 seconds
+
+--A Cartesian product is a join where all the tuples in the left side of the join are paired with all the tuples of the right table. If the left table has 5 rows and the right table has 6 rows, 30 rows of output will be produced:
+
+SELECT * FROM stocks JOIN dividends LIMIT 10;
+SELECT count(*) as Cartesian_product FROM stocks JOIN dividends;
+
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/usr/hdp/2.3.0.0-2557/hadoop/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/usr/hdp/2.3.0.0-2557/spark/lib/spark-assembly-1.3.1.2.3.0.0-2557-hadoop2.7.1.2.3.0.0-2557.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+WARNING: Use "yarn jar" to launch YARN applications.
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/usr/hdp/2.3.0.0-2557/hadoop/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/usr/hdp/2.3.0.0-2557/spark/lib/spark-assembly-1.3.1.2.3.0.0-2557-hadoop2.7.1.2.3.0.0-2557.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+
+Logging initialized using configuration in file:/etc/hive/2.3.0.0-2557/0/hive-log4j.properties
+OK
+xxxxxxxxxcurrenttimeinhivexxxxxxxxxxxx
+2015-10-12 00:04:33
+Time taken: 13.814 seconds, Fetched: 1 row(s)
+OK
+tab_name
+default__dividends_stage_es01_index__
+default__weather1_y01_index__
+departments_udftest
+dept
+dividends
+dividends_stage
+dividendsorc
+sample_07
+sample_08
+stocks
+stocks_stage
+tmp_users
+weather
+weather1
+weather_skewed
+weather_stage
+weathermonth
+weatherorc
+Time taken: 6.109 seconds, Fetched: 18 row(s)
+Warning: Map Join MAPJOIN[8][bigTable=stocks] in task 'Map 1' is a cross product
+Query ID = root_20151012000440_c63c06ab-79c7-49b2-9f70-1623ce8c3198
+Total jobs = 1
+Launching Job 1 out of 1
+
+
+Status: Running (Executing on YARN cluster with App id application_1444600603137_0008)
+
+Map 1: -/-	Map 2: -/-	
+Map 1: 0/1	Map 2: -/-	
+Map 1: 0/1	Map 2: -/-	
+Map 1: 0/1	Map 2: -/-	
+Map 1: 0/1	Map 2: -/-	
+Map 1: 0/1	Map 2: -/-	
+Map 1: 0/1	Map 2: -/-	
+Map 1: 0/1	Map 2: 0/1	
+Map 1: 0/1	Map 2: 0/1	
+Map 1: 0/1	Map 2: 0/1	
+Map 1: 0/1	Map 2: 0/1	
+Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+Map 1: 0(+1)/1	Map 2: 0/1	
+Map 1: 0(+1)/1	Map 2: 1/1	
+Map 1: 0(+1)/1	Map 2: 1/1	
+Map 1: 0(+1)/1	Map 2: 1/1	
+Map 1: 0(+1)/1	Map 2: 1/1	
+Map 1: 0/1	Map 2: 1/1	
+Map 1: 1/1	Map 2: 1/1	
+OK
+stocks.ymd	stocks.price_open	stocks.price_high	stocks.price_low	stocks.price_close	stocks.volume	stocks.price_adj_close	stocks.exchange1	stocks.symbol	dividends.ymd	dividends.dividend	dividends.exchange1	dividends.symbol
+2010-02-08	195.69	197.88	194.0	194.12	17036300	194.12	NASDAQ	AAPL	2007-07-17	2.45	NASDAQ	AACC
+2010-02-08	195.69	197.88	194.0	194.12	17036300	194.12	NASDAQ	AAPL	2002-12-13	0.057	NYSE	IYZ
+2010-02-08	195.69	197.88	194.0	194.12	17036300	194.12	NASDAQ	AAPL	2003-03-07	0.074	NYSE	IYZ
+2010-02-08	195.69	197.88	194.0	194.12	17036300	194.12	NASDAQ	AAPL	2003-06-13	0.112	NYSE	IYZ
+2010-02-08	195.69	197.88	194.0	194.12	17036300	194.12	NASDAQ	AAPL	2003-09-12	0.115	NYSE	IYZ
+2010-02-08	195.69	197.88	194.0	194.12	17036300	194.12	NASDAQ	AAPL	2003-12-12	0.146	NYSE	IYZ
+2010-02-08	195.69	197.88	194.0	194.12	17036300	194.12	NASDAQ	AAPL	2003-12-16	0.133	NYSE	IYZ
+2010-02-08	195.69	197.88	194.0	194.12	17036300	194.12	NASDAQ	AAPL	2004-03-26	0.074	NYSE	IYZ
+2010-02-08	195.69	197.88	194.0	194.12	17036300	194.12	NASDAQ	AAPL	2004-06-25	0.107	NYSE	IYZ
+2010-02-08	195.69	197.88	194.0	194.12	17036300	194.12	NASDAQ	AAPL	2004-09-24	0.198	NYSE	IYZ
+Time taken: 202.19 seconds, Fetched: 10 row(s)
+Warning: Map Join MAPJOIN[12][bigTable=stocks] in task 'Map 1' is a cross product
+Query ID = root_20151012000805_fac1bf91-a183-4683-b93d-2d49a5c97d55
+Total jobs = 1
+Launching Job 1 out of 1
+
+
+Status: Running (Executing on YARN cluster with App id application_1444600603137_0008)
+
+Map 1: -/-	Map 3: -/-	Reducer 2: 0/1	
+Map 1: -/-	Map 3: -/-	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: -/-	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: -/-	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: -/-	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: -/-	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: -/-	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: -/-	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: -/-	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: -/-	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: -/-	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: -/-	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: -/-	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: -/-	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: -/-	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: 0/1	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: 0/1	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: 0/1	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: 0/1	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: 0/1	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: 0/1	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: 0/1	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: 0/1	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: 0/1	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: 0/1	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: 0/1	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: 0/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 1/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 1/1	Map 3: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Map 3: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Map 3: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 1/1	Map 3: 1/1	Reducer 2: 1/1	
+Map 1: 1/1	Map 3: 1/1	Reducer 2: 1/1	
+OK
+cartesian_product
+2406742040
+Time taken: 294.084 seconds, Fetched: 1 row(s)
+
+SET hive.cli.print.header = true;
+set hive.cli.print.current.db = true;
+SET hive.execution.engine=tez;
+SET hive.exec.parallel=true;
+SET hive.vectorized.execution.reduce.enabled=true;
+SET hive.exec.dynamic.partition.mode=nonstrict;
+SET hive.exec.dynamic.partition=true;
+SET hive.enforce.bucketing=true;
+
+SELECT FROM_UNIXTIME(UNIX_TIMESTAMP()) as XXXXXXXXXCurrentTimeInHIVEXXXXXXXXXXXX;
+SHOW TABLES; 
+
+SHOW PARTITIONS stocks PARTITION(exchange1,symbol);
+ 
+--A Cartesian product is a join where all the tuples in the left side of the join are paired with all the tuples of the right table. If the left table has 5 rows and the right table has 6 rows, 30 rows of output will be produced:
+
+SELECT * FROM stocks JOIN dividends LIMIT 10;
+SELECT count(*) as Cartesian_product FROM stocks JOIN dividends;
+
+SELECT count(*) as stocks FROM stocks ;
+SELECT count(*) as dividends FROM dividends;
+SELECT count(*) as Cartesian_product FROM stocks JOIN dividends;
+
+DROP TABLE IF EXISTS stocksBucket PURGE;
+CREATE TABLE IF NOT EXISTS stocksBucket (
+symbol STRING,
+ymd STRING,
+price_open FLOAT,
+price_high FLOAT,
+price_low FLOAT,
+price_close FLOAT,
+volume INT,
+price_adj_close FLOAT)
+	PARTITIONED BY (exchange1 STRING)
+	CLUSTERED BY (symbol) SORTED by (YMD) into 4 buckets
+	STORED AS ORC  tblproperties("orc.compress"="SNAPPY");
+
+INSERT OVERWRITE TABLE stocksBucket
+	PARTITION (exchange1)
+	SELECT symbol,ymd,price_open,price_high,price_low,
+		price_close,volume,price_adj_close,exchange1 --- important to have the partition calumn last
+		FROM stocks;
+
+DESCRIBE EXTENDED stocksBucket;
+		
+SELECT * FROM stocksBucket TABLESAMPLE(BUCKET 4 OUT OF 4 on symbol) LIMIT 10;
+
+-- SELECT * FROM stocksBucket TABLESAMPLE(2 PERCENT); 
+--FAILED: SemanticException 3:39 Percentage sampling is not supported in org.apache.hadoop.hive.ql.io.HiveInputFormat. Error encountered near token '2'
+
+SELECT * FROM stocksBucket TABLESAMPLE(10 ROWS);
+
+SELECT * FROM stocksBucket TABLESAMPLE(1M); --BY size bytes
+
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/usr/hdp/2.3.0.0-2557/hadoop/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/usr/hdp/2.3.0.0-2557/spark/lib/spark-assembly-1.3.1.2.3.0.0-2557-hadoop2.7.1.2.3.0.0-2557.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+WARNING: Use "yarn jar" to launch YARN applications.
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/usr/hdp/2.3.0.0-2557/hadoop/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/usr/hdp/2.3.0.0-2557/spark/lib/spark-assembly-1.3.1.2.3.0.0-2557-hadoop2.7.1.2.3.0.0-2557.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+
+Logging initialized using configuration in file:/etc/hive/2.3.0.0-2557/0/hive-log4j.properties
+OK
+xxxxxxxxxcurrenttimeinhivexxxxxxxxxxxx
+2015-10-12 20:39:33
+Time taken: 9.42 seconds, Fetched: 1 row(s)
+OK
+tab_name
+default__dividends_stage_es01_index__
+default__weather1_y01_index__
+departments_udftest
+dept
+dividends
+dividends_stage
+dividendsorc
+sample_07
+sample_08
+stocks
+stocks_stage
+stocksbucket
+tmp_users
+weather
+weather1
+weather_skewed
+weather_stage
+weathermonth
+weatherorc
+Time taken: 0.658 seconds, Fetched: 19 row(s)
+OK
+partition
+exchange1=NASDAQ/symbol=AAPL
+exchange1=NASDAQ/symbol=INTC
+exchange1=NYSE/symbol=GE
+exchange1=NYSE/symbol=IBM
+Time taken: 1.271 seconds, Fetched: 4 row(s)
+Warning: Map Join MAPJOIN[8][bigTable=stocks] in task 'Map 1' is a cross product
+Query ID = root_20151012203936_399052d6-6334-4501-bd1c-670ff65f8f4f
+Total jobs = 1
+Launching Job 1 out of 1
+
+
+Status: Running (Executing on YARN cluster with App id application_1444678512215_0004)
+
+Map 1: -/-	Map 2: -/-	
+Map 1: 0/1	Map 2: -/-	
+Map 1: 0/1	Map 2: -/-	
+Map 1: 0/1	Map 2: 0/1	
+Map 1: 0/1	Map 2: 0/1	
+Map 1: 0/1	Map 2: 0/1	
+Map 1: 0/1	Map 2: 0/1	
+Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+Map 1: 0(+1)/1	Map 2: 0(+1)/1	
+Map 1: 0(+1)/1	Map 2: 1/1	
+Map 1: 0(+1)/1	Map 2: 1/1	
+Map 1: 0(+1)/1	Map 2: 1/1	
+Map 1: 1/1	Map 2: 1/1	
+OK
+stocks.ymd	stocks.price_open	stocks.price_high	stocks.price_low	stocks.price_close	stocks.volume	stocks.price_adj_close	stocks.exchange1	stocks.symbol	dividends.ymd	dividends.dividend	dividends.exchange1	dividends.symbol
+2010-02-08	195.69	197.88	194.0	194.12	17036300	194.12	NASDAQ	AAPL	2007-07-17	2.45	NASDAQ	AACC
+2010-02-08	195.69	197.88	194.0	194.12	17036300	194.12	NASDAQ	AAPL	2002-12-13	0.057	NYSE	IYZ
+2010-02-08	195.69	197.88	194.0	194.12	17036300	194.12	NASDAQ	AAPL	2003-03-07	0.074	NYSE	IYZ
+2010-02-08	195.69	197.88	194.0	194.12	17036300	194.12	NASDAQ	AAPL	2003-06-13	0.112	NYSE	IYZ
+2010-02-08	195.69	197.88	194.0	194.12	17036300	194.12	NASDAQ	AAPL	2003-09-12	0.115	NYSE	IYZ
+2010-02-08	195.69	197.88	194.0	194.12	17036300	194.12	NASDAQ	AAPL	2003-12-12	0.146	NYSE	IYZ
+2010-02-08	195.69	197.88	194.0	194.12	17036300	194.12	NASDAQ	AAPL	2003-12-16	0.133	NYSE	IYZ
+2010-02-08	195.69	197.88	194.0	194.12	17036300	194.12	NASDAQ	AAPL	2004-03-26	0.074	NYSE	IYZ
+2010-02-08	195.69	197.88	194.0	194.12	17036300	194.12	NASDAQ	AAPL	2004-06-25	0.107	NYSE	IYZ
+2010-02-08	195.69	197.88	194.0	194.12	17036300	194.12	NASDAQ	AAPL	2004-09-24	0.198	NYSE	IYZ
+Time taken: 59.258 seconds, Fetched: 10 row(s)
+Warning: Map Join MAPJOIN[11][bigTable=stocks] in task 'Map 1' is a cross product
+Query ID = root_20151012204035_b5d5921e-b1cd-4d79-840e-f7d5edd81b7c
+Total jobs = 1
+Launching Job 1 out of 1
+
+
+Status: Running (Executing on YARN cluster with App id application_1444678512215_0004)
+
+Map 1: -/-	Map 3: -/-	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: -/-	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: -/-	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: -/-	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: 0/1	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: 0/1	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: 0/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 1/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 1/1	Map 3: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Map 3: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Map 3: 1/1	Reducer 2: 1/1	
+OK
+cartesian_product
+2406742040
+Time taken: 72.932 seconds, Fetched: 1 row(s)
+OK
+stocks
+158255
+Time taken: 6.08 seconds, Fetched: 1 row(s)
+OK
+dividends
+15208
+Time taken: 1.382 seconds, Fetched: 1 row(s)
+Warning: Map Join MAPJOIN[11][bigTable=stocks] in task 'Map 1' is a cross product
+Query ID = root_20151012204156_e706ae91-ed5e-4c8a-a624-aa402f594ad1
+Total jobs = 1
+Launching Job 1 out of 1
+
+
+Status: Running (Executing on YARN cluster with App id application_1444678512215_0004)
+
+Map 1: -/-	Map 3: -/-	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: -/-	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: -/-	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: 0/1	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: 0/1	Reducer 2: 0/1	
+Map 1: 0/1	Map 3: 0/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 0(+1)/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 0(+1)/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 1/1	Map 3: 1/1	Reducer 2: 0/1	
+Map 1: 1/1	Map 3: 1/1	Reducer 2: 0(+1)/1	
+Map 1: 1/1	Map 3: 1/1	Reducer 2: 1/1	
+OK
+cartesian_product
+2406742040
+Time taken: 73.291 seconds, Fetched: 1 row(s)
+OK
+Time taken: 3.921 seconds
+OK
+Time taken: 0.518 seconds
+Query ID = root_20151012204314_67f77857-c769-4989-b4ad-7b2cd0d0fc13
+Total jobs = 1
+Launching Job 1 out of 1
+
+
+Status: Running (Executing on YARN cluster with App id application_1444678512215_0004)
+
+Map 1: 0/1	Reducer 2: 0/4	
+Map 1: 0(+1)/1	Reducer 2: 0/4	
+Map 1: 0(+1)/1	Reducer 2: 0/4	
+Map 1: 0(+1)/1	Reducer 2: 0/4	
+Map 1: 1/1	Reducer 2: 0/4	
+Map 1: 1/1	Reducer 2: 0(+1)/4	
+Map 1: 1/1	Reducer 2: 0(+1)/4	
+Map 1: 1/1	Reducer 2: 1(+0)/4	
+Map 1: 1/1	Reducer 2: 1(+1)/4	
+Map 1: 1/1	Reducer 2: 2(+0)/4	
+Map 1: 1/1	Reducer 2: 2(+0)/4	
+Map 1: 1/1	Reducer 2: 2(+1)/4	
+Map 1: 1/1	Reducer 2: 2(+1)/4	
+Map 1: 1/1	Reducer 2: 2(+2)/4	
+Map 1: 1/1	Reducer 2: 2(+2)/4	
+Map 1: 1/1	Reducer 2: 2(+2)/4	
+Map 1: 1/1	Reducer 2: 2(+2)/4	
+Map 1: 1/1	Reducer 2: 2(+1)/4	
+Map 1: 1/1	Reducer 2: 3(+0)/4	
+Map 1: 1/1	Reducer 2: 4/4	
+Map 1: 1/1	Reducer 2: 4/4	
+Loading data to table default.stocksbucket partition (exchange1=null)
+	 Time taken for load dynamic partitions : 2377
+	Loading partition {exchange1=NYSE}
+	Loading partition {exchange1=NASDAQ}
+	 Time taken for adding to write entity : 10
+Partition default.stocksbucket{exchange1=NASDAQ} stats: [numFiles=4, numRows=85601, totalSize=872786, rawDataSize=17633806]
+Partition default.stocksbucket{exchange1=NYSE} stats: [numFiles=4, numRows=72654, totalSize=653313, rawDataSize=14833525]
+OK
+symbol	ymd	price_open	price_high	price_low	price_close	volume	price_adj_close	exchange1
+Time taken: 67.331 seconds
+OK
+col_name	data_type	comment
+symbol              	string              	                    
+ymd                 	string              	                    
+price_open          	float               	                    
+price_high          	float               	                    
+price_low           	float               	                    
+price_close         	float               	                    
+volume              	int                 	                    
+price_adj_close     	float               	                    
+exchange1           	string              	                    
+	 	 
+# Partition Information	 	 
+# col_name            	data_type           	comment             
+	 	 
+exchange1           	string              	                    
+	 	 
+Detailed Table Information	Table(tableName:stocksbucket, dbName:default, owner:root, createTime:1444682594, lastAccessTime:0, retention:0, sd:StorageDescriptor(cols:[FieldSchema(name:symbol, type:string, comment:null), FieldSchema(name:ymd, type:string, comment:null), FieldSchema(name:price_open, type:float, comment:null), FieldSchema(name:price_high, type:float, comment:null), FieldSchema(name:price_low, type:float, comment:null), FieldSchema(name:price_close, type:float, comment:null), FieldSchema(name:volume, type:int, comment:null), FieldSchema(name:price_adj_close, type:float, comment:null), FieldSchema(name:exchange1, type:string, comment:null)], location:hdfs://sandbox.hortonworks.com:8020/apps/hive/warehouse/stocksbucket, inputFormat:org.apache.hadoop.hive.ql.io.orc.OrcInputFormat, outputFormat:org.apache.hadoop.hive.ql.io.orc.OrcOutputFormat, compressed:false, numBuckets:4, serdeInfo:SerDeInfo(name:null, serializationLib:org.apache.hadoop.hive.ql.io.orc.OrcSerde, parameters:{serialization.format=1}), bucketCols:[symbol], sortCols:[Order(col:ymd, order:1)], parameters:{}, skewedInfo:SkewedInfo(skewedColNames:[], skewedColValues:[], skewedColValueLocationMaps:{}), storedAsSubDirectories:false), partitionKeys:[FieldSchema(name:exchange1, type:string, comment:null)], parameters:{orc.compress=SNAPPY, transient_lastDdlTime=1444682594}, viewOriginalText:null, viewExpandedText:null, tableType:MANAGED_TABLE)	
+Time taken: 0.887 seconds, Fetched: 16 row(s)
+OK
+stocksbucket.symbol	stocksbucket.ymd	stocksbucket.price_open	stocksbucket.price_high	stocksbucket.price_low	stocksbucket.price_close	stocksbucket.volume	stocksbucket.price_adj_close	stocksbucket.exchange1
+Time taken: 0.885 seconds
+OK
+stocksbucket.symbol	stocksbucket.ymd	stocksbucket.price_open	stocksbucket.price_high	stocksbucket.price_low	stocksbucket.price_close	stocksbucket.volume	stocksbucket.price_adj_close	stocksbucket.exchange1
+AAPL	1984-09-07	26.5	26.87	26.25	26.5	2981600	3.02	NASDAQ
+AAPL	1984-09-07	26.5	26.87	26.25	26.5	2981600	3.02	NASDAQ
+AAPL	1984-09-07	26.5	26.87	26.25	26.5	2981600	3.02	NASDAQ
+AAPL	1984-09-07	26.5	26.87	26.25	26.5	2981600	3.02	NASDAQ
+AAPL	1984-09-07	26.5	26.87	26.25	26.5	2981600	3.02	NASDAQ
+AAPL	1984-09-10	26.5	26.62	25.87	26.37	2346400	3.01	NASDAQ
+AAPL	1984-09-10	26.5	26.62	25.87	26.37	2346400	3.01	NASDAQ
+AAPL	1984-09-10	26.5	26.62	25.87	26.37	2346400	3.01	NASDAQ
+AAPL	1984-09-10	26.5	26.62	25.87	26.37	2346400	3.01	NASDAQ
+AAPL	1984-09-10	26.5	26.62	25.87	26.37	2346400	3.01	NASDAQ
+Time taken: 0.561 seconds, Fetched: 10 row(s)
+FAILED: SemanticException 3:39 Total Length sampling is not supported in org.apache.hadoop.hive.ql.io.HiveInputFormat. Error encountered near token '1M'
+
+

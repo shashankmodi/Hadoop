@@ -1,0 +1,152 @@
+WARNING: Use "yarn jar" to launch YARN applications.
+15/10/15 21:07:44 INFO pig.ExecTypeProvider: Trying ExecType : LOCAL
+15/10/15 21:07:44 INFO pig.ExecTypeProvider: Trying ExecType : MAPREDUCE
+15/10/15 21:07:44 INFO pig.ExecTypeProvider: Trying ExecType : TEZ_LOCAL
+15/10/15 21:07:44 INFO pig.ExecTypeProvider: Trying ExecType : TEZ
+15/10/15 21:07:44 INFO pig.ExecTypeProvider: Picked TEZ as the ExecType
+Found 14 items
+-rw-r--r--   1 root hdfs     234424 2015-10-15 20:35 /user/root/data/baseball.txt
+drwxrwxrwx   - root hdfs          0 2015-09-25 19:27 /user/root/data/book
+drwxr-xr-x   - root hdfs          0 2015-09-25 19:28 /user/root/data/bookout
+drwxr-xr-x   - root hdfs          0 2015-09-25 21:38 /user/root/data/bookoutpig
+-rw-r--r--   1 root hdfs        154 2015-10-02 21:22 /user/root/data/dept.txt
+drwxr-xr-x   - root hdfs          0 2015-10-12 00:29 /user/root/data/dividends
+drwxrwxrwx   - root hdfs          0 2015-10-12 00:14 /user/root/data/input
+drwxr-xr-x   - root hdfs          0 2015-09-25 19:06 /user/root/data/output
+drwxr-xr-x   - root hdfs          0 2015-10-10 22:57 /user/root/data/stocks
+drwxrwxrwx   - root hdfs          0 2015-10-10 13:32 /user/root/data/tables.csv
+-rwxrwxrwx   1 root hdfs    3291626 2015-09-25 16:07 /user/root/data/warandpeace.txt
+drwxrwxrwx   - root hdfs          0 2015-09-26 02:19 /user/root/data/weather
+-rwxrwxrwx   1 root hdfs  352609342 2015-10-07 17:00 /user/root/data/weatherperf.csv
+drwxr-xr-x   - root hdfs          0 2015-09-25 23:12 /user/root/data/weatherpigresults
+228.9 K  /user/root/data/baseball.txt
+3.1 M    /user/root/data/book
+2.6 M    /user/root/data/bookout
+345.0 K  /user/root/data/bookoutpig
+154      /user/root/data/dept.txt
+395.9 K  /user/root/data/dividends
+2.0 M    /user/root/data/input
+868      /user/root/data/output
+111.1 M  /user/root/data/stocks
+45.0 K   /user/root/data/tables.csv
+3.1 M    /user/root/data/warandpeace.txt
+0        /user/root/data/weather
+336.3 M  /user/root/data/weatherperf.csv
+2.4 K    /user/root/data/weatherpigresults
+player: {name: chararray,team: chararray,pos: {t: (p: chararray)},bat: map[]}
+2015-10-15 21:07:58,774 [main] INFO  org.apache.hadoop.mapreduce.lib.output.FileOutputCommitter - File Output Committer Algorithm version is 1
+2015-10-15 21:07:59,250 [main] INFO  org.apache.hadoop.mapreduce.lib.input.FileInputFormat - Total input paths to process : 1
+2015-10-15 21:08:00,287 [main] INFO  org.apache.hadoop.mapreduce.lib.output.FileOutputCommitter - Saved output of task 'attempt__0001_m_000001_1' to hdfs://sandbox.hortonworks.com:8020/tmp/temp763701748/tmp509768842/_temporary/0/task__0001_m_000001
+2015-10-15 21:08:00,407 [main] INFO  org.apache.hadoop.mapreduce.lib.input.FileInputFormat - Total input paths to process : 1
+(Jorge Posada,New York Yankees,{(Catcher),(Designated_hitter)},[on_base_percentage#0.379,hit_by_pitch#65,games#1594,grand_slams#7,home_runs#243,gdb#163,sacrifice_flies#43,at_bats#5365,base_on_balls#838,ibbs#71,sacrifice_hits#1,hits#1488,rbis#964,slugging_percentage#0.48,batting_average#0.277,triples#9,doubles#342,strikeouts#1278,runs#817])
+(Landon Powell,Oakland Athletics,{(Catcher),(First_baseman)},[on_base_percentage#0.297,games#46,grand_slams#1,home_runs#7,at_bats#140,sacrifice_flies#1,gdb#3,base_on_balls#14,hits#32,rbis#30,slugging_percentage#0.429,batting_average#0.229,doubles#7,strikeouts#36,runs#19])
+(Mart?n Prado,Atlanta Braves,{(Second_baseman),(Infielder),(Left_fielder)},[on_base_percentage#0.36,hit_by_pitch#3,games#258,home_runs#14,gdb#22,at_bats#779,sacrifice_flies#6,base_on_balls#65,ibbs#1,sacrifice_hits#15,hits#239,rbis#93,slugging_percentage#0.451,batting_average#0.307,triples#5,doubles#60,strikeouts#101,runs#108])
+(David Price,Tampa Bay Rays,{(Starting_pitcher),(Pitcher)},[at_bats#3,games#28,on_base_percentage#0.333,hits#1,slugging_percentage#0.333,batting_average#0.333])
+(Jason Pridie,Minnesota Twins,{(Outfielder),(Center_fielder),(Left_fielder)},[at_bats#4,games#11,base_on_balls#1,sacrifice_hits#1,on_base_percentage#0.2,strikeouts#1,runs#3])
+(Scott Proctor,Florida Marlins,{(Relief_pitcher),(Pitcher)},[at_bats#3,games#136,strikeouts#3])
+(Albert Pujols,St. Louis Cardinals,{(Third_baseman),(First_baseman),(Left_fielder)},[on_base_percentage#0.427,hit_by_pitch#69,games#1399,grand_slams#11,home_runs#366,gdb#180,sacrifice_flies#55,at_bats#5146,base_on_balls#811,ibbs#198,sacrifice_hits#1,hits#1717,rbis#1112,slugging_percentage#0.628,batting_average#0.334,triples#14,doubles#387,strikeouts#570,runs#1071])
+(Nick Punto,Minnesota Twins,{(Second_baseman),(Third_baseman),(Infielder),(Shortstop)},[on_base_percentage#0.322,hit_by_pitch#2,games#736,grand_slams#1,home_runs#12,gdb#43,sacrifice_flies#20,at_bats#2216,base_on_balls#250,ibbs#4,sacrifice_hits#42,hits#550,rbis#178,slugging_percentage#0.324,batting_average#0.248,triples#20,doubles#93,strikeouts#415,runs#301])
+(David Purcey,Toronto Blue Jays,{(Pitcher)},[at_bats#1,games#10,strikeouts#1])
+(J.J. Putz,New York Mets,{(Relief_pitcher)},[games#162])
+2015-10-15 21:08:00,776 [main] INFO  org.apache.hadoop.mapreduce.lib.output.FileOutputCommitter - File Output Committer Algorithm version is 1
+2015-10-15 21:08:00,860 [main] INFO  org.apache.hadoop.mapreduce.lib.input.FileInputFormat - Total input paths to process : 1
+2015-10-15 21:08:01,400 [main] INFO  org.apache.hadoop.mapreduce.lib.output.FileOutputCommitter - Saved output of task 'attempt__0001_m_000001_1' to hdfs://sandbox.hortonworks.com:8020/tmp/temp763701748/tmp-1715795471/_temporary/0/task__0001_m_000001
+2015-10-15 21:08:01,518 [main] INFO  org.apache.hadoop.mapreduce.lib.input.FileInputFormat - Total input paths to process : 1
+(767.0)
+()
+(64.0)
+()
+()
+()
+(613.0)
+(246.0)
+()
+()
+2015-10-15 21:08:02,403 [main] INFO  org.apache.tez.mapreduce.hadoop.MRInputHelpers - Generating mapreduce api input splits
+2015-10-15 21:08:02,512 [main] INFO  org.apache.hadoop.mapreduce.lib.input.FileInputFormat - Total input paths to process : 1
+2015-10-15 21:08:02,582 [main] INFO  org.apache.tez.mapreduce.hadoop.MRInputHelpers - NumSplits: 1, SerializedSize: 397
+2015-10-15 21:08:06,318 [PigTezLauncher-0] INFO  org.apache.tez.client.TezClient - Tez Client Version: [ component=tez-api, version=0.7.0.2.3.0.0-2557, revision=ab9a0295b8de3f8711cf2bd4d837cd0b66be7cfa, SCM-URL=scm:git:https://git-wip-us.apache.org/repos/asf/tez.git, buildTime=20150714-0943 ]
+2015-10-15 21:08:07,495 [PigTezLauncher-0] INFO  org.apache.hadoop.yarn.client.api.impl.TimelineClientImpl - Timeline service address: http://sandbox.hortonworks.com:8188/ws/v1/timeline/
+2015-10-15 21:08:07,797 [PigTezLauncher-0] INFO  org.apache.hadoop.yarn.client.RMProxy - Connecting to ResourceManager at sandbox.hortonworks.com/10.0.2.15:8050
+2015-10-15 21:08:08,231 [PigTezLauncher-0] INFO  org.apache.tez.client.TezClient - Using org.apache.tez.dag.history.ats.acls.ATSHistoryACLPolicyManager to manage Timeline ACLs
+2015-10-15 21:08:08,700 [PigTezLauncher-0] INFO  org.apache.hadoop.yarn.client.api.impl.TimelineClientImpl - Timeline service address: http://sandbox.hortonworks.com:8188/ws/v1/timeline/
+2015-10-15 21:08:08,700 [PigTezLauncher-0] INFO  org.apache.tez.client.TezClient - Session mode. Starting session.
+2015-10-15 21:08:08,709 [PigTezLauncher-0] INFO  org.apache.tez.client.TezClientUtils - Using tez.lib.uris value from configuration: /hdp/apps/2.3.0.0-2557/tez/tez.tar.gz
+2015-10-15 21:08:09,150 [PigTezLauncher-0] INFO  org.apache.tez.client.TezClient - Tez system stage directory hdfs://sandbox.hortonworks.com:8020/tmp/temp221111308/.tez/application_1444934820319_0002 doesn't exist and is created
+2015-10-15 21:08:11,022 [PigTezLauncher-0] INFO  org.apache.tez.dag.history.ats.acls.ATSHistoryACLPolicyManager - Created Timeline Domain for History ACLs, domainId=Tez_ATS_application_1444934820319_0002
+2015-10-15 21:08:12,155 [PigTezLauncher-0] INFO  org.apache.hadoop.yarn.client.api.impl.YarnClientImpl - Submitted application application_1444934820319_0002
+2015-10-15 21:08:12,191 [PigTezLauncher-0] INFO  org.apache.tez.client.TezClient - The url to track the Tez Session: http://sandbox.hortonworks.com:8088/proxy/application_1444934820319_0002/
+2015-10-15 21:08:31,584 [PigTezLauncher-0] INFO  org.apache.tez.client.TezClient - Submitting dag to TezSession, sessionName=PigLatin:tmp.pig, applicationId=application_1444934820319_0002, dagName=PigLatin:tmp.pig-0_scope-0
+2015-10-15 21:08:33,100 [PigTezLauncher-0] INFO  org.apache.tez.client.TezClient - Submitted dag to TezSession, sessionName=PigLatin:tmp.pig, applicationId=application_1444934820319_0002, dagName=PigLatin:tmp.pig-0_scope-0
+2015-10-15 21:08:33,941 [PigTezLauncher-0] INFO  org.apache.hadoop.yarn.client.api.impl.TimelineClientImpl - Timeline service address: http://sandbox.hortonworks.com:8188/ws/v1/timeline/
+2015-10-15 21:08:33,951 [PigTezLauncher-0] INFO  org.apache.hadoop.yarn.client.RMProxy - Connecting to ResourceManager at sandbox.hortonworks.com/10.0.2.15:8050
+2015-10-15 21:09:06,197 [PigTezLauncher-0] INFO  org.apache.tez.common.counters.Limits - Counter limits initialized with parameters:  GROUP_NAME_MAX=256, MAX_GROUPS=500, COUNTER_NAME_MAX=64, MAX_COUNTERS=1200
+2015-10-15 21:09:07,108 [main] INFO  org.apache.hadoop.mapreduce.lib.input.FileInputFormat - Total input paths to process : 1
+(767.0)
+(64.0)
+(613.0)
+(246.0)
+(125.0)
+(65.0)
+(36.0)
+(19.0)
+(48.0)
+(61.0)
+2015-10-15 21:09:07,972 [Thread-23] INFO  org.apache.tez.client.TezClient - Shutting down Tez Session, sessionName=PigLatin:tmp.pig, applicationId=application_1444934820319_0002
+
+
+%default TODAYS_DATE `date +%Y-%m-%d`;
+%default V30_DAYS_AGO `date -d "$TODAYS_DATE - 30 day" +%Y/%m/%d`;
+
+playercnt =  foreach (group player all) generate COUNT($1),$TODAYS_DATE,$V30_DAYS_AGO,ToString(SubtractDuration(CurrentTime(),'P30D'), 'yyyy-MM-dd');
+playercnt1 =  foreach (group player all) generate COUNT($1),ToString(CurrentTime(),'yyyy-MM-dd'),CurrentTime();
+dump playercnt;
+dump playercnt1;
+
+
+(1025,1990,14,2015-09-15)
+(1025,2015-10-15,2015-10-15T23:55:47.257Z)
+
+--register.pig
+register '/media/sf_Data/piggybank.jar';
+dividends = load '/user/root/data/dividends/dividends.csv'  using PigStorage(',')
+		as (exchange1:chararray, symbol:chararray,
+            date:chararray, dividend:float);
+backwards = foreach dividends generate symbol,
+                org.apache.pig.piggybank.evaluation.string.Reverse(symbol);
+backwards10 = LIMIT backwards 10;
+dump backwards10;
+
+
+(AMTD,DTMA)
+(AHGP,PGHA)
+(AHGP,PGHA)
+(AHGP,PGHA)
+(AHGP,PGHA)
+(AHGP,PGHA)
+(AHGP,PGHA)
+(AHGP,PGHA)
+(AHGP,PGHA)
+(AHGP,PGHA)
+
+--flatten.pig
+player = load '/user/root/data/baseball.txt' 
+	  as (name:chararray, team:chararray,
+		pos:bag{t:(p:chararray)},bat:map[]);
+/*player = load '/user/root/data/baseball.txt'
+	as (name:chararray, team:chararray,
+	    pos:bag{t:(p:chararray)}, bat:map[]);  */  
+player1 = LIMIT player 1;
+dump player1;
+
+pos     = foreach player generate name, flatten(pos) as position;
+bypos   = group pos by position;
+bypos1 = LIMIT bypos 1;
+dump bypos1;
+
+
+(Jorge Posada,New York Yankees,{(Catcher),(Designated_hitter)},[on_base_percentage#0.379,hit_by_pitch#65,games#1594,grand_slams#7,home_runs#243,gdb#163,sacrifice_flies#43,at_bats#5365,base_on_balls#838,ibbs#71,sacrifice_hits#1,hits#1488,rbis#964,slugging_percentage#0.48,batting_average#0.277,triples#9,doubles#342,strikeouts#1278,runs#817])
+
+(Catcher,{(Ronny Paulino,Catcher),(Jason Kendall,Catcher),(Dusty Brown,Catcher),(Shawn Riggans,Catcher),(Ryan Garko,Catcher),(Miguel Olivo,Catcher),(George Kottaras,Catcher),(Jason Varitek,Catcher),(Mike Rivera,Catcher),(Dioner Navarro,Catcher),(Mike Napoli,Catcher),(Gerald Laird,Catcher),(Chris Gimenez,Catcher),(David Ross,Catcher),(Henry Blanco,Catcher),(Landon Powell,Catcher),(Jos? Morales,Catcher),(Luke Montz,Catcher),(Miguel Montero,Catcher),(Yadier Molina,Catcher),(Jos? Molina,Catcher),(Wil Nieves,Catcher),(Rob Bowen,Catcher),(Mark Wagner,Catcher),(Jason LaRue,Catcher),(Brian McCann,Catcher),(Jose Lobaton,Catcher),(J. R. Towles,Catcher),(Lou Marson,Catcher),(Humberto Quintero,Catcher),(Joe Mauer,Catcher),(Russell Martin,Catcher),(V?ctor Mart?nez,Catcher),(Jeff Mathis,Catcher),(Mike Rabelo,Catcher),(Brad Ausmus,Catcher),(Ryan Hanigan,Catcher),(Brett Hayes,Catcher),(Ryan Budde,Catcher),(Danny Ardoin,Catcher),(Robinzon Diaz,Catcher),(Ram?n Hern?ndez,Catcher),(Taylor Teagarden,Catcher),(Craig Tatum,Catcher),(Chris Coste,Catcher),(Francisco Cervelli,Catcher),(Jake Fox,Catcher),(Max Ram?rez,Catcher),(Wyatt Toregas,Catcher),(Kurt Suzuki,Catcher),(Yorvit Torrealba,Catcher),(Bobby Wilson,Catcher),(John Buck,Catcher),(Gregg Zaun,Catcher),(Matt Treanor,Catcher),(Ram?n Castro,Catcher),(Wilkin Castillo,Catcher),(Josh Bard,Catcher),(Geovany Soto,Catcher),(Koyie Hill,Catcher),(Chris Snyder,Catcher),(A.J. Ellis,Catcher),(Kelly Shoppach,Catcher),(Jes?s Flores,Catcher),(Ryan Doumit,Catcher),(Mike Redmond,Catcher),(Brian Schneider,Catcher),(Paul Bako,Catcher),(Jorge Posada,Catcher),(Pablo Sandoval,Catcher),(Nicky Hundley,Catcher),(Clint Sammons,Catcher),(Jarrod Saltalamacchia,Catcher),(Angel Salome,Catcher),(Dusty Ryan,Catcher),(Carlos Ruiz,Catcher),(Chris Iannetta,Catcher),(Jeff Clement,Catcher),(Brandon Inge,Catcher),(A. J. Pierzynski,Catcher),(Jason Jaramillo,Catcher),(John Jaso,Catcher),(John Baker,Catcher),(Brayan Pe?,Catcher),(Kenji Johjima,Catcher),(Robinson Cancel,Catcher),(Rob Johnson,Catcher)})
+
+

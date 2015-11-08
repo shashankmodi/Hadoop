@@ -11,3 +11,109 @@ STORE C1 into '/user/root/data/input/AAPL' using PigStorage(',');
 STORE C2 into '/user/root/data/input/INTC' using PigStorage(',');
 STORE C3 into '/user/root/data/input/GE' using PigStorage(',');
 STORE C4 into '/user/root/data/input/IBM' using PigStorage(',');
+
+
+batting = LOAD ‘Batting.csv’ USING PigStorage(‘,’);
+raw_runs = FILTER batting BY $1>0;
+runs = FOREACH raw_runs GENERATE $0 AS playerID, $1 AS year, $8 AS runs;
+grp_data = GROUP runs BY (year);
+max_runs = FOREACH grp_data GENERATE group as grp, MAX(runs.runs) AS max_runs;
+join_max_runs = JOIN max_runs BY ($0, max_runs), runs BY (year, runs);
+join_data = FOREACH join_max_runs GENERATE $0 AS year, $2 AS playerID, $1 AS runs;
+DUMP join_data;
+
+batting = LOAD 'Batting.csv' USING PigStorage(',');
+
+-- Strip off the first row (column headings) so the Max function can be used later without errors
+raw_runs = FILTER batting BY $1>0;
+
+-- Create a table with all rows, but only 3 columns
+-- Columns are numbered starting with zero, so the first column is $0, the second is $1, etc.
+all_runs = FOREACH raw_runs GENERATE $0 AS playerID, $1 AS year, $8 AS runs;
+-- Show sample output of all_runs
+limit_all_runs = limit all_runs 5;
+describe all_runs;
+dump limit_all_runs;
+
+-- Group by year
+grp_data = GROUP all_runs BY (year);
+-- Show sample output of grp_data
+limit_grp_data = limit grp_data 5;
+describe grp_data;
+dump limit_grp_data;
+
+-- Create a table that contains each year and the max runs for that year
+max_runs_year = FOREACH grp_data GENERATE group as max_year, MAX(all_runs.runs) AS max_runs;
+-- Show sample output of grp_data
+limit_max_runs_year = limit max_runs_year 5;
+describe max_runs_year;
+dump limit_max_runs_year;
+
+-- Join max_runs_year and all_runs by matching on both year and runs to find the playerID with the max runs each year
+join_max_runs = JOIN max_runs_year BY (max_year, max_runs), all_runs BY (year, runs);
+-- Show sample output of join_max_runs
+limit_join_max_runs = limit join_max_runs 5;
+describe join_max_runs;
+dump limit_join_max_runs;
+
+-- Clean up the output so that only the year, playerID, and the maximum runs are included (columns zero, two and four)
+join_data = FOREACH join_max_runs GENERATE $0 AS year, $2 AS playerID, $4 AS runs;
+-- Show sample output of join_data
+limit_join_data = limit join_data 5;
+describe join_data;
+dump limit_join_data;
+
+SET hive.cbo.enable=true;
+
+describe formatted weather_skewed;
+describe formatted weatherorc;
+
+ANALYZE TABLE weather_skewed COMPUTE STATISTICS;
+ANALYZE TABLE weather1 COMPUTE STATISTICS;
+
+ANALYZE TABLE weatherorc PARTITION(YEAR) COMPUTE STATISTICS NOSCAN;
+ANALYZE TABLE weatherorc PARTITION(YEAR) COMPUTE STATISTICS FOR COLUMNS TMAX,STATION;
+
+describe formatted stocks;
+describe formatted dividends;
+describe formatted dividendsorc;
+
+SHOW PARTITIONS stocks PARTITION(exchange1,symbol);
+SHOW PARTITIONS dividends PARTITION(exchange1,symbol = 'AAPL');
+
+http://pivotalhd.docs.pivotal.io/docs/hive-users-guide.html
+
+SELECT state, net_payments FROM transfer_payments 
+WHERE transfer_payments.year IN (SELECT year FROM us_census);
+
+SELECT state, net_payments FROM transfer_payments 
+WHERE EXISTS (SELECT year FROM us_census WHERE transfer_payments.state = us_census.state);
+
+
+
+CREATE TABLE students (name VARCHAR(64), age INT, gpa DECIMAL(3,2)) CLUSTERED BY (age) INTO 2 BUCKETS STORED AS ORC;
+INSERT INTO TABLE students VALUES ('fred flintstone', 35, 1.28), ('barney rubble', 32, 2.32);
+CREATE TABLE pageviews (userid VARCHAR(64), link STRING, from STRING PARTITIONED BY (datestamp STRING) CLUSTERED BY (userid) INTO 256 BUCKETS STORED AS ORC;
+INSERT INTO TABLE pageviews PARTITION (datestamp = '2014-09-23') VALUES ('jsmith', 'mail.com', 'sports.com'), ('jdoe', 'mail.com', null);
+INSERT INTO TABLE pageviews PARTITION (datestamp) VALUES ('tjohnson', 'sports.com', 'finance.com', '2014-09-23'), ('tlee', 'finance.com', null, '2014-09-21');
+UPDATE tablename SET column = value [, column = value ...] [WHERE expression];
+
+http://pivotalhd.docs.pivotal.io/docs/hive-users-guide.html
+Atomicity
+
+An operation either succeeds completely or fails; it does not leave partial data.
+
+Consistency
+
+Once an application performs an operation, the results of that operation are visible to the application in every subsequent operation.
+
+Isolation
+
+Operations by one user do not cause unexpected side effects for other users.
+
+Durability
+
+Once an operation is complete, it is preserved in case of machine or system failure.
+
+
+

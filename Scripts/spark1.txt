@@ -1,0 +1,34 @@
+# pyspark /media/sf_Data/Hadoop/Scripts/tmpspark.py >/media/sf_Data/Hadoop/Scripts/pyspark.log 2>&1 &
+#pyspark /media/sf_Data/Hadoop/Scripts/tmpspark.py >/media/sf_Data/Hadoop/Scripts/pyspark.log 
+# 2>/media/sf_Data/Hadoop/Scripts/pyspark.log 1>/media/sf_Data/Hadoop/Scripts/pyspark.log
+
+from pyspark import SparkContext
+
+
+def quiet_logs( sc ):
+  logger = sc._jvm.org.apache.log4j
+  logger.LogManager.getLogger("org"). setLevel( logger.Level.ERROR )
+  logger.LogManager.getLogger("akka").setLevel( logger.Level.ERROR )
+  
+sc =SparkContext()
+quiet_logs( sc )
+# hdfs://sandbox.hortonworks.com
+#myLines = sc.textFile('hdfs://sandbox.hortonworks.com/user/root/data/book/warandpeace.txt')
+
+lines = sc.parallelize(['Its fun to have fun,','but you have to know how.']) 
+wordcounts = lines.map( lambda x: x.replace(',',' ').replace('.',' ').replace('-',' ').lower()) \
+        .flatMap(lambda x: x.split()) \
+        .map(lambda x: (x, 1)) \
+        .reduceByKey(lambda x,y:x+y) \
+        .map(lambda x:(x[1],x[0])) \
+        .sortByKey(False) 
+wordcounts.take(10)
+
+myLines = sc.textFile('hdfs://sandbox.hortonworks.com/user/root/data/book/warandpeace.txt')
+myLines_filtered = myLines.filter( lambda x: len(x) > 1 )
+myLines_filtered.count()
+
+words = myLines_filtered.flatMap(lambda x: x.split())
+wordcounts = words.map(lambda x: (x, 1)).reduceByKey(lambda x,y:x+y).map(lambda x:(x[1],x[0])).sortByKey(False)
+wordcounts.first()
+wordcounts.take(10)
