@@ -1,0 +1,28 @@
+New log file opened at Fri Nov 13 12:18:12 EST 2015 by 24052@iMridhusris-iMac.local
+Taking next connection to: 52798
+New client attempting to connect on port: 52799-52798
+  Address = /192.168.1.11:52798
+This client on port 52799 has uuid 6e8a8887-6f64-4bbc-8a39-125d405a0be6 configName activator humanReadableName Activator protocolVersion 3 featureTags Vector()
+Connected Clients: activator-6e8a8887-6f64-4bbc-8a39-125d405a0be6
+Taking next connection to: 52798
+Checking to see if clients are empty...
+We have 1 non-daemon clients, continuing serving connections.
+Taking next connection to: 52798
+Checking to see if clients are empty...
+We have 1 non-daemon clients, continuing serving connections.
+Taking next connection to: 52798
+Checking to see if clients are empty...
+We have 1 non-daemon clients, continuing serving connections.
+Taking next connection to: 52798
+Checking to see if clients are empty...
+We have 1 non-daemon clients, continuing serving connections.
+Taking next connection to: 52798
+Checking to see if clients are empty...
+We have 1 non-daemon clients, continuing serving connections.
+Taking next connection to: 52798
+Checking to see if clients are empty...
+No non-daemon clients connected after 3 min. Shutting down.
+Server socket thread exiting.
+0 clients open, will close them...
+All client sockets have been closed.
+Closing the 24052@iMridhusris-iMac.local logs at Fri Nov 13 12:36:12 EST 2015, goodbye.
