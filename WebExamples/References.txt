@@ -1,0 +1,17 @@
+Python Quick Reference links
+-----------------------------
+
+
+https://docs.python.org/2/library/datetime.html
+
+http://www.thegeekstuff.com/2014/06/python-sorted/
+
+https://spark.apache.org/docs/1.3.1/api/python/pyspark.sql.html
+
+https://spark.apache.org/docs/1.3.1/api/python/pyspark.html#subpackages
+
+
+Packages
+
+http://matplotlib.org/faq/installing_faq.html
+
